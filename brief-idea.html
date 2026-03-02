@@ -4,26 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Katabatic</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #08070e;
-    --bg-elevated: #0e0d16;
-    --bg-card: rgba(18, 16, 30, 0.6);
-    --bg-card-hover: rgba(24, 21, 42, 0.7);
-    --border: rgba(122, 109, 181, 0.12);
-    --border-hover: rgba(122, 109, 181, 0.3);
-    --accent: #8b7fd4;
-    --accent-bright: #a599e9;
-    --accent-dim: #6b5faa;
-    --accent-glow: rgba(139, 127, 212, 0.15);
-    --text: #e8e6f0;
-    --text-secondary: rgba(232, 230, 240, 0.55);
-    --text-tertiary: rgba(232, 230, 240, 0.3);
-    --white: #ffffff;
-    --gradient-text: linear-gradient(135deg, #c4bef0 0%, #8b7fd4 40%, #a599e9 70%, #d4cff5 100%);
-    --gradient-border: linear-gradient(135deg, rgba(122,109,181,0.4) 0%, rgba(122,109,181,0.08) 50%, rgba(122,109,181,0.3) 100%);
-    --glass-border: rgba(122, 109, 181, 0.1);
+    --bg: #f0eff6;
+    --bg-warm: #e8e6f0;
+    --bg-card: rgba(255, 255, 255, 0.52);
+    --bg-card-hover: rgba(255, 255, 255, 0.74);
+    --bg-frost: rgba(255, 255, 255, 0.45);
+    --border: rgba(139, 127, 212, 0.16);
+    --border-hover: rgba(139, 127, 212, 0.32);
+    --accent: #7b6fc4;
+    --accent-bright: #8b7fd4;
+    --accent-soft: #a599e9;
+    --accent-deep: #5f54a0;
+    --accent-glow: rgba(139, 127, 212, 0.1);
+    --text: #2e2a3d;
+    --text-secondary: rgba(46, 42, 61, 0.52);
+    --text-tertiary: rgba(46, 42, 61, 0.3);
+    --white: #1e1a2e;
+    --highlight: #b8aee6;
+    --gradient-text: linear-gradient(135deg, #5f54a0 0%, #8b7fd4 40%, #a599e9 65%, #7b6fc4 100%);
+    --gradient-border: linear-gradient(135deg, rgba(139,127,212,0.4) 0%, rgba(139,127,212,0.05) 50%, rgba(139,127,212,0.3) 100%);
+    --glass-border: rgba(139, 127, 212, 0.12);
+    --shadow-soft: 0 2px 24px rgba(100, 88, 170, 0.05);
+    --shadow-card: 0 4px 32px rgba(100, 88, 170, 0.06), 0 1px 3px rgba(100, 88, 170, 0.03);
+    --shadow-hover: 0 8px 48px rgba(100, 88, 170, 0.1), 0 2px 8px rgba(100, 88, 170, 0.04);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,813 +38,184 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Sora', sans-serif;
+    font-family: 'Outfit', sans-serif;
     line-height: 1.7;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
-  /* ─── NOISE ─── */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9999;
   }
 
-  /* ─── FLOATING ORBS ─── */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(100px);
-    pointer-events: none;
-    z-index: 0;
-    will-change: transform;
-  }
+  .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; will-change: transform; }
+  .orb-1 { width: 600px; height: 600px; background: rgba(165, 153, 233, 0.1); top: -150px; left: -100px; animation: orbDrift1 20s ease-in-out infinite; }
+  .orb-2 { width: 500px; height: 500px; background: rgba(139, 127, 212, 0.07); bottom: 5%; right: -120px; animation: orbDrift2 24s ease-in-out infinite; }
+  .orb-3 { width: 400px; height: 400px; background: rgba(184, 174, 230, 0.08); top: 35%; left: 55%; animation: orbDrift3 28s ease-in-out infinite; }
 
-  .orb-1 {
-    width: 500px; height: 500px;
-    background: rgba(139, 127, 212, 0.07);
-    top: -120px; left: -120px;
-    animation: orbDrift1 18s ease-in-out infinite;
-  }
+  @keyframes orbDrift1 { 0%,100%{transform:translate(0,0) scale(1)} 25%{transform:translate(60px,50px) scale(1.08)} 50%{transform:translate(20px,100px) scale(.96)} 75%{transform:translate(-30px,40px) scale(1.04)} }
+  @keyframes orbDrift2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-50px,-60px) scale(1.06)} 66%{transform:translate(30px,-30px) scale(.94)} }
+  @keyframes orbDrift3 { 0%,100%{transform:translate(0,0) scale(1)} 20%{transform:translate(-40px,40px) scale(1.1)} 40%{transform:translate(60px,-20px) scale(.92)} 60%{transform:translate(-20px,-50px) scale(1.04)} 80%{transform:translate(40px,30px) scale(.96)} }
 
-  .orb-2 {
-    width: 400px; height: 400px;
-    background: rgba(107, 95, 170, 0.05);
-    bottom: 10%; right: -100px;
-    animation: orbDrift2 22s ease-in-out infinite;
-  }
+  .mouse-glow { position: fixed; width: 450px; height: 450px; border-radius: 50%; background: radial-gradient(circle, rgba(139,127,212,0.06) 0%, transparent 70%); pointer-events: none; z-index: 1; transform: translate(-50%,-50%); transition: left .35s ease, top .35s ease; will-change: left, top; }
 
-  .orb-3 {
-    width: 300px; height: 300px;
-    background: rgba(164, 153, 233, 0.04);
-    top: 40%; left: 50%;
-    animation: orbDrift3 25s ease-in-out infinite;
-  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem; position: relative; z-index: 2; }
 
-  @keyframes orbDrift1 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(80px, 60px) scale(1.1); }
-    50% { transform: translate(30px, 120px) scale(0.95); }
-    75% { transform: translate(-40px, 50px) scale(1.05); }
-  }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 0; backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6); background: rgba(240,239,246,0.65); border-bottom: 1px solid var(--glass-border); transform: translateY(-100%); animation: navSlide .6s ease .3s forwards; }
+  @keyframes navSlide { to { transform: translateY(0); } }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; }
+  .nav-wordmark { font-family: 'Fraunces', serif; font-size: .92rem; font-weight: 300; letter-spacing: .18em; text-transform: lowercase; color: var(--accent); }
+  .nav-badge { font-size: .52rem; font-weight: 500; letter-spacing: .06em; color: var(--text-tertiary); background: var(--bg-frost); border: 1px solid var(--glass-border); padding: .3rem .7rem; border-radius: 100px; backdrop-filter: blur(8px); }
 
-  @keyframes orbDrift2 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(-70px, -80px) scale(1.08); }
-    66% { transform: translate(40px, -40px) scale(0.92); }
-  }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-scale { opacity: 0; transform: scale(.94); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+  .stagger-1{transition-delay:.05s} .stagger-2{transition-delay:.1s} .stagger-3{transition-delay:.15s} .stagger-4{transition-delay:.2s} .stagger-5{transition-delay:.25s} .stagger-6{transition-delay:.3s}
 
-  @keyframes orbDrift3 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    20% { transform: translate(-60px, 50px) scale(1.12); }
-    40% { transform: translate(80px, -30px) scale(0.9); }
-    60% { transform: translate(-30px, -70px) scale(1.06); }
-    80% { transform: translate(50px, 40px) scale(0.95); }
-  }
+  .hero { padding: 10rem 0 5rem; text-align: center; position: relative; }
+  .hero-badge { display: inline-flex; align-items: center; gap: .5rem; background: var(--bg-frost); border: 1px solid rgba(139,127,212,.18); padding: .38rem .95rem; border-radius: 100px; font-size: .58rem; font-weight: 500; letter-spacing: .06em; color: var(--accent); margin-bottom: 2rem; backdrop-filter: blur(10px); opacity: 0; animation: fadeUp .8s ease .5s forwards; }
+  .hero-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-bright); box-shadow: 0 0 8px rgba(139,127,212,.5); animation: pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 8px rgba(139,127,212,.5);opacity:1} 50%{box-shadow:0 0 20px rgba(139,127,212,.7);opacity:.7} }
 
-  /* ─── MOUSE GLOW ─── */
-  .mouse-glow {
-    position: fixed;
-    width: 400px; height: 400px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(139,127,212,0.06) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 1;
-    transform: translate(-50%, -50%);
-    transition: left 0.3s ease, top 0.3s ease;
-    will-change: left, top;
-  }
+  .hero-wordmark { font-family: 'Fraunces', serif; font-size: clamp(3.5rem,8vw,5.8rem); font-weight: 200; letter-spacing: .12em; text-transform: lowercase; background: var(--gradient-text); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; line-height: 1.1; opacity: 0; animation: fadeUp .8s ease .7s forwards, shimmer 8s ease-in-out infinite; }
+  @keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-  .container {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-    position: relative;
-    z-index: 2;
-  }
+  .hero-tagline { font-family: 'Fraunces', serif; font-size: clamp(1rem,2.5vw,1.35rem); font-weight: 400; color: var(--text); margin-bottom: 1.2rem; line-height: 1.45; opacity: 0; animation: fadeUp .8s ease .9s forwards; }
+  .hero-desc { font-size: .88rem; color: var(--text-secondary); max-width: 540px; margin: 0 auto 2.5rem; line-height: 1.85; font-weight: 300; opacity: 0; animation: fadeUp .8s ease 1.1s forwards; }
+  .hero-meta { display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; opacity: 0; animation: fadeUp .8s ease 1.3s forwards; }
 
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 1rem 0;
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    background: rgba(8, 7, 14, 0.7);
-    border-bottom: 1px solid var(--glass-border);
-    transform: translateY(-100%);
-    animation: navSlide 0.6s ease 0.3s forwards;
-  }
+  .meta-chip { display: flex; align-items: center; gap: .4rem; background: var(--bg-card); border: 1px solid var(--border); padding: .4rem .85rem; border-radius: 8px; backdrop-filter: blur(12px); box-shadow: var(--shadow-soft); transition: border-color .3s ease, transform .3s ease, box-shadow .3s ease; }
+  .meta-chip:hover { border-color: var(--border-hover); transform: translateY(-1px); box-shadow: var(--shadow-card); }
+  .meta-chip .mc-label { font-size: .5rem; text-transform: uppercase; letter-spacing: .1em; color: var(--text-tertiary); font-weight: 500; }
+  .meta-chip .mc-value { font-size: .72rem; font-weight: 600; color: var(--text); }
 
-  @keyframes navSlide {
-    to { transform: translateY(0); }
-  }
-
-  .nav-inner {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .nav-wordmark {
-    font-size: 0.88rem;
-    font-weight: 300;
-    letter-spacing: 0.22em;
-    text-transform: lowercase;
-    color: var(--accent-bright);
-  }
-
-  .nav-badge {
-    font-size: 0.52rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--text-tertiary);
-    background: rgba(122, 109, 181, 0.08);
-    border: 1px solid var(--glass-border);
-    padding: 0.3rem 0.7rem;
-    border-radius: 100px;
-  }
-
-  /* ─── SCROLL REVEAL ─── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .reveal-left {
-    opacity: 0;
-    transform: translateX(-30px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal-left.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .reveal-scale {
-    opacity: 0;
-    transform: scale(0.92);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal-scale.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .stagger-1 { transition-delay: 0.05s; }
-  .stagger-2 { transition-delay: 0.1s; }
-  .stagger-3 { transition-delay: 0.15s; }
-  .stagger-4 { transition-delay: 0.2s; }
-  .stagger-5 { transition-delay: 0.25s; }
-  .stagger-6 { transition-delay: 0.3s; }
-
-  /* ─── HERO ─── */
-  .hero {
-    padding: 10rem 0 5rem;
-    text-align: center;
-    position: relative;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(139, 127, 212, 0.08);
-    border: 1px solid rgba(139, 127, 212, 0.15);
-    padding: 0.35rem 0.9rem;
-    border-radius: 100px;
-    font-size: 0.58rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--accent-bright);
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.5s forwards;
-  }
-
-  .hero-badge .dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 8px var(--accent); opacity: 1; }
-    50% { box-shadow: 0 0 18px var(--accent-bright); opacity: 0.7; }
-  }
-
-  .hero-wordmark {
-    font-size: clamp(3.5rem, 8vw, 5.5rem);
-    font-weight: 200;
-    letter-spacing: 0.2em;
-    text-transform: lowercase;
-    background: var(--gradient-text);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.7s forwards, shimmer 6s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-tagline {
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 1.2rem;
-    letter-spacing: -0.01em;
-    line-height: 1.4;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.9s forwards;
-  }
-
-  .hero-desc {
-    font-size: 0.88rem;
-    color: var(--text-secondary);
-    max-width: 540px;
-    margin: 0 auto 2.5rem;
-    line-height: 1.85;
-    font-weight: 300;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 1.1s forwards;
-  }
-
-  .hero-meta {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 1.3s forwards;
-  }
-
-  .meta-chip {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    padding: 0.4rem 0.85rem;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    transition: border-color 0.3s ease, transform 0.3s ease;
-  }
-
-  .meta-chip:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-1px);
-  }
-
-  .meta-chip .mc-label { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); font-weight: 500; }
-  .meta-chip .mc-value { font-size: 0.72rem; font-weight: 600; color: var(--text); }
-
-  /* ─── SECTIONS ─── */
-  .section-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 0;
-  }
-
+  .section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
   section { padding: 5rem 0; }
+  .section-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .52rem; text-transform: uppercase; letter-spacing: .14em; color: var(--accent); font-weight: 600; margin-bottom: .8rem; }
+  .section-eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--accent-soft); }
+  .section-heading { font-family: 'Fraunces', serif; font-size: clamp(1.4rem,3vw,1.85rem); font-weight: 500; margin-bottom: .6rem; letter-spacing: -.01em; line-height: 1.3; color: var(--white); }
+  .section-desc { color: var(--text-secondary); font-size: .86rem; max-width: 520px; margin-bottom: 2.5rem; line-height: 1.85; font-weight: 300; }
 
-  .section-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.52rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-  }
-
-  .section-eyebrow::before {
-    content: '';
-    width: 12px; height: 1px;
-    background: var(--accent-dim);
-  }
-
-  .section-heading {
-    font-size: clamp(1.4rem, 3vw, 1.8rem);
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-    letter-spacing: -0.025em;
-    line-height: 1.25;
-    color: var(--white);
-  }
-
-  .section-desc {
-    color: var(--text-secondary);
-    font-size: 0.86rem;
-    max-width: 520px;
-    margin-bottom: 2.5rem;
-    line-height: 1.85;
-    font-weight: 300;
-  }
-
-  /* ─── GLASS CARD ─── */
-  .glass-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .glass-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    padding: 1px;
-    background: var(--gradient-border);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .glass-card:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--border-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 40px rgba(139, 127, 212, 0.06);
-  }
-
+  .glass-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); box-shadow: var(--shadow-card); transition: all .4s cubic-bezier(.16,1,.3,1); position: relative; overflow: hidden; }
+  .glass-card::before { content: ''; position: absolute; inset: 0; border-radius: 16px; padding: 1px; background: var(--gradient-border); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; opacity: 0; transition: opacity .4s ease; }
+  .glass-card:hover { background: var(--bg-card-hover); border-color: var(--border-hover); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
   .glass-card:hover::before { opacity: 1; }
-
-  /* Card inner glow on hover */
-  .glass-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    width: 80%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(139,127,212,0.3), transparent);
-    transform: translateX(-50%) scaleX(0);
-    transition: transform 0.4s ease;
-  }
-
+  .glass-card::after { content: ''; position: absolute; top: 0; left: 50%; width: 80%; height: 1px; background: linear-gradient(90deg, transparent, rgba(139,127,212,.2), transparent); transform: translateX(-50%) scaleX(0); transition: transform .4s ease; }
   .glass-card:hover::after { transform: translateX(-50%) scaleX(1); }
 
-  /* ─── CALLOUT ─── */
-  .callout {
-    background: rgba(139, 127, 212, 0.04);
-    border: 1px solid rgba(139, 127, 212, 0.12);
-    border-radius: 14px;
-    padding: 1.4rem 1.6rem;
-    margin-bottom: 2.5rem;
-    position: relative;
-    overflow: hidden;
-  }
+  .callout { background: rgba(139,127,212,.05); border: 1px solid rgba(139,127,212,.14); border-radius: 14px; padding: 1.4rem 1.6rem; margin-bottom: 2.5rem; position: relative; overflow: hidden; backdrop-filter: blur(8px); }
+  .callout::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent-bright), transparent); border-radius: 2px; }
+  .callout h3 { font-family: 'Fraunces', serif; font-size: .82rem; font-weight: 500; color: var(--accent); margin-bottom: .3rem; padding-left: .6rem; }
+  .callout p { font-size: .76rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; padding-left: .6rem; }
 
-  .callout::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--accent), transparent);
-    border-radius: 2px;
-  }
-
-  .callout h3 { font-size: 0.78rem; font-weight: 600; color: var(--accent-bright); margin-bottom: 0.3rem; padding-left: 0.6rem; }
-  .callout p { font-size: 0.76rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; padding-left: 0.6rem; }
-
-  /* ─── CHAIN ─── */
-  .chain {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    margin: 2.5rem 0 0.6rem;
-    flex-wrap: wrap;
-  }
-
-  .chain-node {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.75rem 0.9rem;
-    text-align: center;
-    min-width: 115px;
-    opacity: 0;
-    transform: translateX(-15px);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
-  }
-
+  .chain { display: flex; align-items: center; justify-content: center; gap: 0; margin: 2.5rem 0 .6rem; flex-wrap: wrap; }
+  .chain-node { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: .75rem .9rem; text-align: center; min-width: 115px; backdrop-filter: blur(12px); box-shadow: var(--shadow-soft); opacity: 0; transform: translateX(-15px); transition: all .5s cubic-bezier(.16,1,.3,1), border-color .3s ease; }
   .chain-node.visible { opacity: 1; transform: translateX(0); }
-  .chain-node:hover { border-color: var(--border-hover); }
+  .chain-node:hover { border-color: var(--border-hover); box-shadow: var(--shadow-card); }
+  .chain-node h4 { font-family: 'Fraunces', serif; font-size: .65rem; font-weight: 500; color: var(--accent); margin-bottom: .1rem; }
+  .chain-node p { font-size: .56rem; color: var(--text-secondary); font-weight: 300; line-height: 1.4; }
+  .chain-arrow { font-size: .8rem; color: var(--accent-soft); padding: 0 .25rem; opacity: 0; transition: opacity .4s ease; }
+  .chain-arrow.visible { opacity: .45; }
+  .chain-caption { text-align: center; font-size: .6rem; color: var(--text-tertiary); margin-top: .6rem; margin-bottom: 1.8rem; font-weight: 400; }
 
-  .chain-node h4 { font-size: 0.65rem; font-weight: 600; color: var(--accent-bright); margin-bottom: 0.1rem; }
-  .chain-node p { font-size: 0.56rem; color: var(--text-secondary); font-weight: 300; line-height: 1.4; }
-
-  .chain-arrow {
-    font-size: 0.8rem;
-    color: var(--accent-dim);
-    padding: 0 0.25rem;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .chain-arrow.visible { opacity: 1; }
-
-  .chain-caption {
-    text-align: center; font-size: 0.6rem; color: var(--text-tertiary);
-    margin-top: 0.6rem; margin-bottom: 1.8rem; font-weight: 400;
-  }
-
-  /* ─── BENTO STATS ─── */
-  .bento-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.6rem;
-  }
-
+  .bento-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; }
   .stat-card { padding: 1.6rem 1.3rem; }
+  .stat-card .stat-num { font-family: 'Fraunces', serif; font-size: 1.7rem; font-weight: 600; background: var(--gradient-text); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: .2rem; animation: shimmer 8s ease-in-out infinite; }
+  .stat-card h3 { font-size: .74rem; font-weight: 600; color: var(--white); margin-bottom: .25rem; }
+  .stat-card p { font-size: .68rem; color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
 
-  .stat-card .stat-num {
-    font-size: 1.6rem;
-    font-weight: 700;
-    background: var(--gradient-text);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.2rem;
-    animation: shimmer 6s ease-in-out infinite;
-  }
-
-  .stat-card h3 { font-size: 0.74rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
-  .stat-card p { font-size: 0.68rem; color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
-
-  /* ─── BENTO SIGNALS ─── */
-  .bento-signals {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.6rem;
-  }
-
+  .bento-signals { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
   .signal-card { padding: 1.4rem; }
+  .signal-card .sig-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(139,127,212,.08); border: 1px solid rgba(139,127,212,.14); display: flex; align-items: center; justify-content: center; margin-bottom: .75rem; transition: transform .4s ease, box-shadow .4s ease; }
+  .signal-card:hover .sig-icon { transform: scale(1.1) rotate(-3deg); box-shadow: 0 0 20px rgba(139,127,212,.14); }
+  .signal-card .sig-icon svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .signal-card h4 { font-size: .78rem; font-weight: 600; color: var(--white); margin-bottom: .25rem; }
+  .signal-card p { font-size: .7rem; color: var(--text-secondary); line-height: 1.65; font-weight: 300; }
+  .signal-card .source { font-size: .54rem; color: var(--text-tertiary); margin-top: .55rem; letter-spacing: .04em; font-weight: 500; }
+  .signal-card.featured { border-color: rgba(139,127,212,.28); background: linear-gradient(135deg, rgba(139,127,212,.07) 0%, rgba(255,255,255,.52) 100%); box-shadow: 0 4px 40px rgba(139,127,212,.07); }
+  .signal-card.featured .sig-icon { background: rgba(139,127,212,.14); border-color: rgba(139,127,212,.28); box-shadow: 0 0 14px rgba(139,127,212,.12); animation: glowPulse 3.5s ease-in-out infinite; }
+  @keyframes glowPulse { 0%,100%{box-shadow:0 0 14px rgba(139,127,212,.12)} 50%{box-shadow:0 0 28px rgba(139,127,212,.22)} }
 
-  .signal-card .sig-icon {
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    background: rgba(139, 127, 212, 0.1);
-    border: 1px solid rgba(139, 127, 212, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.75rem;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  .signal-card:hover .sig-icon {
-    transform: scale(1.1) rotate(-3deg);
-    box-shadow: 0 0 16px rgba(139, 127, 212, 0.2);
-  }
-
-  .signal-card .sig-icon svg {
-    width: 16px; height: 16px;
-    stroke: var(--accent-bright);
-    fill: none;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .signal-card h4 { font-size: 0.78rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
-  .signal-card p { font-size: 0.7rem; color: var(--text-secondary); line-height: 1.65; font-weight: 300; }
-  .signal-card .source { font-size: 0.54rem; color: var(--text-tertiary); margin-top: 0.55rem; letter-spacing: 0.04em; font-weight: 500; }
-
-  .signal-card.featured {
-    border-color: rgba(139, 127, 212, 0.25);
-    background: linear-gradient(135deg, rgba(139,127,212,0.08) 0%, rgba(18,16,30,0.6) 100%);
-    box-shadow: 0 0 30px rgba(139, 127, 212, 0.05);
-  }
-
-  .signal-card.featured .sig-icon {
-    background: rgba(139, 127, 212, 0.18);
-    border-color: rgba(139, 127, 212, 0.25);
-    box-shadow: 0 0 12px rgba(139, 127, 212, 0.15);
-    animation: glowPulse 3s ease-in-out infinite;
-  }
-
-  @keyframes glowPulse {
-    0%, 100% { box-shadow: 0 0 12px rgba(139, 127, 212, 0.15); }
-    50% { box-shadow: 0 0 24px rgba(139, 127, 212, 0.3); }
-  }
-
-  /* ─── ARCHITECTURE ─── */
-  .arch-stack { display: flex; flex-direction: column; gap: 0.5rem; }
-
+  .arch-stack { display: flex; flex-direction: column; gap: .5rem; }
   .arch-layer { padding: 1.5rem 1.7rem; }
-
-  .arch-layer .layer-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-tertiary);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  .layer-tag .ln {
-    background: var(--accent);
-    color: var(--bg);
-    width: 16px; height: 16px;
-    border-radius: 4px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.48rem;
-    font-weight: 700;
-    transition: transform 0.3s ease;
-  }
-
+  .arch-layer .layer-tag { display: inline-flex; align-items: center; gap: .4rem; font-size: .5rem; text-transform: uppercase; letter-spacing: .1em; color: var(--text-tertiary); font-weight: 600; margin-bottom: .5rem; }
+  .layer-tag .ln { background: var(--accent); color: #fff; width: 16px; height: 16px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: .48rem; font-weight: 700; transition: transform .3s ease; }
   .arch-layer:hover .ln { transform: scale(1.15); }
+  .arch-layer h3 { font-family: 'Fraunces', serif; font-size: .92rem; font-weight: 500; color: var(--white); margin-bottom: .3rem; }
+  .arch-layer p { font-size: .76rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+  .arch-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .75rem; }
+  .arch-chip { background: rgba(139,127,212,.07); border: 1px solid rgba(139,127,212,.14); padding: .2rem .55rem; border-radius: 6px; font-size: .6rem; font-weight: 500; color: var(--accent); transition: background .3s ease, transform .3s ease; }
+  .arch-chip:hover { background: rgba(139,127,212,.13); transform: translateY(-1px); }
 
-  .arch-layer h3 { font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
-  .arch-layer p { font-size: 0.76rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
-
-  .arch-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.75rem; }
-
-  .arch-chip {
-    background: rgba(139, 127, 212, 0.06);
-    border: 1px solid rgba(139, 127, 212, 0.12);
-    padding: 0.2rem 0.55rem;
-    border-radius: 6px;
-    font-size: 0.6rem;
-    font-weight: 500;
-    color: var(--accent-bright);
-    transition: background 0.3s ease, transform 0.3s ease;
-  }
-
-  .arch-chip:hover {
-    background: rgba(139, 127, 212, 0.12);
-    transform: translateY(-1px);
-  }
-
-  /* ─── TIMELINE ─── */
   .timeline { position: relative; padding-left: 2.2rem; }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 5px; top: 6px; bottom: 6px;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--accent), var(--accent-dim), rgba(139,127,212,0.1));
-  }
-
-  /* Animated progress line */
-  .timeline-progress {
-    position: absolute;
-    left: 5px; top: 6px;
-    width: 1px; height: 0;
-    background: var(--accent-bright);
-    box-shadow: 0 0 8px var(--accent);
-    transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 1;
-  }
-
+  .timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: linear-gradient(to bottom, var(--accent-bright), var(--accent-soft), rgba(139,127,212,.1)); }
+  .timeline-progress { position: absolute; left: 5px; top: 6px; width: 1px; height: 0; background: var(--accent); box-shadow: 0 0 8px rgba(139,127,212,.35); transition: height 1.5s cubic-bezier(.16,1,.3,1); z-index: 1; }
   .timeline-progress.animate { height: 100%; }
-
   .tl-item { position: relative; margin-bottom: 2rem; }
   .tl-item:last-child { margin-bottom: 0; }
+  .tl-item .tl-dot { position: absolute; left: -1.92rem; top: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent-bright); box-shadow: 0 0 8px rgba(139,127,212,.25); z-index: 2; transition: transform .3s ease, box-shadow .3s ease; }
+  .tl-item:hover .tl-dot { transform: scale(1.3); box-shadow: 0 0 18px rgba(139,127,212,.4); }
+  .tl-item:nth-child(n+3) .tl-dot { border-color: var(--accent-soft); box-shadow: 0 0 6px rgba(139,127,212,.15); }
+  .tl-item:nth-child(n+5) .tl-dot { border-color: rgba(139,127,212,.3); box-shadow: none; }
+  .tl-item .tl-time { font-size: .54rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 600; margin-bottom: .15rem; }
+  .tl-item h3 { font-family: 'Fraunces', serif; font-size: .9rem; font-weight: 500; color: var(--white); margin-bottom: .25rem; }
+  .tl-item p { font-size: .74rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+  .tl-chips { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .5rem; }
+  .tl-chip { background: var(--bg-card); border: 1px solid var(--border); padding: .16rem .5rem; border-radius: 6px; font-size: .6rem; color: var(--text-secondary); font-weight: 400; backdrop-filter: blur(8px); transition: border-color .3s ease, color .3s ease; }
+  .tl-chip:hover { border-color: var(--border-hover); color: var(--text); }
 
-  .tl-item .tl-dot {
-    position: absolute;
-    left: -1.92rem; top: 6px;
-    width: 11px; height: 11px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 8px rgba(139, 127, 212, 0.3);
-    z-index: 2;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .tl-item:hover .tl-dot {
-    transform: scale(1.3);
-    box-shadow: 0 0 16px rgba(139, 127, 212, 0.5);
-  }
-
-  .tl-item:nth-child(2) .tl-dot { border-color: var(--accent-dim); box-shadow: 0 0 6px rgba(139,127,212,0.2); }
-  .tl-item:nth-child(3) .tl-dot { border-color: var(--accent-dim); box-shadow: 0 0 6px rgba(139,127,212,0.15); }
-  .tl-item:nth-child(4) .tl-dot { border-color: rgba(139,127,212,0.3); box-shadow: none; }
-  .tl-item:nth-child(5) .tl-dot { border-color: rgba(139,127,212,0.15); box-shadow: none; }
-
-  .tl-item .tl-time { font-size: 0.54rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; margin-bottom: 0.15rem; }
-  .tl-item h3 { font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
-  .tl-item p { font-size: 0.74rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
-
-  .tl-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
-
-  .tl-chip {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    padding: 0.16rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.6rem;
-    color: var(--text-secondary);
-    font-weight: 400;
-    transition: border-color 0.3s ease, color 0.3s ease;
-  }
-
-  .tl-chip:hover {
-    border-color: var(--border-hover);
-    color: var(--text);
-  }
-
-  /* ─── TEAM ─── */
-  .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
-
+  .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; }
   .team-card { padding: 1.4rem 1rem; text-align: center; }
+  .team-card .ti { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto .65rem; display: flex; align-items: center; justify-content: center; background: rgba(139,127,212,.08); border: 1px solid rgba(139,127,212,.14); transition: transform .4s ease, box-shadow .4s ease, background .4s ease; }
+  .team-card:hover .ti { transform: scale(1.15) rotate(5deg); box-shadow: 0 0 24px rgba(139,127,212,.16); background: rgba(139,127,212,.14); }
+  .team-card .ti svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .team-card h4 { font-size: .76rem; font-weight: 600; color: var(--white); margin-bottom: .15rem; }
+  .team-card p { font-size: .64rem; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
 
-  .team-card .ti {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    margin: 0 auto 0.65rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(139, 127, 212, 0.08);
-    border: 1px solid rgba(139, 127, 212, 0.1);
-    transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
-  }
-
-  .team-card:hover .ti {
-    transform: scale(1.15) rotate(5deg);
-    box-shadow: 0 0 20px rgba(139, 127, 212, 0.2);
-    background: rgba(139, 127, 212, 0.15);
-  }
-
-  .team-card .ti svg { width: 18px; height: 18px; stroke: var(--accent-bright); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .team-card h4 { font-size: 0.76rem; font-weight: 600; color: var(--white); margin-bottom: 0.15rem; }
-  .team-card p { font-size: 0.64rem; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
-
-  /* ─── DEMO BOX ─── */
-  .demo-box {
-    background: linear-gradient(135deg, rgba(139,127,212,0.06) 0%, var(--bg-card) 100%);
-    border: 1px solid rgba(139, 127, 212, 0.2);
-    border-radius: 20px;
-    padding: 2.2rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 60px rgba(139, 127, 212, 0.04);
-  }
-
-  .demo-box::after {
-    content: '';
-    position: absolute;
-    top: -50%; right: -20%;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(139,127,212,0.06) 0%, transparent 70%);
-    pointer-events: none;
-    animation: demoGlow 8s ease-in-out infinite;
-  }
-
-  @keyframes demoGlow {
-    0%, 100% { transform: translate(0, 0); opacity: 0.6; }
-    50% { transform: translate(-30px, 20px); opacity: 1; }
-  }
-
-  .demo-box h3 { font-size: 1.05rem; font-weight: 600; color: var(--white); margin-bottom: 1.3rem; position: relative; }
-  .demo-steps { display: flex; flex-direction: column; gap: 0.7rem; position: relative; }
-  .demo-step { display: flex; align-items: flex-start; gap: 0.85rem; }
-
-  .demo-step .sn {
-    font-size: 0.52rem; font-weight: 700; color: var(--bg);
-    background: var(--accent);
-    width: 20px; height: 20px;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 0.2rem;
-    box-shadow: 0 0 10px rgba(139, 127, 212, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .demo-step:hover .sn {
-    transform: scale(1.15);
-    box-shadow: 0 0 18px rgba(139, 127, 212, 0.5);
-  }
-
-  .demo-step p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+  .demo-box { background: linear-gradient(135deg, rgba(139,127,212,.05) 0%, var(--bg-card) 100%); border: 1px solid rgba(139,127,212,.2); border-radius: 20px; padding: 2.2rem; position: relative; overflow: hidden; box-shadow: 0 4px 60px rgba(139,127,212,.05); backdrop-filter: blur(16px); }
+  .demo-box::after { content: ''; position: absolute; top: -50%; right: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(139,127,212,.06) 0%, transparent 70%); pointer-events: none; animation: demoGlow 8s ease-in-out infinite; }
+  @keyframes demoGlow { 0%,100%{transform:translate(0,0);opacity:.6} 50%{transform:translate(-30px,20px);opacity:1} }
+  .demo-box h3 { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 500; color: var(--white); margin-bottom: 1.3rem; position: relative; }
+  .demo-steps { display: flex; flex-direction: column; gap: .7rem; position: relative; }
+  .demo-step { display: flex; align-items: flex-start; gap: .85rem; }
+  .demo-step .sn { font-size: .52rem; font-weight: 700; color: #fff; background: var(--accent); width: 20px; height: 20px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: .2rem; box-shadow: 0 2px 10px rgba(139,127,212,.2); transition: transform .3s ease, box-shadow .3s ease; }
+  .demo-step:hover .sn { transform: scale(1.15); box-shadow: 0 4px 18px rgba(139,127,212,.35); }
+  .demo-step p { font-size: .78rem; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
   .demo-step p strong { color: var(--white); font-weight: 600; }
-  .demo-step p em { color: var(--accent-bright); font-style: normal; font-weight: 400; }
+  .demo-step p em { color: var(--accent); font-style: italic; font-weight: 400; }
 
-  /* ─── SCENARIOS ─── */
-  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; margin-top: 1.5rem; }
+  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; margin-top: 1.5rem; }
   .sc-card { padding: 1.2rem; }
-  .sc-card .sc-tag { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 600; margin-bottom: 0.2rem; }
-  .sc-card h4 { font-size: 0.78rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
-  .sc-card p { font-size: 0.68rem; color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
+  .sc-card .sc-tag { font-size: .5rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); font-weight: 600; margin-bottom: .2rem; }
+  .sc-card h4 { font-size: .78rem; font-weight: 600; color: var(--white); margin-bottom: .2rem; }
+  .sc-card p { font-size: .68rem; color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
 
-  /* ─── IMPACT ─── */
-  .impact-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
   .impact-card { padding: 1.8rem 1.3rem; text-align: center; }
+  .impact-card .imp-num { font-family: 'Fraunces', serif; font-size: 2.1rem; font-weight: 600; background: var(--gradient-text); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: .2rem; animation: shimmer 8s ease-in-out infinite; }
+  .impact-card h4 { font-size: .78rem; font-weight: 600; color: var(--white); margin-bottom: .2rem; }
+  .impact-card p { font-size: .66rem; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
 
-  .impact-card .imp-num {
-    font-size: 2rem; font-weight: 700;
-    background: var(--gradient-text);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.2rem;
-    animation: shimmer 6s ease-in-out infinite;
-  }
+  .pitch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
+  .pitch-card { padding: 1rem .7rem; text-align: center; position: relative; }
 
-  .impact-card h4 { font-size: 0.78rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
-  .impact-card p { font-size: 0.66rem; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
+  .pitch-card .pt { font-size: .48rem; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin-bottom: .25rem; }
+  .pitch-card h4 { font-family: 'Fraunces', serif; font-size: .74rem; font-weight: 500; color: var(--white); margin-bottom: .12rem; }
+  .pitch-card p { font-size: .58rem; color: var(--text-secondary); line-height: 1.5; font-weight: 300; }
 
-  /* ─── PITCH ─── */
-  .pitch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
-
-  .pitch-card { padding: 1rem 0.7rem; text-align: center; position: relative; }
-
-  .pitch-card::after {
-    content: '';
-    position: absolute;
-    right: -0.15rem; top: 50%;
-    transform: translateY(-50%);
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--accent-dim);
-    animation: dotPulse 2s ease-in-out infinite;
-  }
-
-  .pitch-card:last-child::after { display: none; }
-
-  @keyframes dotPulse {
-    0%, 100% { opacity: 0.5; transform: translateY(-50%) scale(1); }
-    50% { opacity: 1; transform: translateY(-50%) scale(1.3); }
-  }
-
-  .pitch-card .pt { font-size: 0.48rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 0.25rem; }
-  .pitch-card h4 { font-size: 0.72rem; font-weight: 600; color: var(--white); margin-bottom: 0.12rem; }
-  .pitch-card p { font-size: 0.58rem; color: var(--text-secondary); line-height: 1.5; font-weight: 300; }
-
-  /* ─── FOOTER ─── */
-  footer { padding: 3rem 0 4rem; text-align: center; position: relative; }
+  footer { padding: 3rem 0 4rem; text-align: center; }
   .footer-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin-bottom: 2.5rem; }
+  .footer-wordmark { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 200; letter-spacing: .2em; text-transform: lowercase; background: var(--gradient-text); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: .4rem; animation: shimmer 8s ease-in-out infinite; }
+  footer p { font-size: .58rem; color: var(--text-tertiary); letter-spacing: .04em; }
 
-  .footer-wordmark {
-    font-size: 1rem; font-weight: 200;
-    letter-spacing: 0.25em; text-transform: lowercase;
-    background: var(--gradient-text);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.4rem;
-    animation: shimmer 6s ease-in-out infinite;
-  }
-
-  footer p { font-size: 0.58rem; color: var(--text-tertiary); letter-spacing: 0.04em; }
-
-  /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
     .bento-stats { grid-template-columns: 1fr 1fr; }
     .bento-signals, .impact-grid, .scenario-grid { grid-template-columns: 1fr; }
@@ -846,7 +223,7 @@
     .pitch-row { grid-template-columns: 1fr; }
     .pitch-card::after { display: none; }
     .container { padding: 0 1.4rem; }
-    .chain { flex-direction: column; gap: 0.3rem; }
+    .chain { flex-direction: column; gap: .3rem; }
     .chain-arrow { transform: rotate(90deg); }
     .nav-inner { padding: 0 1.4rem; }
     .mouse-glow { display: none; }
@@ -869,7 +246,6 @@
 
 <div class="container">
 
-  <!-- ═══ HERO ═══ -->
   <div class="hero">
     <div class="hero-badge"><span class="dot"></span> Project Brief · March 13 to 15, 2026</div>
     <div class="hero-wordmark">katabatic</div>
@@ -885,17 +261,14 @@
 
   <div class="section-divider"></div>
 
-  <!-- ═══ THE NICHE ═══ -->
   <section>
     <div class="section-eyebrow reveal">01 The Niche</div>
     <div class="section-heading reveal">Weather moves money.<br>Nobody's tracing it to stablecoins.</div>
     <p class="section-desc reveal">70% of stablecoins are backed by real-world assets held at real banks in real places. Weather events stress those places. But no tool connects the storm to the vault.</p>
-
     <div class="callout reveal">
       <h3>The causal chain that makes this defensible</h3>
       <p>A vague claim like "hurricanes affect stablecoins" is hand-waving. Katabatic makes the chain explicit and traceable through a knowledge graph. Every link is a named entity with real data behind it.</p>
     </div>
-
     <div class="chain" id="chain">
       <div class="chain-node" data-chain="0"><h4>NOAA Forecast</h4><p>Cat 4 hurricane<br>targeting SE Florida</p></div>
       <span class="chain-arrow" data-chain="1">→</span>
@@ -908,7 +281,6 @@
       <div class="chain-node" data-chain="8"><h4>Risk Score</h4><p>USDC counterparty<br>score shifts to yellow</p></div>
     </div>
     <p class="chain-caption reveal">Each node is a named entity in the knowledge graph. The LLM traces and explains the full chain.</p>
-
     <div class="bento-stats">
       <div class="glass-card stat-card reveal stagger-1"><div class="stat-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div><h3>Stablecoin Market Cap</h3><p>Backed by assets in real places. Updated by auditors once a month.</p></div>
       <div class="glass-card stat-card reveal stagger-2"><div class="stat-num" data-count="3.3" data-prefix="$" data-suffix="B">$0</div><h3>USDC in SVB</h3><p>A bank in the wrong place depegged a $40B stablecoin to $0.87.</p></div>
@@ -919,218 +291,86 @@
 
   <div class="section-divider"></div>
 
-  <!-- ═══ HOW IT WORKS ═══ -->
   <section>
     <div class="section-eyebrow reveal">02 How It Works</div>
     <div class="section-heading reveal">LLM agents read the reports.<br>Weather data enters the graph.</div>
     <p class="section-desc reveal">No ML models trained on 3 depeg events. An agentic LLM pipeline extracts counterparty data from attestation PDFs, builds a geographic knowledge graph, and injects weather signals as stress inputs on specific nodes.</p>
     <div class="bento-signals">
-      <div class="glass-card signal-card reveal stagger-1">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8m8 4H8"/></svg></div>
-        <h4>Attestation Extraction</h4>
-        <p>LLM reads Circle, Tether, Paxos PDFs. Extracts banks, percentages, asset classes, maturity profiles, jurisdictions.</p>
-        <div class="source">Circle · Tether · Paxos reports</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-2">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M8.6 7.4L15.4 16.6M15.4 7.4L8.6 16.6"/></svg></div>
-        <h4>Geographic Knowledge Graph</h4>
-        <p>Stablecoin → Bank → City/State → Asset Class. Geographic anchoring makes weather data actionable.</p>
-        <div class="source">Extracted data · FDIC · geocoding</div>
-      </div>
-      <div class="glass-card signal-card featured reveal stagger-3">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 8.97"/><path d="M8 19h.01M12 17h.01M8 13h.01M16 15h.01M12 21h.01"/></svg></div>
-        <h4>Weather Signal Injection</h4>
-        <p>NOAA forecasts and NHC tracks enter the graph as stress modifiers on geographic nodes. A storm in Miami stresses Miami bank nodes.</p>
-        <div class="source">NOAA · NHC · OpenMeteo · FEMA</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-4">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11m16-11v11"/></svg></div>
-        <h4>Counterparty Monitoring</h4>
-        <p>Named banks tracked against news, FDIC watch lists, CDS spreads. Weather stress compounds with financial stress on the same nodes.</p>
-        <div class="source">News APIs · FDIC · financial data</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-5">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-        <h4>Deterministic Risk Scoring</h4>
-        <p>Weighted composite across six dimensions. Rules handle quantifiable signals, LLM reasons over qualitative ones. Every score traces to named entities.</p>
-        <div class="source">Rule engine · LLM reasoning</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-6">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <h4>LLM Risk Narratives</h4>
-        <p>Full causal chain in plain English. Not "72/100" but "12% of reserves at First Regional FL, facing $4B in hurricane claims exposure."</p>
-        <div class="source">Claude API · chain tracing</div>
-      </div>
+      <div class="glass-card signal-card reveal stagger-1"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8m8 4H8"/></svg></div><h4>Attestation Extraction</h4><p>LLM reads Circle, Tether, Paxos PDFs. Extracts banks, percentages, asset classes, maturity profiles, jurisdictions.</p><div class="source">Circle · Tether · Paxos reports</div></div>
+      <div class="glass-card signal-card reveal stagger-2"><div class="sig-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M8.6 7.4L15.4 16.6M15.4 7.4L8.6 16.6"/></svg></div><h4>Geographic Knowledge Graph</h4><p>Stablecoin → Bank → City/State → Asset Class. Geographic anchoring makes weather data actionable.</p><div class="source">Extracted data · FDIC · geocoding</div></div>
+      <div class="glass-card signal-card featured reveal stagger-3"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 8.97"/><path d="M8 19h.01M12 17h.01M8 13h.01M16 15h.01M12 21h.01"/></svg></div><h4>Weather Signal Injection</h4><p>NOAA forecasts and NHC tracks enter the graph as stress modifiers on geographic nodes. A storm in Miami stresses Miami bank nodes.</p><div class="source">NOAA · NHC · OpenMeteo · FEMA</div></div>
+      <div class="glass-card signal-card reveal stagger-4"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11m16-11v11"/></svg></div><h4>Counterparty Monitoring</h4><p>Named banks tracked against news, FDIC watch lists, CDS spreads. Weather stress compounds with financial stress on the same nodes.</p><div class="source">News APIs · FDIC · financial data</div></div>
+      <div class="glass-card signal-card reveal stagger-5"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h4>Deterministic Risk Scoring</h4><p>Weighted composite across six dimensions. Rules handle quantifiable signals, LLM reasons over qualitative ones. Every score traces to named entities.</p><div class="source">Rule engine · LLM reasoning</div></div>
+      <div class="glass-card signal-card reveal stagger-6"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h4>LLM Risk Narratives</h4><p>Full causal chain in plain English. Not "72/100" but "12% of reserves at First Regional FL, facing $4B in hurricane claims exposure."</p><div class="source">Claude API · chain tracing</div></div>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
-  <!-- ═══ ARCHITECTURE ═══ -->
   <section>
     <div class="section-eyebrow reveal">03 Technical Architecture</div>
     <div class="section-heading reveal">Agentic LLM pipeline<br>with geographic graph.</div>
     <p class="section-desc reveal">Four layers. The key innovation is Layer 2: a geographically-anchored knowledge graph where weather data becomes a first-class stress signal on named counterparty nodes.</p>
     <div class="arch-stack">
-      <div class="glass-card arch-layer reveal stagger-1">
-        <div class="layer-tag"><span class="ln">1</span> Document + Weather Ingestion</div>
-        <h3>LLM Reads Reports, NOAA Feeds Geography</h3>
-        <p>Attestation PDFs fed to Claude for structured extraction. NOAA forecasts, NHC hurricane tracks, and FEMA disaster zones geocoded and normalized. Both streams produce location-tagged data.</p>
-        <div class="arch-tags"><span class="arch-chip">Claude API</span><span class="arch-chip">PDF extraction</span><span class="arch-chip">NOAA / NHC</span><span class="arch-chip">OpenMeteo</span><span class="arch-chip">geocoding</span></div>
-      </div>
-      <div class="glass-card arch-layer reveal stagger-2">
-        <div class="layer-tag"><span class="ln">2</span> Geographic Knowledge Graph</div>
-        <h3>The Core Innovation</h3>
-        <p>Entities mapped with location: Stablecoin → Custodian Bank (city, state) → Jurisdiction → Asset Class. Weather events attach as stress modifiers to geographic nodes. The graph makes the causal chain explicit and queryable.</p>
-        <div class="arch-tags"><span class="arch-chip">NetworkX</span><span class="arch-chip">entity resolution</span><span class="arch-chip">geographic indexing</span><span class="arch-chip">weather overlay</span></div>
-      </div>
-      <div class="glass-card arch-layer reveal stagger-3">
-        <div class="layer-tag"><span class="ln">3</span> Risk Scoring Engine</div>
-        <h3>Deterministic Rules + LLM Chain-of-Thought</h3>
-        <p>Six-dimension weighted composite. Peg deviation and concentration ratios scored by deterministic rules. Weather exposure, news sentiment, and regulatory posture scored by LLM reasoning over graph context.</p>
-        <div class="arch-tags"><span class="arch-chip">rule engine</span><span class="arch-chip">graph propagation</span><span class="arch-chip">LLM-as-judge</span><span class="arch-chip">chain attribution</span></div>
-      </div>
-      <div class="glass-card arch-layer reveal stagger-4">
-        <div class="layer-tag"><span class="ln">4</span> What-If Simulator + Dashboard</div>
-        <h3>The Star Feature</h3>
-        <p>Drop a hurricane on the map, move a rate slider, trigger a bank failure. Each input propagates through the geographic graph and recalculates scores in real-time. Traffic lights with LLM narratives for every state change.</p>
-        <div class="arch-tags"><span class="arch-chip">React + Recharts</span><span class="arch-chip">Mapbox / Leaflet</span><span class="arch-chip">Claude narratives</span><span class="arch-chip">traffic light UI</span></div>
-      </div>
+      <div class="glass-card arch-layer reveal stagger-1"><div class="layer-tag"><span class="ln">1</span> Document + Weather Ingestion</div><h3>LLM Reads Reports, NOAA Feeds Geography</h3><p>Attestation PDFs fed to Claude for structured extraction. NOAA forecasts, NHC hurricane tracks, and FEMA disaster zones geocoded and normalized. Both streams produce location-tagged data.</p><div class="arch-tags"><span class="arch-chip">Claude API</span><span class="arch-chip">PDF extraction</span><span class="arch-chip">NOAA / NHC</span><span class="arch-chip">OpenMeteo</span><span class="arch-chip">geocoding</span></div></div>
+      <div class="glass-card arch-layer reveal stagger-2"><div class="layer-tag"><span class="ln">2</span> Geographic Knowledge Graph</div><h3>The Core Innovation</h3><p>Entities mapped with location: Stablecoin → Custodian Bank (city, state) → Jurisdiction → Asset Class. Weather events attach as stress modifiers to geographic nodes. The graph makes the causal chain explicit and queryable.</p><div class="arch-tags"><span class="arch-chip">NetworkX</span><span class="arch-chip">entity resolution</span><span class="arch-chip">geographic indexing</span><span class="arch-chip">weather overlay</span></div></div>
+      <div class="glass-card arch-layer reveal stagger-3"><div class="layer-tag"><span class="ln">3</span> Risk Scoring Engine</div><h3>Deterministic Rules + LLM Chain-of-Thought</h3><p>Six-dimension weighted composite. Peg deviation and concentration ratios scored by deterministic rules. Weather exposure, news sentiment, and regulatory posture scored by LLM reasoning over graph context.</p><div class="arch-tags"><span class="arch-chip">rule engine</span><span class="arch-chip">graph propagation</span><span class="arch-chip">LLM-as-judge</span><span class="arch-chip">chain attribution</span></div></div>
+      <div class="glass-card arch-layer reveal stagger-4"><div class="layer-tag"><span class="ln">4</span> What-If Simulator + Dashboard</div><h3>The Star Feature</h3><p>Drop a hurricane on the map, move a rate slider, trigger a bank failure. Each input propagates through the geographic graph and recalculates scores in real-time. Traffic lights with LLM narratives for every state change.</p><div class="arch-tags"><span class="arch-chip">React + Recharts</span><span class="arch-chip">Mapbox / Leaflet</span><span class="arch-chip">Claude narratives</span><span class="arch-chip">traffic light UI</span></div></div>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
-  <!-- ═══ RISK DIMENSIONS ═══ -->
   <section>
     <div class="section-eyebrow reveal">04 Risk Dimensions</div>
     <div class="section-heading reveal">Six dimensions. Weather<br>exposure is the differentiator.</div>
     <p class="section-desc reveal">Five of these dimensions exist in various forms. The sixth, geographic weather exposure routed through counterparty data, is what makes Katabatic unique.</p>
     <div class="bento-signals">
-      <div class="glass-card signal-card reveal stagger-1">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-10-10h4m12 0h4"/></svg></div>
-        <h4>Peg Stability</h4>
-        <p>Rolling deviation from $1.00. Volatility clustering. Recovery speed. Max drawdown.</p>
-        <div class="source">Deterministic · CoinGecko</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-2">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11m16-11v11"/></svg></div>
-        <h4>Counterparty Concentration</h4>
-        <p>Single-bank percentage. Custodian count. FDIC watch list matches. Extracted from attestation reports.</p>
-        <div class="source">LLM extraction · FDIC</div>
-      </div>
-      <div class="glass-card signal-card featured reveal stagger-3">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 8.97"/><path d="M8 19h.01M12 17h.01M8 13h.01M16 15h.01M12 21h.01"/></svg></div>
-        <h4>Geographic Weather Exposure ★</h4>
-        <p>NOAA events matched to custodian locations from attestations. "This storm stresses this bank holding this % of this stablecoin."</p>
-        <div class="source">NOAA · NHC · graph propagation</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-4">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <h4>Collateral Quality</h4>
-        <p>T-bills vs. commercial paper vs. repo. Duration mismatch. Yield vs. risk of reserve composition.</p>
-        <div class="source">LLM extraction · rate data</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-5">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8m8-4h-8"/></svg></div>
-        <h4>News & Regulatory Sentiment</h4>
-        <p>LLM-scored sentiment on named counterparties. Bank downgrades, SEC actions, each mapped to graph nodes.</p>
-        <div class="source">LLM scoring · News APIs</div>
-      </div>
-      <div class="glass-card signal-card reveal stagger-6">
-        <div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-        <h4>On-Chain Health</h4>
-        <p>Whale wallet concentration, contract age, large redemptions, DEX liquidity. The one on-chain dimension.</p>
-        <div class="source">Etherscan · Dune Analytics</div>
-      </div>
+      <div class="glass-card signal-card reveal stagger-1"><div class="sig-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-10-10h4m12 0h4"/></svg></div><h4>Peg Stability</h4><p>Rolling deviation from $1.00. Volatility clustering. Recovery speed. Max drawdown.</p><div class="source">Deterministic · CoinGecko</div></div>
+      <div class="glass-card signal-card reveal stagger-2"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11m16-11v11"/></svg></div><h4>Counterparty Concentration</h4><p>Single-bank percentage. Custodian count. FDIC watch list matches. Extracted from attestation reports.</p><div class="source">LLM extraction · FDIC</div></div>
+      <div class="glass-card signal-card featured reveal stagger-3"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 8.97"/><path d="M8 19h.01M12 17h.01M8 13h.01M16 15h.01M12 21h.01"/></svg></div><h4>Geographic Weather Exposure ★</h4><p>NOAA events matched to custodian locations from attestations. "This storm stresses this bank holding this % of this stablecoin."</p><div class="source">NOAA · NHC · graph propagation</div></div>
+      <div class="glass-card signal-card reveal stagger-4"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h4>Collateral Quality</h4><p>T-bills vs. commercial paper vs. repo. Duration mismatch. Yield vs. risk of reserve composition.</p><div class="source">LLM extraction · rate data</div></div>
+      <div class="glass-card signal-card reveal stagger-5"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8m8-4h-8"/></svg></div><h4>News & Regulatory Sentiment</h4><p>LLM-scored sentiment on named counterparties. Bank downgrades, SEC actions, each mapped to graph nodes.</p><div class="source">LLM scoring · News APIs</div></div>
+      <div class="glass-card signal-card reveal stagger-6"><div class="sig-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><h4>On-Chain Health</h4><p>Whale wallet concentration, contract age, large redemptions, DEX liquidity. The one on-chain dimension.</p><div class="source">Etherscan · Dune Analytics</div></div>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
-  <!-- ═══ ROADMAP ═══ -->
   <section>
     <div class="section-eyebrow reveal">05 36-Hour Roadmap</div>
     <div class="section-heading reveal">Hard-code the demo.<br>Build the pipeline around it.</div>
     <p class="section-desc reveal">The demo works no matter what. Pre-loaded historical scenarios with real data guarantee the killer moment. Then we build real pipeline around those anchors.</p>
     <div class="timeline" id="timeline">
       <div class="timeline-progress" id="timelineProgress"></div>
-      <div class="tl-item reveal stagger-1">
-        <div class="tl-dot"></div>
-        <div class="tl-time">Friday Evening, Hours 0 to 4</div>
-        <h3>Demo-First Foundation</h3>
-        <p>Download attestation PDFs. Hard-code SVB and Hurricane Ian scenarios with real data. Scaffold React dashboard. Define extraction JSON schema.</p>
-        <div class="tl-chips"><span class="tl-chip">attestation PDFs</span><span class="tl-chip">SVB data</span><span class="tl-chip">Hurricane Ian data</span><span class="tl-chip">React scaffold</span><span class="tl-chip">JSON schema</span></div>
-      </div>
-      <div class="tl-item reveal stagger-2">
-        <div class="tl-dot"></div>
-        <div class="tl-time">Saturday Morning, Hours 4 to 12</div>
-        <h3>Extraction Pipeline & Geographic Graph</h3>
-        <p>LLM extraction chain: PDF in, JSON out. Geographic knowledge graph: banks mapped to locations. NOAA weather zone overlay. Scoring rules for all six dimensions.</p>
-        <div class="tl-chips"><span class="tl-chip">PDF chain</span><span class="tl-chip">geographic graph</span><span class="tl-chip">weather overlay</span><span class="tl-chip">scoring rules</span><span class="tl-chip">peg data</span></div>
-      </div>
-      <div class="tl-item reveal stagger-3">
-        <div class="tl-dot"></div>
-        <div class="tl-time">Saturday Afternoon, Hours 12 to 20</div>
-        <h3>What-If Simulator (The Star)</h3>
-        <p>Interactive map: drop hurricane, adjust rate sliders, trigger bank stress. Graph propagation wired to frontend. Claude API for real-time narrative generation.</p>
-        <div class="tl-chips"><span class="tl-chip">interactive map</span><span class="tl-chip">weather drop</span><span class="tl-chip">graph propagation</span><span class="tl-chip">Claude narratives</span><span class="tl-chip">animations</span></div>
-      </div>
-      <div class="tl-item reveal stagger-4">
-        <div class="tl-dot"></div>
-        <div class="tl-time">Saturday Night, Hours 20 to 26</div>
-        <h3>Backtests & Polish</h3>
-        <p>"Time machine" view: Katabatic scores during SVB collapse and Hurricane Ian. Polish transitions. Edge cases. Pitch deck.</p>
-        <div class="tl-chips"><span class="tl-chip">SVB backtest</span><span class="tl-chip">Ian backtest</span><span class="tl-chip">UI polish</span><span class="tl-chip">pitch deck</span></div>
-      </div>
-      <div class="tl-item reveal stagger-5">
-        <div class="tl-dot"></div>
-        <div class="tl-time">Sunday Morning, Hours 26 to 36</div>
-        <h3>Lock, Rehearse & Deliver</h3>
-        <p>Code freeze at hour 30. Rehearse pitch five times. Verify all demo paths. Final deploy.</p>
-        <div class="tl-chips"><span class="tl-chip">code freeze</span><span class="tl-chip">rehearsal x5</span><span class="tl-chip">demo check</span><span class="tl-chip">deploy</span></div>
-      </div>
+      <div class="tl-item reveal stagger-1"><div class="tl-dot"></div><div class="tl-time">Friday Evening, Hours 0 to 4</div><h3>Demo-First Foundation</h3><p>Download attestation PDFs. Hard-code SVB and Hurricane Ian scenarios with real data. Scaffold React dashboard. Define extraction JSON schema.</p><div class="tl-chips"><span class="tl-chip">attestation PDFs</span><span class="tl-chip">SVB data</span><span class="tl-chip">Hurricane Ian data</span><span class="tl-chip">React scaffold</span><span class="tl-chip">JSON schema</span></div></div>
+      <div class="tl-item reveal stagger-2"><div class="tl-dot"></div><div class="tl-time">Saturday Morning, Hours 4 to 12</div><h3>Extraction Pipeline & Geographic Graph</h3><p>LLM extraction chain: PDF in, JSON out. Geographic knowledge graph: banks mapped to locations. NOAA weather zone overlay. Scoring rules for all six dimensions.</p><div class="tl-chips"><span class="tl-chip">PDF chain</span><span class="tl-chip">geographic graph</span><span class="tl-chip">weather overlay</span><span class="tl-chip">scoring rules</span><span class="tl-chip">peg data</span></div></div>
+      <div class="tl-item reveal stagger-3"><div class="tl-dot"></div><div class="tl-time">Saturday Afternoon, Hours 12 to 20</div><h3>What-If Simulator (The Star)</h3><p>Interactive map: drop hurricane, adjust rate sliders, trigger bank stress. Graph propagation wired to frontend. Claude API for real-time narrative generation.</p><div class="tl-chips"><span class="tl-chip">interactive map</span><span class="tl-chip">weather drop</span><span class="tl-chip">graph propagation</span><span class="tl-chip">Claude narratives</span><span class="tl-chip">animations</span></div></div>
+      <div class="tl-item reveal stagger-4"><div class="tl-dot"></div><div class="tl-time">Saturday Night, Hours 20 to 26</div><h3>Backtests & Polish</h3><p>"Time machine" view: Katabatic scores during SVB collapse and Hurricane Ian. Polish transitions. Edge cases. Pitch deck.</p><div class="tl-chips"><span class="tl-chip">SVB backtest</span><span class="tl-chip">Ian backtest</span><span class="tl-chip">UI polish</span><span class="tl-chip">pitch deck</span></div></div>
+      <div class="tl-item reveal stagger-5"><div class="tl-dot"></div><div class="tl-time">Sunday Morning, Hours 26 to 36</div><h3>Lock, Rehearse & Deliver</h3><p>Code freeze at hour 30. Rehearse pitch five times. Verify all demo paths. Final deploy.</p><div class="tl-chips"><span class="tl-chip">code freeze</span><span class="tl-chip">rehearsal x5</span><span class="tl-chip">demo check</span><span class="tl-chip">deploy</span></div></div>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
-  <!-- ═══ TEAM ═══ -->
   <section>
     <div class="section-eyebrow reveal">06 Team Allocation</div>
     <div class="section-heading reveal">Parallel workstreams.<br>Clear ownership.</div>
-    <div style="height: 1rem"></div>
+    <div style="height:1rem"></div>
     <div class="team-grid">
-      <div class="glass-card team-card reveal stagger-1">
-        <div class="ti"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
-        <h4>LLM / Extraction</h4>
-        <p>PDF prompts, attestation parsing, narratives, Claude API</p>
-      </div>
-      <div class="glass-card team-card reveal stagger-2">
-        <div class="ti"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M8.6 7.4L15.4 16.6M15.4 7.4L8.6 16.6"/></svg></div>
-        <h4>Graph / Weather</h4>
-        <p>Knowledge graph, NOAA, geographic indexing, propagation</p>
-      </div>
-      <div class="glass-card team-card reveal stagger-3">
-        <div class="ti"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-        <h4>Data / Scoring</h4>
-        <p>APIs, scoring rules, scenarios, caching, error handling</p>
-      </div>
-      <div class="glass-card team-card reveal stagger-4">
-        <div class="ti"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-        <h4>Frontend</h4>
-        <p>Dashboard, map, traffic lights, sliders, backtest views</p>
-      </div>
+      <div class="glass-card team-card reveal stagger-1"><div class="ti"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><h4>LLM / Extraction</h4><p>PDF prompts, attestation parsing, narratives, Claude API</p></div>
+      <div class="glass-card team-card reveal stagger-2"><div class="ti"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M8.6 7.4L15.4 16.6M15.4 7.4L8.6 16.6"/></svg></div><h4>Graph / Weather</h4><p>Knowledge graph, NOAA, geographic indexing, propagation</p></div>
+      <div class="glass-card team-card reveal stagger-3"><div class="ti"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><h4>Data / Scoring</h4><p>APIs, scoring rules, scenarios, caching, error handling</p></div>
+      <div class="glass-card team-card reveal stagger-4"><div class="ti"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><h4>Frontend</h4><p>Dashboard, map, traffic lights, sliders, backtest views</p></div>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
-  <!-- ═══ DEMO ═══ -->
   <section>
     <div class="section-eyebrow reveal">07 The Killer Demo</div>
     <div class="section-heading reveal">Three pre-loaded scenarios.<br>All guaranteed to work.</div>
-    <div style="height: 1.2rem"></div>
+    <div style="height:1.2rem"></div>
     <div class="demo-box reveal-scale">
       <h3>Demo flow: 90 seconds that win the hackathon</h3>
       <div class="demo-steps">
@@ -1150,11 +390,10 @@
 
   <div class="section-divider"></div>
 
-  <!-- ═══ IMPACT ═══ -->
   <section>
     <div class="section-eyebrow reveal">08 Impact & Market</div>
     <div class="section-heading reveal">Why this becomes a company.</div>
-    <div style="height: 0.8rem"></div>
+    <div style="height:.8rem"></div>
     <div class="impact-grid">
       <div class="glass-card impact-card reveal stagger-1"><div class="imp-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div><h4>Assets at Risk</h4><p>Monthly attestation coverage, zero weather exposure modeling</p></div>
       <div class="glass-card impact-card reveal stagger-2"><div class="imp-num" data-count="4000" data-prefix="" data-suffix="+">0</div><h4>DeFi Protocols</h4><p>Every treasury needs geographic counterparty visibility</p></div>
@@ -1164,11 +403,10 @@
 
   <div class="section-divider"></div>
 
-  <!-- ═══ PITCH ═══ -->
   <section>
     <div class="section-eyebrow reveal">09 Pitch Flow</div>
     <div class="section-heading reveal">4 minutes. 5 beats.</div>
-    <div style="height: 0.8rem"></div>
+    <div style="height:.8rem"></div>
     <div class="pitch-row">
       <div class="glass-card pitch-card reveal stagger-1"><div class="pt">0:00 to 0:30</div><h4>Problem</h4><p>Monthly audits, daily weather, $3.3B at SVB</p></div>
       <div class="glass-card pitch-card reveal stagger-2"><div class="pt">0:30 to 0:50</div><h4>Niche</h4><p>The risk is geographic. Nobody connects storms to stablecoins.</p></div>
@@ -1187,142 +425,31 @@
 </div>
 
 <script>
-// ─── MOUSE GLOW ───
-const glow = document.getElementById('mouseGlow');
-document.addEventListener('mousemove', (e) => {
-  glow.style.left = e.clientX + 'px';
-  glow.style.top = e.clientY + 'px';
-});
+const glow=document.getElementById('mouseGlow');
+document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'});
 
-// ─── SCROLL REVEAL (IntersectionObserver) ───
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+const revealObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-scale').forEach(el=>revealObserver.observe(el));
 
-document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
-  revealObserver.observe(el);
-});
-
-// ─── CHAIN SEQUENTIAL ANIMATION ───
-const chainEl = document.getElementById('chain');
-let chainAnimated = false;
-
-const chainObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !chainAnimated) {
-      chainAnimated = true;
-      const items = chainEl.querySelectorAll('[data-chain]');
-      items.forEach(item => {
-        const idx = parseInt(item.dataset.chain);
-        setTimeout(() => {
-          item.classList.add('visible');
-        }, idx * 180);
-      });
-    }
-  });
-}, { threshold: 0.3 });
-
+const chainEl=document.getElementById('chain');let chainAnimated=false;
+const chainObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting&&!chainAnimated){chainAnimated=true;chainEl.querySelectorAll('[data-chain]').forEach(item=>{setTimeout(()=>item.classList.add('visible'),parseInt(item.dataset.chain)*180)})}})},{threshold:.3});
 chainObserver.observe(chainEl);
 
-// ─── COUNTER ANIMATION ───
-function animateCounter(el) {
-  const target = parseFloat(el.dataset.count);
-  const prefix = el.dataset.prefix || '';
-  const suffix = el.dataset.suffix || '';
-  const duration = 1500;
-  const start = performance.now();
-  const isDecimal = target % 1 !== 0;
+function animateCounter(el){const target=parseFloat(el.dataset.count),prefix=el.dataset.prefix||'',suffix=el.dataset.suffix||'',duration=1500,start=performance.now(),isDecimal=target%1!==0;function update(now){const elapsed=now-start,progress=Math.min(elapsed/duration,1),eased=1-Math.pow(1-progress,3),current=target*eased;el.textContent=isDecimal?prefix+current.toFixed(1)+suffix:prefix+Math.round(current).toLocaleString()+suffix;if(progress<1)requestAnimationFrame(update)}requestAnimationFrame(update)}
 
-  function update(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = target * eased;
+const counterObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.animated){e.target.dataset.animated='true';animateCounter(e.target)}})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>counterObserver.observe(el));
 
-    if (isDecimal) {
-      el.textContent = prefix + current.toFixed(1) + suffix;
-    } else {
-      el.textContent = prefix + Math.round(current).toLocaleString() + suffix;
-    }
+const timelineProgress=document.getElementById('timelineProgress');
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)setTimeout(()=>timelineProgress.classList.add('animate'),300)})},{threshold:.15}).observe(document.getElementById('timeline'));
 
-    if (progress < 1) requestAnimationFrame(update);
-  }
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{const s=window.scrollY;document.querySelector('.orb-1').style.transform=`translate(${Math.sin(s*.002)*30}px,${s*.05}px)`;document.querySelector('.orb-2').style.transform=`translate(${Math.cos(s*.003)*20}px,${-s*.03}px)`;document.querySelector('.orb-3').style.transform=`translate(${Math.sin(s*.001)*40}px,${s*.02}px)`;ticking=false});ticking=true}});
 
-  requestAnimationFrame(update);
-}
+const nav=document.querySelector('nav');
+window.addEventListener('scroll',()=>{nav.style.boxShadow=window.scrollY>50?'0 4px 30px rgba(100,88,170,.06)':'none'},{passive:true});
 
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !entry.target.dataset.animated) {
-      entry.target.dataset.animated = 'true';
-      animateCounter(entry.target);
-    }
-  });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
-
-// ─── TIMELINE PROGRESS ───
-const timelineEl = document.getElementById('timeline');
-const timelineProgress = document.getElementById('timelineProgress');
-
-const timelineObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      setTimeout(() => timelineProgress.classList.add('animate'), 300);
-    }
-  });
-}, { threshold: 0.15 });
-
-timelineObserver.observe(timelineEl);
-
-// ─── PARALLAX ORBS ON SCROLL ───
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      const scrollY = window.scrollY;
-      document.querySelector('.orb-1').style.transform = `translate(${Math.sin(scrollY * 0.002) * 30}px, ${scrollY * 0.05}px)`;
-      document.querySelector('.orb-2').style.transform = `translate(${Math.cos(scrollY * 0.003) * 20}px, ${-scrollY * 0.03}px)`;
-      document.querySelector('.orb-3').style.transform = `translate(${Math.sin(scrollY * 0.001) * 40}px, ${scrollY * 0.02}px)`;
-      ticking = false;
-    });
-    ticking = true;
-  }
-});
-
-// ─── NAV SHADOW ON SCROLL ───
-const nav = document.querySelector('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)';
-  } else {
-    nav.style.boxShadow = 'none';
-  }
-}, { passive: true });
-
-// ─── CARD TILT ON HOVER ───
-document.querySelectorAll('.glass-card').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / centerY * -2;
-    const rotateY = (x - centerX) / centerX * 2;
-
-    card.style.transform = `translateY(-3px) perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  });
-
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-  });
-});
+document.querySelectorAll('.glass-card').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;card.style.transform=`translateY(-3px) perspective(600px) rotateX(${(y-r.height/2)/r.height*-4}deg) rotateY(${(x-r.width/2)/r.width*4}deg)`});card.addEventListener('mouseleave',()=>{card.style.transform=''})});
 </script>
 
 </body>

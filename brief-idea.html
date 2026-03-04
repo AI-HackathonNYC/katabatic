@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>katabatic. — The Rating Agency for Stablecoin Reserves</title>
+<title>katabatic. — Liquidity Risk-as-a-Service for Stablecoin Reserves</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -584,7 +584,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="hero-tag"><span class="dot"></span> Programmable Capital Track &middot; Mar 13-15</div>
     <h1 class="hero-title">katabatic<span>.</span></h1>
-    <p class="hero-sub">The <strong>rating agency for stablecoin reserves.</strong> Continuous counterparty risk ratings, proven with the signal nobody else is watching: weather.</p>
+    <p class="hero-sub"><strong>Liquidity stress-testing for stablecoin reserves.</strong> Duration risk meets weather tail-risk. Not ratings you get sued over — scenarios you can act on.</p>
     <div class="hero-chips">
       <span class="hero-chip">4-5 Engineers</span>
       <span class="hero-chip">36 Hours</span>
@@ -592,17 +592,17 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     </div>
     <div class="hero-product">
       <div class="hp-header">
-        <span class="hp-header-title">KATABATIC RATINGS</span>
+        <span class="hp-header-title">KATABATIC STRESS SCORES</span>
         <span class="hp-live">LIVE</span>
       </div>
       <div class="hp-body">
-        <div class="hp-row"><span class="hp-label">USDC</span><span class="hp-grade">B+</span><span class="hp-detail">counterparty conc.</span></div>
-        <div class="hp-row"><span class="hp-label">USDT</span><span class="hp-grade">A-</span><span class="hp-detail">stable</span></div>
-        <div class="hp-row"><span class="hp-label">BUSD</span><span class="hp-grade">A</span><span class="hp-detail">stable</span></div>
-        <div class="hp-row"><span class="hp-label">DAI</span><span class="hp-grade">B+</span><span class="hp-detail">collateral shift</span></div>
-        <div class="hp-row"><span class="hp-label">FRAX</span><span class="hp-grade">B</span><span class="hp-detail">weather exposure</span></div>
+        <div class="hp-row"><span class="hp-label">USDC</span><span class="hp-grade">62</span><span class="hp-detail">LCR 88% &middot; latency 72h</span></div>
+        <div class="hp-row"><span class="hp-label">USDT</span><span class="hp-grade" style="color:#27ae60">18</span><span class="hp-detail">LCR 100% &middot; latency &lt;4h</span></div>
+        <div class="hp-row"><span class="hp-label">BUSD</span><span class="hp-grade" style="color:#27ae60">12</span><span class="hp-detail">LCR 100% &middot; latency &lt;4h</span></div>
+        <div class="hp-row"><span class="hp-label">DAI</span><span class="hp-grade">54</span><span class="hp-detail">LCR 92% &middot; latency 24h</span></div>
+        <div class="hp-row"><span class="hp-label">FRAX</span><span class="hp-grade" style="color:#e74c3c">78</span><span class="hp-detail">LCR 81% &middot; latency 72h+</span></div>
         <hr class="hp-divider">
-        <div class="hp-footer hp-row"><span class="hp-label">ALERTS</span><span class="hp-grade" style="color:var(--text)">2</span><span class="hp-detail">SE Florida &middot; Gulf Coast</span></div>
+        <div class="hp-footer hp-row"><span class="hp-label">ALERTS</span><span class="hp-grade" style="color:var(--text)">2</span><span class="hp-detail">FL LTV stress &middot; WAM &gt;2yr</span></div>
       </div>
     </div>
   </div>
@@ -613,20 +613,20 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">The Problem</div>
-      <h2 class="h-lg reveal">$150B in stablecoins. No independent <span class="em">risk rating.</span></h2>
-      <p class="body-lg reveal">Moody's rates corporate bonds. S&P rates sovereign debt. Nobody rates the reserve banking risk behind the stablecoins that power DeFi.</p>
+      <h2 class="h-lg reveal">$150B in stablecoins. No <span class="em">stress testing.</span></h2>
+      <p class="body-lg reveal">Stablecoin risk is a duration mismatch problem. SVB proved it. Weather and rate shocks are tail-risk multipliers on already-fragile balance sheets — and nobody is modeling them.</p>
     </div>
     <div class="problem-grid">
       <div class="card p-card reveal d1">
         <div class="p-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div>
-        <div class="h-sm">Unrated Reserve Assets</div>
-        <p class="body-sm">Backed by real-world banking relationships that change monthly. No continuous credit rating exists for the counterparties holding these reserves.</p>
+        <div class="h-sm">Unstressed Reserve Assets</div>
+        <p class="body-sm">Backed by real-world banking relationships with hidden duration risk. No one is modeling what happens to these reserves under rate shocks, weather events, or liquidity freezes.</p>
         <div class="p-source">Monthly attestation reports</div>
       </div>
       <div class="card p-card reveal d2">
         <div class="p-num" data-count="3.3" data-prefix="$" data-suffix="B">$0</div>
         <div class="h-sm">USDC Held at SVB</div>
-        <p class="body-sm">A single bank failure depegged a $40B stablecoin to $0.87. The attestation said everything was fine. A real-time rating would have flagged the concentration risk.</p>
+        <p class="body-sm">SVB held 2-year treasuries when rates spiked — a duration mismatch. The attestation said "US-regulated bank." A stress test would have shown the liquidity freeze coming 48 hours early.</p>
         <div class="p-source">Circle attestation &middot; March 2023</div>
       </div>
       <div class="card p-card reveal d3">
@@ -643,35 +643,35 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
 <section class="section" id="method">
   <div class="container">
     <div class="section-header">
-      <div class="eyebrow reveal">Rating Methodology</div>
-      <h2 class="h-lg reveal">From attestation PDF to continuous <span class="em">risk rating.</span></h2>
-      <p class="body-lg reveal">Every score traces to named entities and verifiable data. The chain is explicit and auditable.</p>
+      <div class="eyebrow reveal">Stress Engine</div>
+      <h2 class="h-lg reveal">From opaque PDF to real-time <span class="em">liquidity stress score.</span></h2>
+      <p class="body-lg reveal">Attestations are envelopes, not ground truth. We treat them as inference puzzles — cross-referencing vague disclosures against FDIC data and on-chain flows.</p>
     </div>
     <div class="pipeline reveal">
       <div class="card pipe-step d1">
         <div class="pipe-num">1</div>
-        <div class="pipe-title">Ingest Reports</div>
-        <div class="pipe-desc">LLM extracts banks, percentages, and jurisdictions from PDFs</div>
+        <div class="pipe-title">Resolve Entities</div>
+        <div class="pipe-desc">LLM infers probable counterparties from vague attestation PDFs + FDIC Call Reports</div>
       </div>
       <div class="card pipe-step d2">
         <div class="pipe-num">2</div>
         <div class="pipe-title">Build Graph</div>
-        <div class="pipe-desc">Map counterparties to geography and asset class</div>
+        <div class="pipe-desc">Map banks to geography, LTV ratios, WAM, data center corridors</div>
       </div>
       <div class="card pipe-step d3">
         <div class="pipe-num">3</div>
-        <div class="pipe-title">Inject Signals</div>
-        <div class="pipe-desc">Weather, news, FDIC, rates stress the graph</div>
+        <div class="pipe-title">Compute WAM</div>
+        <div class="pipe-desc">Extract Weighted Average Maturity of treasury portfolio — the primary risk signal</div>
       </div>
       <div class="card pipe-step d4">
         <div class="pipe-num">4</div>
-        <div class="pipe-title">Score &times; 6</div>
-        <div class="pipe-desc">Rules + LLM reasoning across all dimensions</div>
+        <div class="pipe-title">Multiply Stress</div>
+        <div class="pipe-desc">Weather, rate shocks, LTV deterioration act as force multipliers on duration risk</div>
       </div>
       <div class="card pipe-step d5">
         <div class="pipe-num">5</div>
-        <div class="pipe-title">Rate + Explain</div>
-        <div class="pipe-desc">Letter grade with full causal narrative</div>
+        <div class="pipe-title">Output LCR</div>
+        <div class="pipe-desc">Liquidity coverage ratio + redemption latency under scenario, not a letter grade</div>
       </div>
     </div>
   </div>
@@ -682,45 +682,45 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Six Dimensions of Risk</div>
-      <h2 class="h-lg reveal">Continuous intelligence. Weather is the <span class="em">demo focus.</span></h2>
-      <p class="body-lg reveal">The full platform rates stablecoins across six dimensions. For this hackathon, we prove it end-to-end with geographic weather exposure.</p>
+      <h2 class="h-lg reveal">Duration risk is primary. Weather is the <span class="em">force multiplier.</span></h2>
+      <p class="body-lg reveal">SVB died from duration mismatch, not a hurricane. The engine scores the structural fragility first, then models what breaks it.</p>
     </div>
     <div class="dim-grid">
-      <div class="card dim-card reveal d1">
-        <div class="dim-tag">Dimension 01</div>
-        <div class="h-sm">Attestation Extraction</div>
-        <p class="body-sm">LLM reads Circle, Tether, Paxos PDFs. Extracts banks, percentages, asset classes, maturity profiles, jurisdictions.</p>
-        <div class="dim-source">Circle &middot; Tether &middot; Paxos reports</div>
+      <div class="card dim-card featured reveal d1">
+        <div class="dim-tag">30% Weight &middot; Primary</div>
+        <div class="h-sm">Duration Risk (WAM)</div>
+        <p class="body-sm">Weighted Average Maturity of the treasury portfolio. Longer WAM = more fragile. SVB had 2-year average — our engine would have flagged it weeks before the run.</p>
+        <div class="dim-source">OCC filings &middot; LLM extraction &middot; 10-K</div>
       </div>
       <div class="card dim-card reveal d2">
-        <div class="dim-tag">Dimension 02</div>
-        <div class="h-sm">Geographic Knowledge Graph</div>
-        <p class="body-sm">Stablecoin to Bank to City/State to Asset Class. Geographic anchoring makes every other signal actionable.</p>
-        <div class="dim-source">Extracted data &middot; FDIC &middot; geocoding</div>
+        <div class="dim-tag">20% Weight</div>
+        <div class="h-sm">Reserve Transparency</div>
+        <p class="body-sm">Attestations say "US-regulated bank with $100B+ in assets" — that's an envelope, not data. Our probabilistic entity resolver cross-references 10-K filings and on-chain Mint/Burn flows to infer the actual counterparty (e.g., "BNY Mellon, 92% confidence").</p>
+        <div class="dim-source">FDIC &middot; Etherscan &middot; 10-K filings</div>
       </div>
-      <div class="card dim-card featured reveal d3">
-        <div class="dim-tag">Demo Focus</div>
-        <div class="h-sm">Weather as a Risk Signal</div>
-        <p class="body-sm">The dimension nobody else rates. NOAA forecasts enter the graph as stress modifiers on custodian bank nodes. $165B/yr in weather damages flows through reserve banking relationships nobody is monitoring.</p>
-        <div class="dim-source">NOAA &middot; NHC &middot; OpenMeteo &middot; FEMA</div>
+      <div class="card dim-card reveal d3">
+        <div class="dim-tag">15% Weight</div>
+        <div class="h-sm">Geographic + Ops Concentration</div>
+        <p class="body-sm">HHI index of bank locations plus data center corridor overlap. If treasury ops run on AWS us-east-1 and a hurricane hits Northern Virginia, redemption processing freezes — even if the bank is fine.</p>
+        <div class="dim-source">Nominatim &middot; AWS/Azure zones &middot; HHI</div>
       </div>
-      <div class="card dim-card reveal d4">
-        <div class="dim-tag">Dimension 04</div>
-        <div class="h-sm">Counterparty Monitoring</div>
-        <p class="body-sm">Named banks tracked against news, FDIC watch lists, CDS spreads. Weather stress compounds with financial stress on the same nodes.</p>
-        <div class="dim-source">News APIs &middot; FDIC &middot; financial data</div>
+      <div class="card dim-card featured reveal d4">
+        <div class="dim-tag">15% Weight &middot; Demo Focus</div>
+        <div class="h-sm">Weather Tail-Risk Multiplier</div>
+        <p class="body-sm">The hurricane doesn't hit the bank — it hits the bank's local economy. FDIC Call Reports reveal Real Estate Loan Concentration by geography. A Cat 5 in Florida means LTV ratios plummet, triggering a liquidity freeze where the bank can't process withdrawals.</p>
+        <div class="dim-source">NOAA &middot; NHC &middot; FDIC Call Reports</div>
       </div>
       <div class="card dim-card reveal d5">
-        <div class="dim-tag">Dimension 05</div>
-        <div class="h-sm">Composite Rating Engine</div>
-        <p class="body-sm">Six-dimension weighted composite produces a letter grade. Deterministic rules for quantifiable signals, LLM reasoning for qualitative ones.</p>
-        <div class="dim-source">Rule engine &middot; LLM reasoning</div>
+        <div class="dim-tag">15% Weight</div>
+        <div class="h-sm">Counterparty Health</div>
+        <p class="body-sm">Named banks tracked against FDIC watch lists, LTV ratios, and liquidity coverage. Multi-model LLM jury (Claude + GPT) independently score each bank — if models disagree by &gt;15 points, the signal is flagged for review.</p>
+        <div class="dim-source">FDIC &middot; LLM consensus jury</div>
       </div>
       <div class="card dim-card reveal d6">
-        <div class="dim-tag">Dimension 06</div>
-        <div class="h-sm">Rating Narratives</div>
-        <p class="body-sm">Every rating comes with a full causal explanation. Not just "B+" but "12% of reserves at First Regional FL, facing $4B in hurricane claims exposure."</p>
-        <div class="dim-source">Claude API &middot; chain tracing</div>
+        <div class="dim-tag">5% Weight</div>
+        <div class="h-sm">Peg Stability</div>
+        <p class="body-sm">Historical depeg events, current spread, mint/burn velocity. The lagging indicator — by the time the peg moves, the structural damage is already done. Useful for backtest validation.</p>
+        <div class="dim-source">On-chain data &middot; DEX spreads</div>
       </div>
     </div>
   </div>
@@ -731,40 +731,40 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Architecture</div>
-      <h2 class="h-lg reveal">Signal-agnostic engine. Weather is the <span class="em">first input.</span></h2>
-      <p class="body-lg reveal">Four layers. The architecture accepts any stress signal — weather proves the concept, but the knowledge graph generalizes.</p>
+      <h2 class="h-lg reveal">Five layers. Duration risk is the backbone. Weather is the <span class="em">proof.</span></h2>
+      <p class="body-lg reveal">The architecture separates structural fragility (WAM, concentration) from event catalysts (weather, rate shocks). That's what makes the SVB backtest valid.</p>
     </div>
     <div class="arch-stack">
       <div class="card arch-row reveal d1">
         <div class="arch-num">01</div>
         <div>
-          <div class="h-sm">Document + Weather Ingestion</div>
-          <p class="body-sm">Attestation PDFs fed to Claude for structured extraction. NOAA forecasts, NHC hurricane tracks, and FEMA disaster zones geocoded and normalized.</p>
+          <div class="h-sm">Ingestion + Entity Resolution</div>
+          <p class="body-sm">OCC filings and attestation PDFs fed to Claude for extraction. Probabilistic entity resolver cross-references bank 10-K filings and on-chain Mint/Burn flows to identify probable counterparties from vague disclosures.</p>
           <div class="arch-pills">
-            <span class="arch-pill">Claude API</span><span class="arch-pill">PDF extraction</span>
-            <span class="arch-pill">NOAA / NHC</span><span class="arch-pill">OpenMeteo</span><span class="arch-pill">geocoding</span>
+            <span class="arch-pill">Claude API</span><span class="arch-pill">entity resolver</span>
+            <span class="arch-pill">Etherscan</span><span class="arch-pill">FDIC Call Reports</span>
           </div>
         </div>
       </div>
       <div class="card arch-row reveal d2">
         <div class="arch-num">02</div>
         <div>
-          <div class="h-sm">Geographic Knowledge Graph</div>
-          <p class="body-sm">Stablecoin to Custodian Bank (city, state) to Jurisdiction to Asset Class. Weather events attach as stress modifiers. The graph makes the causal chain queryable.</p>
+          <div class="h-sm">Knowledge Graph + Data Center Corridors</div>
+          <p class="body-sm">Stablecoin to Bank (WAM, LTV, liquidity) to City/State to Jurisdiction. Data center corridor nodes map AWS/Azure zones for operational risk. Weather events attach as stress multipliers on bank + DC nodes.</p>
           <div class="arch-pills">
-            <span class="arch-pill">NetworkX</span><span class="arch-pill">entity resolution</span>
-            <span class="arch-pill">geographic indexing</span><span class="arch-pill">weather overlay</span>
+            <span class="arch-pill">NetworkX</span><span class="arch-pill">geographic indexing</span>
+            <span class="arch-pill">AWS/Azure zones</span><span class="arch-pill">weather overlay</span>
           </div>
         </div>
       </div>
       <div class="card arch-row reveal d3">
         <div class="arch-num">03</div>
         <div>
-          <div class="h-sm">Risk Scoring Engine</div>
-          <p class="body-sm">Six-dimension weighted composite. Peg deviation and concentration scored by rules. Weather, news, and regulatory posture scored by LLM reasoning over graph context.</p>
+          <div class="h-sm">Duration + Stress Engine</div>
+          <p class="body-sm">Primary: WAM of treasury portfolio (duration mismatch score). Multiplier: weather tail-risk &times; geographic concentration &times; LTV deterioration. LLM jury (Claude + GPT) for qualitative consensus scoring.</p>
           <div class="arch-pills">
-            <span class="arch-pill">rule engine</span><span class="arch-pill">graph propagation</span>
-            <span class="arch-pill">LLM-as-judge</span><span class="arch-pill">chain attribution</span>
+            <span class="arch-pill">WAM calculator</span><span class="arch-pill">LTV stress</span>
+            <span class="arch-pill">LLM consensus jury</span><span class="arch-pill">graph propagation</span>
           </div>
         </div>
       </div>
@@ -772,10 +772,21 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div class="arch-num">04</div>
         <div>
           <div class="h-sm">What-If Simulator + Dashboard</div>
-          <p class="body-sm">Drop a hurricane on the map, move a rate slider, trigger a bank failure. Propagates through the graph and recalculates in real-time with LLM narratives.</p>
+          <p class="body-sm">Drop a hurricane on the map, move a rate slider, trigger a bank failure. Output: "Redemption latency: 72h. Liquidity coverage: 88%." Not a grade — a scenario you can act on.</p>
           <div class="arch-pills">
             <span class="arch-pill">React + Recharts</span><span class="arch-pill">Leaflet</span>
-            <span class="arch-pill">Claude narratives</span>
+            <span class="arch-pill">scenario engine</span>
+          </div>
+        </div>
+      </div>
+      <div class="card arch-row reveal d5">
+        <div class="arch-num">05</div>
+        <div>
+          <div class="h-sm">Trust Layer (Multi-Model Consensus)</div>
+          <p class="body-sm">Claude + GPT independently analyze the same stress context. If both agree a threshold is crossed, the signal is confirmed. "Multi-SIG for AI" — makes the data feed oracle-grade for DeFi protocols to auto-rebalance.</p>
+          <div class="arch-pills">
+            <span class="arch-pill">Claude + GPT jury</span><span class="arch-pill">consensus hash</span>
+            <span class="arch-pill">oracle-ready</span>
           </div>
         </div>
       </div>
@@ -788,41 +799,41 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">The Demo</div>
-      <h2 class="h-lg reveal">Weather triggers the downgrade. The engine proves the <span class="em">vision.</span></h2>
+      <h2 class="h-lg reveal">Weather triggers the liquidity freeze. The engine proves the <span class="em">thesis.</span></h2>
     </div>
     <div class="demo-grid">
       <div class="demo-script reveal">
         <div class="h-md">Demo Script</div>
         <p class="body-sm">Five beats. Under two minutes.</p>
-        <div class="ds-step"><span class="ds-num">1</span><p><strong>Show the ratings dashboard.</strong> Six stablecoins rated across six dimensions. <em>"We had an LLM read every major attestation report, identify the counterparties, and rate them continuously."</em></p></div>
-        <div class="ds-step"><span class="ds-num">2</span><p><strong>Drop a hurricane on the map.</strong> Banks in the zone highlight. Two stablecoins downgrade from A to B+ as weather stress propagates through the knowledge graph.</p></div>
-        <div class="ds-step"><span class="ds-num">3</span><p><strong>Click into the rating explanation.</strong> LLM generates: <em>"USDC downgraded to B+. 12% of reserves at institutions in SE Florida. $4.2B insurance liability increases deposit stress."</em></p></div>
-        <div class="ds-step"><span class="ds-num">4</span><p><strong>SVB backtest.</strong> Rewind to March 2023. Rating drops to C+ 48 hours before the depeg. <em>"8.3% of reserves at SVB, elevated deposit outflow signals."</em></p></div>
-        <div class="ds-step"><span class="ds-num">5</span><p><strong>Close the pitch.</strong> "We just showed a hurricane triggering a live downgrade with full causal explanation. That's one signal. The platform handles all of them."</p></div>
+        <div class="ds-step"><span class="ds-num">1</span><p><strong>Show the stress score dashboard.</strong> Six stablecoins with Liquidity Stress Scores and projected redemption latencies. <em>"We ingest OCC filings, cross-reference on-chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio — continuously."</em></p></div>
+        <div class="ds-step"><span class="ds-num">2</span><p><strong>Drop a hurricane on the map.</strong> Two things happen: Florida bank markers turn red as their mortgage LTV ratios deteriorate, and the Northern Virginia data center corridor lights up. <em>"This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."</em></p></div>
+        <div class="ds-step"><span class="ds-num">3</span><p><strong>Click into the causal explanation.</strong> Two models (Claude + GPT) independently generated the same narrative. <em>"Consensus confirmed. USDC stress score: 68. Redemption latency: 72 hours. Liquidity coverage: 88%."</em></p></div>
+        <div class="ds-step"><span class="ds-num">4</span><p><strong>SVB backtest.</strong> Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. <em>"Our engine would have flagged this 48 hours before the depeg."</em></p></div>
+        <div class="ds-step"><span class="ds-num">5</span><p><strong>Close the pitch.</strong> "We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage.' That's what DAO treasuries need. That's Katabatic."</p></div>
       </div>
       <div>
         <div class="demo-scenarios">
           <div class="card demo-scenario reveal d1">
             <div class="scenario-tag">Scenario A &middot; Primary Demo</div>
-            <div class="h-sm">Weather-Triggered Downgrade</div>
-            <p class="body-sm">Hurricane stresses FL custodian banks, rating engine downgrades affected stablecoins, LLM explains the full causal chain.</p>
+            <div class="h-sm">Hurricane Liquidity Freeze</div>
+            <p class="body-sm">Hurricane hits FL local economy. Bank LTV ratios deteriorate. Data center corridor at risk. Stress score spikes, LLM jury confirms the causal chain.</p>
           </div>
           <div class="card demo-scenario reveal d2">
-            <div class="scenario-tag">Scenario B &middot; Same Engine, Different Signal</div>
+            <div class="scenario-tag">Scenario B &middot; Duration Mismatch</div>
             <div class="h-sm">SVB Collapse Backtest</div>
-            <p class="body-sm">Real March 2023 data. Same rating engine, different stress input. Rating drops to C+ 48 hours before USDC depegs.</p>
+            <p class="body-sm">Real March 2023 data. WAM of 2 years + rate hikes = critical duration mismatch. Engine flags it 48 hours before USDC depegs.</p>
           </div>
           <div class="card demo-scenario reveal d3">
-            <div class="scenario-tag">Scenario C &middot; Platform Extensibility</div>
+            <div class="scenario-tag">Scenario C &middot; Rate Sensitivity</div>
             <div class="h-sm">Rate Hike Stress Test</div>
-            <p class="body-sm">Rate to +3%. Bond portfolios bleed, collateral quality ratings shift. One architecture, infinite inputs.</p>
+            <p class="body-sm">+100bps rate hike. WAM sensitivity shows which stablecoins are most exposed. Bond portfolios bleed, coverage ratios drop.</p>
           </div>
         </div>
         <div class="demo-mockup reveal d4">
           <div class="mockup-bar"><span></span><span></span><span></span></div>
           <div class="mockup-body">
-            <div class="mockup-chart"><div class="mockup-label">RATINGS OVER TIME</div></div>
-            <div class="mockup-map"><div class="mockup-label" style="padding:0.5rem">GEOGRAPHIC EXPOSURE</div></div>
+            <div class="mockup-chart"><div class="mockup-label">STRESS SCORE OVER TIME</div></div>
+            <div class="mockup-map"><div class="mockup-label" style="padding:0.5rem">LTV EXPOSURE MAP</div></div>
           </div>
         </div>
       </div>
@@ -835,13 +846,13 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">36-Hour Roadmap</div>
-      <h2 class="h-lg reveal">Build the rating engine. Prove it with <span class="em">weather.</span></h2>
+      <h2 class="h-lg reveal">Build the stress engine. Prove it with <span class="em">weather + duration.</span></h2>
     </div>
     <div class="roadmap reveal">
-      <div class="card road-step"><div class="road-time">Fri Eve &middot; 0-4h</div><div class="h-sm">Foundation</div><p class="body-sm">Attestation PDFs. Hard-coded SVB & Hurricane Ian. React scaffold. JSON schema.</p></div>
-      <div class="card road-step"><div class="road-time">Sat AM &middot; 4-12h</div><div class="h-sm">Pipeline & Graph</div><p class="body-sm">LLM extraction chain. Geographic graph. NOAA overlay. Scoring rules.</p></div>
-      <div class="card road-step"><div class="road-time">Sat PM &middot; 12-20h</div><div class="h-sm">Simulator</div><p class="body-sm">Interactive map. Hurricane drop. Rate sliders. Claude narratives.</p></div>
-      <div class="card road-step"><div class="road-time">Sat Night &middot; 20-26h</div><div class="h-sm">Backtests</div><p class="body-sm">SVB time machine. Hurricane Ian replay. UI polish. Pitch deck.</p></div>
+      <div class="card road-step"><div class="road-time">Fri Eve &middot; 0-4h</div><div class="h-sm">Foundation</div><p class="body-sm">Seed data. SVB + Hurricane Ian fixtures. React scaffold. WAM schema. Entity resolver prototype.</p></div>
+      <div class="card road-step"><div class="road-time">Sat AM &middot; 4-12h</div><div class="h-sm">Pipeline & Graph</div><p class="body-sm">Entity resolution. Knowledge graph with LTV + WAM nodes. FDIC Call Report mining. Weather multiplier logic.</p></div>
+      <div class="card road-step"><div class="road-time">Sat PM &middot; 12-20h</div><div class="h-sm">Simulator</div><p class="body-sm">Interactive map with DC corridors. Hurricane drop. Rate sliders. LLM jury narratives.</p></div>
+      <div class="card road-step"><div class="road-time">Sat Night &middot; 20-26h</div><div class="h-sm">Backtests</div><p class="body-sm">SVB duration mismatch replay. Hurricane Ian LTV stress. Trust layer mock. UI polish.</p></div>
       <div class="card road-step"><div class="road-time">Sun AM &middot; 26-36h</div><div class="h-sm">Ship</div><p class="body-sm">Code freeze at hour 30. Rehearse &times;5. Verify all demo paths. Deploy.</p></div>
     </div>
   </div>
@@ -868,23 +879,23 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Impact & Market</div>
-      <h2 class="h-lg reveal">Weather is the wedge. The rating agency is the <span class="em">business.</span></h2>
+      <h2 class="h-lg reveal">Weather is the wedge. Liquidity risk-as-a-service is the <span class="em">business.</span></h2>
     </div>
     <div class="impact-grid">
       <div class="impact-card reveal d1">
         <div class="impact-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div>
-        <div class="h-sm">Unrated Reserve Assets</div>
-        <p class="body-sm">No continuous, independent rating exists for stablecoin reserve banking risk</p>
+        <div class="h-sm">Unstressed Reserve Assets</div>
+        <p class="body-sm">No one is modeling what happens to these reserves under rate shocks, weather events, or liquidity freezes</p>
       </div>
       <div class="impact-card reveal d2">
         <div class="impact-num" data-count="4000" data-suffix="+">0</div>
-        <div class="h-sm">DeFi Treasuries</div>
-        <p class="body-sm">Every protocol holding stablecoins needs counterparty risk visibility</p>
+        <div class="h-sm">DAO Treasuries</div>
+        <p class="body-sm">Every protocol holding stablecoins needs scenario-based stress testing, not static letter grades</p>
       </div>
       <div class="impact-card reveal d3">
         <div class="impact-num" data-count="0">0</div>
         <div class="h-sm">Competitors</div>
-        <p class="body-sm">Nobody combines attestation extraction, geographic mapping, and real-time stress signals into a rating</p>
+        <p class="body-sm">Nobody combines entity resolution, duration analysis, LTV stress, and multi-model consensus into a liquidity simulator</p>
       </div>
     </div>
   </div>
@@ -895,27 +906,27 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Future Vision</div>
-      <h2 class="h-lg reveal">From rating agency to <span class="em">financial infrastructure.</span></h2>
-      <p class="body-lg reveal">Weather is how we prove the engine. The endgame is much bigger — total stablecoin risk intelligence, and ultimately, a stablecoin built from that intelligence.</p>
+      <h2 class="h-lg reveal">From stress simulator to <span class="em">financial infrastructure.</span></h2>
+      <p class="body-lg reveal">Weather + duration is how we prove the engine. The endgame is oracle-grade risk data that DeFi protocols auto-rebalance against.</p>
     </div>
     <div class="vision-grid">
       <div class="card vision-card reveal d1">
         <div class="vision-label">Phase 1 &middot; Now</div>
-        <div class="h-md">Weather-Driven Ratings</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Prove the engine with the most novel signal — hurricane forecasts propagating through reserve banking relationships to produce live downgrades with causal explanation.</p>
+        <div class="h-md">Stress-Test Playground</div>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Prove the engine: duration mismatch as the primary signal, weather as the tail-risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under scenario.</p>
       </div>
       <div class="card vision-card reveal d2">
         <div class="vision-label">Phase 2 &middot; Next</div>
-        <div class="h-md">All-Factor Risk Intelligence</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Expand beyond weather to every factor that affects stablecoin reserves — bank health, interest rate shocks, regulatory changes, geopolitical risk, liquidity events, and real-time news sentiment.</p>
+        <div class="h-md">Oracle-Grade Risk Feed</div>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Multi-model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto-rebalance stablecoin positions when stress thresholds are crossed. Multi-SIG for AI.</p>
       </div>
       <div class="card vision-card reveal d3">
         <div class="vision-label">Phase 3 &middot; Endgame</div>
         <div class="h-md">The Katabatic Stablecoin</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design and manage a stablecoin with optimal reserve structure — diversified counterparties, continuously monitored, transparently rated.</p>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design a stablecoin with optimal reserve structure — diversified counterparties, continuously stress-tested, transparently managed by the engine that rates them all.</p>
       </div>
     </div>
-    <p class="body-sm reveal" style="text-align:center; margin-top:2.5rem; max-width:560px; margin-left:auto; margin-right:auto; color:var(--text-3);">Bloomberg started with data terminals and became financial infrastructure. We start with ratings and become the most transparent stablecoin in crypto.</p>
+    <p class="body-sm reveal" style="text-align:center; margin-top:2.5rem; max-width:560px; margin-left:auto; margin-right:auto; color:var(--text-3);">Bloomberg started with data terminals and became financial infrastructure. We start with stress simulations and become the most transparent stablecoin in crypto.</p>
   </div>
 </section>
 

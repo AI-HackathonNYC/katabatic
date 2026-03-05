@@ -76,7 +76,7 @@ html, body {
   display:flex; flex-direction:column;
   justify-content:flex-start; align-items:stretch;
   box-sizing:border-box;
-  padding:18px 40px 28px;
+  padding:18px 36px 20px;
   overflow:hidden;
   font-size:13px;
   background:var(--bg);
@@ -110,25 +110,25 @@ html, body {
 .ey {
   font-family:var(--mono); font-size:10px; letter-spacing:0.22em;
   text-transform:uppercase; color:var(--accent-soft); font-weight:400;
-  margin-bottom:5px; display:flex; align-items:center; gap:9px;
+  margin-bottom:8px; display:flex; align-items:center; gap:9px;
 }
 .ey::before {
   content:''; display:inline-block; width:18px; height:1px;
   background:linear-gradient(90deg,var(--accent),transparent);
   flex-shrink:0;
 }
-.h2  { font-size:26px; line-height:1.1; letter-spacing:-0.025em; margin-bottom:8px; font-weight:300; }
+.h2  { font-size:30px; line-height:1.1; letter-spacing:-0.025em; margin-bottom:8px; font-weight:400; }
 .em  { color:var(--accent-soft); }
 .emr { color:var(--danger); }
-.sub { font-size:13px; color:var(--text-2); line-height:1.55; max-width:680px; font-weight:300; margin-bottom:8px; }
+.sub { font-size:16px; color:var(--text-2); line-height:1.65; max-width:680px; font-weight:300; margin-bottom:8px; }
 .tc  { text-align:center; }
 
 /* ── Glass cards ── */
 .c {
   background:var(--surface);
   border:1px solid var(--border);
-  border-radius:8px;
-  padding:10px 12px;
+  border-radius:14px;
+  padding:8px 12px;
   box-shadow:var(--card-shadow);
   backdrop-filter:blur(24px);
   -webkit-backdrop-filter:blur(24px);
@@ -141,8 +141,8 @@ html, body {
 }
 
 /* ── Grids ── */
-.g2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
 
 /* ── Stats ── */
 .sn {
@@ -152,14 +152,14 @@ html, body {
   text-shadow:0 0 28px var(--accent-glow);
 }
 .sl { font-family:var(--mono); font-size:10px; color:var(--text-3); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px; }
-.ct { font-size:12px; color:var(--text-2); line-height:1.5; margin:4px 0 0; font-weight:300; }
+.ct { font-size:15px; color:var(--text-2); line-height:1.6; margin:4px 0 0; font-weight:300; }
 .clabel { font-family:var(--mono); font-size:10px; color:var(--text-4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
 
 /* ── Pipeline ── */
 .pipe { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin:8px 0; }
 .ps {
   background:var(--surface); border:1px solid var(--border);
-  padding:10px 9px; position:relative;
+  padding:12px 10px; position:relative;
   backdrop-filter:blur(20px);
 }
 .ps:first-child { border-radius:8px 0 0 8px; }
@@ -185,20 +185,21 @@ html, body {
 /* ── ROI rows ── */
 .roi { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); }
 .roi:last-child { border-bottom:none; }
-.roi-l { font-size:12px; color:var(--text-2); font-weight:300; }
+.roi-l { font-size:13px; color:var(--text-2); font-weight:300; }
 .roi-v { font-size:11px; font-weight:500; color:var(--accent-soft); font-family:var(--mono); }
 
 /* ── Dimension rows ── */
 .dr {
-  display:grid; grid-template-columns:20px 1fr 80px 36px;
-  align-items:center; gap:6px; padding:4px 0;
+  display:grid; grid-template-columns:20px 1fr 42px;
+  align-items:start; gap:6px; padding:4px 0;
   border-bottom:1px solid rgba(255,255,255,0.04);
 }
 .dr:last-child { border-bottom:none; }
-.di  { font-family:var(--mono); font-size:10px; color:var(--text-4); }
-.dn2 { font-size:12px; color:var(--text); font-weight:400; }
-.dm  { font-family:var(--mono); font-size:10px; color:var(--text-3); line-height:1.3; }
-.dw  { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--accent-soft); text-align:right; }
+.di  { font-family:var(--mono); font-size:10px; color:var(--text-4); margin-top:2px; }
+.dn2 { font-size:14px; color:var(--text); font-weight:400; }
+.dd  { font-size:12px; color:var(--text-3); line-height:1.4; margin-top:2px; }
+.dm  { font-family:var(--mono); font-size:12px; color:var(--text-3); line-height:1.3; }
+.dw  { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--accent-soft); text-align:right; margin-top:2px; }
 
 /* ── Output bands ── */
 .br {
@@ -216,7 +217,7 @@ html, body {
 .formula {
   font-family:var(--mono); font-size:12px; color:var(--text-2);
   background:rgba(0,0,0,0.38); border:1px solid rgba(123,111,196,0.14);
-  border-radius:7px; padding:9px 13px; line-height:1.9;
+  border-radius:12px; padding:11px 16px; line-height:1.9;
   position:relative;
 }
 .formula::before {
@@ -268,25 +269,25 @@ html, body {
 
 /* ── Timeline ── */
 .tl { display:flex; flex-direction:column; gap:0; }
-.tli { display:flex; gap:12px; align-items:flex-start; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.tli { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
 .tli:last-child { border-bottom:none; }
 .tli-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; margin-top:4px; border:2px solid var(--accent); }
 .tli-dot.active { background:var(--accent); box-shadow:0 0 10px var(--accent-glow); }
 .tli-dot.done { border-color:var(--success); background:var(--success); box-shadow:0 0 10px var(--success-glow); }
 .tli-date { font-family:var(--mono); font-size:11px; color:var(--text-4); min-width:80px; padding-top:1px; }
-.tli-txt { font-size:12px; color:var(--text-2); line-height:1.5; }
+.tli-txt { font-size:14px; color:var(--text-2); line-height:1.5; }
 .tli-txt strong { color:var(--text); font-weight:500; }
 
 /* ── Scenario cards ── */
 .scn { flex:1; display:flex; flex-direction:column; gap:5px; padding:12px 14px; }
 .scn-cat { font-family:var(--mono); font-size:10px; color:var(--text-4); letter-spacing:0.12em; text-transform:uppercase; }
-.scn-title { font-size:16px; font-weight:500; color:var(--text); margin:3px 0 5px; line-height:1.2; }
-.scn-sub { font-size:12px; color:var(--text-3); line-height:1.5; }
+.scn-title { font-size:17px; font-weight:500; color:var(--text); margin:3px 0 5px; line-height:1.2; }
+.scn-sub { font-size:14px; color:var(--text-3); line-height:1.5; }
 
 /* ── Team ── */
-.team-name { font-size:19px; font-weight:500; color:var(--text); letter-spacing:-0.02em; }
+.team-name { font-size:21px; font-weight:500; color:var(--text); letter-spacing:-0.02em; }
 .team-role { font-family:var(--mono); font-size:10px; color:var(--accent-soft); letter-spacing:0.08em; text-transform:uppercase; margin-top:2px; }
-.team-bio { font-size:12px; color:var(--text-2); line-height:1.55; margin-top:6px; font-weight:300; }
+.team-bio { font-size:14px; color:var(--text-2); line-height:1.55; margin-top:6px; font-weight:300; }
 
 /* ═══════════════════
    HERO
@@ -448,6 +449,12 @@ body.fs .snotes { display:none !important; }
 .gauge-wrap svg { position:absolute; inset:0; }
 .gauge-val { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 
+/* ── New logo ── */
+.kb-logo-h { display:inline-flex; align-items:center; gap:10px; }
+.kb-mark    { display:block; flex-shrink:0; overflow:visible; }
+.kb-word    { font-family:var(--sans); letter-spacing:-0.05em; font-weight:300; line-height:1; }
+.kb-sq      { display:inline-block; background:var(--accent-soft); border-radius:2px; flex-shrink:0; transform:rotate(45deg); margin-left:.14em; vertical-align:middle; }
+
 /* ── Speaker notes ── */
 .snotes {
   position:fixed; bottom:36px; left:16px; right:16px; z-index:8999;
@@ -498,11 +505,17 @@ body.fs .snotes { display:none !important; }
     <div class="hring hr4"></div>
     <div class="hring hr5"></div>
     <div class="h-eye"></div>
-   
   </div>
   <div class="hero-text">
     <span class="ht-ey">Cornell AI Hackathon 2026 · Programmable Capital Track</span>
-    <h1>katabatic<span class="dot">.</span></h1>
+    <div class="kb-logo-h" style="margin-bottom:16px;justify-content:center;gap:14px;">
+      <svg class="kb-mark" width="36" height="52" viewBox="0 0 30 44" fill="none">
+        <line x1="3"  y1="2" x2="9"  y2="42" stroke="rgba(184,175,245,0.25)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(184,175,245,0.6)"  stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="23" y1="2" x2="29" y2="42" stroke="#b8aff5"                stroke-width="3.5" stroke-linecap="round" style="filter:drop-shadow(0 0 7px rgba(184,175,245,0.75))"/>
+      </svg>
+      <span class="kb-word" style="font-size:74px;color:rgba(255,255,255,0.94);text-shadow:0 0 80px rgba(123,111,196,0.32);">katabatic</span>
+    </div>
     <p class="ht-sub">Liquidity Risk-as-a-Service<br>for <span class="ht-em">stablecoin reserves.</span></p>
   </div>
   <div style="position:absolute;bottom:52px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.14em;z-index:10;">
@@ -585,58 +598,42 @@ body.fs .snotes { display:none !important; }
     <div style="margin-top:8px;font-size:11px;color:var(--text-3);">Not a letter grade you can get sued over — operational intelligence DAOs can act on. No NRSRO liability.</div>
   </div>
 
-  <div class="g3" style="flex:1;min-height:0;align-items:stretch;">
-    <!-- Gauge: Stress Score 68/100 -->
-    <div class="c" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px 10px;gap:6px;">
-      <div class="gauge-wrap">
-        <svg viewBox="0 0 88 88" width="88" height="88">
-          <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(123,111,196,0.1)" stroke-width="7"/>
-          <circle cx="44" cy="44" r="34" fill="none" stroke="url(#gAccent)" stroke-width="7" stroke-linecap="round"
-            stroke-dasharray="213.6" stroke-dashoffset="64" transform="rotate(-90 44 44)"/>
-          <defs><linearGradient id="gAccent" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a4ea0"/><stop offset="100%" stop-color="#9d91e0"/></linearGradient></defs>
-        </svg>
-        <div class="gauge-val">
-          <div style="font-size:22px;font-weight:600;color:var(--accent-bright);letter-spacing:-0.03em;line-height:1;">68</div>
-          <div style="font-size:9px;font-family:var(--mono);color:var(--text-4);">/ 100</div>
-        </div>
-      </div>
-      <div class="sl">Liquidity Stress Score</div>
-      <p class="ct" style="max-width:160px;">Composite across 6 weighted dimensions of reserve health.</p>
+  <!-- 5-step pipeline -->
+  <div class="pipe" style="flex:1;min-height:0;">
+    <div class="ps">
+      <div class="pn">01 · INGEST</div>
+      <div class="pt">Resolve Entities</div>
+      <div class="pd">LLM infers counterparties from vague attestation PDFs + FDIC Call Reports</div>
     </div>
-    <!-- Gauge: 72h latency -->
-    <div class="c" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px 10px;gap:6px;">
-      <div class="gauge-wrap">
-        <svg viewBox="0 0 88 88" width="88" height="88">
-          <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(240,82,82,0.1)" stroke-width="7"/>
-          <circle cx="44" cy="44" r="34" fill="none" stroke="url(#gDanger)" stroke-width="7" stroke-linecap="round"
-            stroke-dasharray="213.6" stroke-dashoffset="85" transform="rotate(-90 44 44)"/>
-          <defs><linearGradient id="gDanger" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#b04040"/><stop offset="100%" stop-color="#f05252"/></linearGradient></defs>
-        </svg>
-        <div class="gauge-val">
-          <div style="font-size:22px;font-weight:600;color:var(--danger);letter-spacing:-0.03em;line-height:1;">72h</div>
-          <div style="font-size:9px;font-family:var(--mono);color:var(--text-4);">latency</div>
-        </div>
-      </div>
-      <div class="sl">Redemption Latency</div>
-      <p class="ct" style="max-width:160px;">Projected operational delay under the simulated stress scenario.</p>
+    <div class="ps">
+      <div class="pn">02 · MAP</div>
+      <div class="pt">Build Graph</div>
+      <div class="pd">Banks to geography, LTV ratios, WAM, data center corridors</div>
     </div>
-    <!-- Gauge: 88% coverage -->
-    <div class="c" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px 10px;gap:6px;">
-      <div class="gauge-wrap">
-        <svg viewBox="0 0 88 88" width="88" height="88">
-          <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(52,211,153,0.1)" stroke-width="7"/>
-          <circle cx="44" cy="44" r="34" fill="none" stroke="url(#gSuccess)" stroke-width="7" stroke-linecap="round"
-            stroke-dasharray="213.6" stroke-dashoffset="26" transform="rotate(-90 44 44)"/>
-          <defs><linearGradient id="gSuccess" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#22a36b"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs>
-        </svg>
-        <div class="gauge-val">
-          <div style="font-size:22px;font-weight:600;color:var(--success);letter-spacing:-0.03em;line-height:1;">88%</div>
-          <div style="font-size:9px;font-family:var(--mono);color:var(--text-4);">coverage</div>
-        </div>
-      </div>
-      <div class="sl">Liquidity Coverage</div>
-      <p class="ct" style="max-width:160px;">Reserve coverage ratio under stress. The number protocols need for auto-rebalancing.</p>
+    <div class="ps">
+      <div class="pn">03 · SCORE</div>
+      <div class="pt">Compute WAM</div>
+      <div class="pd">Weighted Average Maturity of treasury portfolio — the primary risk signal</div>
     </div>
+    <div class="ps">
+      <div class="pn">04 · MULTIPLY</div>
+      <div class="pt">Apply Stress</div>
+      <div class="pd">Weather, rate shocks, LTV deterioration act as force multipliers on duration risk</div>
+    </div>
+    <div class="ps">
+      <div class="pn">05 · OUTPUT</div>
+      <div class="pt">Output LCR</div>
+      <div class="pd">Liquidity coverage ratio + redemption latency under scenario. Not a letter grade.</div>
+    </div>
+  </div>
+
+  <!-- Compact output row -->
+  <div class="obox" style="margin-top:8px;display:flex;gap:28px;align-items:center;">
+    <span style="color:var(--text-4);">scenario output →</span>
+    <span><span style="color:var(--text-3);">score </span><span class="ovr">68 / 100</span></span>
+    <span><span style="color:var(--text-3);">latency </span><span class="ovr">72 hours</span></span>
+    <span><span style="color:var(--text-3);">coverage </span><span class="ov">88%</span></span>
+    <span style="margin-left:auto;"><span class="badge" style="font-size:10px;">CONSENSUS · Claude 68 · GPT 71 · δ=3</span></span>
   </div>
 </div>
 </section>
@@ -682,12 +679,12 @@ body.fs .snotes { display:none !important; }
     <div style="flex:1;display:flex;flex-direction:column;gap:10px;min-height:0;">
       <div class="c" style="flex:1;padding:12px 14px;min-height:0;">
         <div class="clabel">6 Dimensions → Liquidity Stress Score</div>
-        <div class="dr"><span class="di">01</span><span class="dn2">Duration Risk (WAM)</span><span class="dm">WAM normalize</span><span class="dw">30%</span></div>
-        <div class="dr"><span class="di">02</span><span class="dn2">Reserve Transparency</span><span class="dm">XBRL + on-chain</span><span class="dw">20%</span></div>
-        <div class="dr"><span class="di">03</span><span class="dn2">Geo + Ops Concentration</span><span class="dm">HHI + DC corridor</span><span class="dw">15%</span></div>
-        <div class="dr"><span class="di">04</span><span class="dn2">Weather Tail-Risk</span><span class="dm">Storm × FDIC LTV</span><span class="dw">15%</span></div>
-        <div class="dr"><span class="di">05</span><span class="dn2">Counterparty Health</span><span class="dm">FDIC + LLM-as-judge</span><span class="dw">15%</span></div>
-        <div class="dr"><span class="di">06</span><span class="dn2">Peg Stability</span><span class="dm">Mint/burn velocity</span><span class="dw">5%</span></div>
+        <div class="dr"><span class="di">01</span><div><div class="dn2">Duration Risk (WAM)</div><div class="dd">Longer WAM = more fragile. SVB held 2-year bonds against daily redemptions — our engine flags this weeks before a run.</div></div><span class="dw">30%</span></div>
+        <div class="dr"><span class="di">02</span><div><div class="dn2">Reserve Transparency</div><div class="dd">Cross-references XBRL/OCC feeds with on-chain Mint/Burn flows. Flags custodian cash divergence >5%.</div></div><span class="dw">20%</span></div>
+        <div class="dr"><span class="di">03</span><div><div class="dn2">Geo + Ops Concentration</div><div class="dd">HHI of bank locations + AWS/Azure DC corridor overlap. Hurricane hits NoVA → redemption processing freezes.</div></div><span class="dw">15%</span></div>
+        <div class="dr"><span class="di">04</span><div><div class="dn2">Weather Tail-Risk</div><div class="dd">Storm track × FDIC LTV ratios. Hurricane hits FL economy → LTV deterioration → bank liquidity freeze.</div></div><span class="dw">15%</span></div>
+        <div class="dr"><span class="di">05</span><div><div class="dn2">Counterparty Health</div><div class="dd">FDIC watch list + LTV ratios. Claude + GPT jury — if models disagree >15pts, signal is flagged for review.</div></div><span class="dw">15%</span></div>
+        <div class="dr"><span class="di">06</span><div><div class="dn2">Peg Stability</div><div class="dd">Historical depeg events + mint/burn velocity. Lagging indicator — useful for backtest validation.</div></div><span class="dw">5%</span></div>
       </div>
       <div class="c ca" style="padding:12px 14px;">
         <div class="clabel" style="color:var(--accent-soft);">Multi-Model LLM Consensus</div>
@@ -808,15 +805,9 @@ body.fs .snotes { display:none !important; }
       <p class="ct">MakerDAO, Aave, Compound — every protocol holding stablecoins needs real-time visibility.</p>
     </div>
     <div class="c" style="text-align:center;padding:10px 10px;">
-      <div class="sn" style="font-size:30px;">$10M+</div>
-      <div class="sl">Year-1 ARR Target (SOM)</div>
-      <!-- Mini revenue breakdown -->
-      <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;gap:2px;margin:10px 12px 6px;">
-        <div style="flex:5;background:var(--accent);border-radius:4px 0 0 4px;"></div>
-        <div style="flex:3;background:var(--accent-deep);"></div>
-        <div style="flex:2;background:rgba(123,111,196,0.35);border-radius:0 4px 4px 0;"></div>
-      </div>
-      <p class="ct">500 protocols at $2K/mo. Top 50 on enterprise tier at $50K+/yr.</p>
+      <div class="sn" style="font-size:30px;">0</div>
+      <div class="sl">Direct Competitors</div>
+      <p class="ct" style="margin-top:10px;">Nobody combines WAM engine, knowledge graph, data center ops risk, and multi-model LLM consensus into a liquidity stress simulator.</p>
     </div>
   </div>
 
@@ -845,10 +836,34 @@ body.fs .snotes { display:none !important; }
 <section data-transition="zoom"
   data-notes="<span class='nt'>2:25–2:50 · 25s</span><strong>Switch to live dashboard now.</strong> Three scenarios. Scenario A: drop Cat 4 on Gulf — FL bank markers turn red (LTV deterioration) AND Northern Virginia data center corridor lights up (ops freeze). Stress score spikes to 68. Click causal explanation: Claude + GPT consensus badge. 68, latency 72h, coverage 88%. Scenario B: SVB backtest — WAM chart shows 94% in 2-year bonds, engine flags critical 48h before the dollar-eighty-seven depeg. Scenario C: rate hike slider — see which stablecoins are most duration-exposed.">
 <div class="sw">
-  <div class="ey tc" style="display:block;">Live Demo</div>
-  <h2 class="h2 tc">Three scenarios. <span class="em">One engine.</span></h2>
+  <div class="ey">Live Demo</div>
+  <h2 class="h2">Three scenarios. <span class="em">One engine.</span></h2>
 
-  <div style="display:flex;gap:12px;flex:1;min-height:0;align-items:stretch;">
+  <div style="display:flex;gap:10px;flex:1;min-height:0;align-items:stretch;">
+    <!-- 5-beat script -->
+    <div class="c" style="flex:0.85;display:flex;flex-direction:column;gap:0;overflow:hidden;">
+      <div class="clabel" style="margin-bottom:6px;">Demo Script · 5 Beats · &lt;2 Min</div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="width:20px;height:20px;border-radius:6px;background:var(--accent);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.45;"><strong style="color:var(--text);">Show dashboard.</strong> 6 stablecoins, WAM-based stress scores. "Continuously re-scoring against OCC filings + on-chain flows."</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="width:20px;height:20px;border-radius:6px;background:var(--accent);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.45;"><strong style="color:var(--text);">Drop hurricane.</strong> FL bank markers turn red. NoVA data center corridor lights up. "This isn't a bank flooding — it's a liquidity squeeze."</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="width:20px;height:20px;border-radius:6px;background:var(--accent);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.45;"><strong style="color:var(--text);">Click causal explanation.</strong> Claude + GPT agree. "Consensus confirmed. Score 68 · Latency 72h · Coverage 88%."</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div style="width:20px;height:20px;border-radius:6px;background:var(--accent);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.45;"><strong style="color:var(--text);">SVB backtest.</strong> WAM 730 days + rate hike. "Our engine flags critical 48 hours before the $0.87 depeg."</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;">
+        <div style="width:20px;height:20px;border-radius:6px;background:var(--accent-soft);color:var(--bg);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.45;"><strong style="color:var(--text);">Close.</strong> "Not a grade. 72h latency and 88% coverage under Cat 4 + 50bps. That's what DAOs need. That's Katabatic."</div>
+      </div>
+    </div>
     <!-- Scenario A -->
     <div class="c ca cg scn" style="flex:1.15;">
       <div>
@@ -1017,7 +1032,14 @@ body.fs .snotes { display:none !important; }
     </div>
 
     <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;">
-      <span style="font-family:var(--sans);font-size:22px;letter-spacing:-0.025em;color:rgba(184,175,245,0.85);font-weight:400;">katabatic<span style="color:var(--accent-soft);">.</span></span>
+      <div class="kb-logo-h" style="gap:8px;">
+        <svg class="kb-mark" width="12" height="18" viewBox="0 0 30 44" fill="none">
+          <line x1="3"  y1="2" x2="9"  y2="42" stroke="rgba(184,175,245,0.25)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(184,175,245,0.6)"  stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="23" y1="2" x2="29" y2="42" stroke="#b8aff5"                stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <span class="kb-word" style="font-size:22px;color:rgba(184,175,245,0.85);">katabatic</span>
+      </div>
       <span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.2);">Cornell AI Hackathon 2026</span>
     </div>
   </div>

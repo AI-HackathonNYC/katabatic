@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>katabatic. — Liquidity Risk-as-a-Service for Stablecoin Reserves</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
    TOKENS
@@ -560,19 +560,31 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   .demo-script { padding: 1.5rem; }
   .cta-frame { padding: 3rem 1.5rem; }
 }
+/* ── Logo mark ── */
+.kb-logo-h { display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
+.kb-mark    { display:block; flex-shrink:0; overflow:visible; }
+.kb-word    { font-family:var(--font); letter-spacing:-0.04em; font-weight:700; line-height:1; }
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a class="nav-brand" data-scroll="#hero">katabatic<span>.</span></a>
+    <a class="nav-brand kb-logo-h" style="gap:7px;" data-scroll="#hero">
+      <svg class="kb-mark" width="9" height="14" viewBox="0 0 30 44" fill="none">
+        <line x1="3"  y1="2" x2="9"  y2="42" stroke="rgba(108,92,231,0.25)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)"  stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7"               stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+      <span class="kb-word" style="font-size:1.05rem;color:var(--text);">katabatic</span>
+    </a>
     <div class="nav-links">
       <a data-scroll="#problem">Problem</a>
       <a data-scroll="#method">Methodology</a>
       <a data-scroll="#dimensions">Dimensions</a>
       <a data-scroll="#arch">Architecture</a>
       <a data-scroll="#demo">Demo</a>
+      <a data-scroll="#positioning">Positioning</a>
       <a data-scroll="#roadmap">Roadmap</a>
     </div>
     <span class="nav-badge">Cornell AI Hackathon 2026</span>
@@ -583,7 +595,14 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
 <section class="hero" id="hero">
   <div class="container">
     <div class="hero-tag"><span class="dot"></span> Programmable Capital Track &middot; Mar 13-15</div>
-    <h1 class="hero-title">katabatic<span>.</span></h1>
+    <h1 class="hero-title" style="display:flex;justify-content:center;align-items:center;gap:16px;">
+      <svg class="kb-mark" width="44" height="64" viewBox="0 0 30 44" fill="none">
+        <line x1="3"  y1="2" x2="9"  y2="42" stroke="rgba(108,92,231,0.22)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.58)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7"               stroke-width="3.5" stroke-linecap="round" style="filter:drop-shadow(0 0 6px rgba(108,92,231,0.5))"/>
+      </svg>
+      <span class="kb-word" style="font-size:clamp(3.2rem,7vw,5.5rem);color:var(--text);">katabatic</span>
+    </h1>
     <p class="hero-sub"><strong>Liquidity stress-testing for stablecoin reserves.</strong> Duration risk meets weather tail-risk. Not ratings you get sued over — scenarios you can act on.</p>
     <div class="hero-chips">
       <span class="hero-chip">4-5 Engineers</span>
@@ -901,6 +920,58 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   </div>
 </section>
 
+<!-- ═══════ POSITIONING ═══════ -->
+<section class="section section-alt" id="positioning">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Stack Positioning</div>
+      <h2 class="h-lg reveal">On-chain data shows the flows.<br>Katabatic shows <span class="em">what's about to break.</span></h2>
+      <p class="body-lg reveal">On-chain data infrastructure became the authoritative source for on-chain behavioral data — the single source of truth institutions integrate into their own systems. Katabatic occupies the equivalent position for off-chain reserve risk. Same infrastructure model. Orthogonal data set.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin-bottom:3rem;">
+      <div class="card p-card reveal d1" style="padding:1.75rem;">
+        <div class="eyebrow" style="margin-bottom:0.75rem;">Layer 1</div>
+        <div class="h-sm" style="margin-bottom:0.5rem;">On-Chain Data Platforms</div>
+        <p class="body-sm">Mint/burn flows, wallet balances, transaction history. Real-time. Authoritative for on-chain behavior.</p>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-3); font-family:'IBM Plex Mono',monospace; line-height:1.6;">Dune · Nansen · Chainalysis</div>
+      </div>
+      <div class="card p-card reveal d2" style="padding:1.75rem; border-color:rgba(108,92,231,0.2); box-shadow:0 0 0 1px rgba(108,92,231,0.08), var(--shadow);">
+        <div class="eyebrow" style="margin-bottom:0.75rem; color:var(--accent);">★ Layer 2 — Katabatic</div>
+        <div class="h-sm" style="margin-bottom:0.5rem;">Reserve Risk Infrastructure</div>
+        <p class="body-sm">WAM duration risk, FDIC bank health, weather tail-risk, LLM consensus stress scores. The structural fragility layer that on-chain data can't see.</p>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(108,92,231,0.12); font-size:0.78rem; color:var(--accent); font-family:'IBM Plex Mono',monospace; line-height:1.6;">stress_score · latency_hours · coverage_ratio</div>
+      </div>
+      <div class="card p-card reveal d3" style="padding:1.75rem;">
+        <div class="eyebrow" style="margin-bottom:0.75rem;">Layer 3</div>
+        <div class="h-sm" style="margin-bottom:0.5rem;">Downstream Consumers</div>
+        <p class="body-sm">DAO governance contracts, DeFi protocol rebalancing logic, institutional risk desks, Chainlink oracle feeds. Output is consumed by systems, not just viewed by humans.</p>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-3); font-family:'IBM Plex Mono',monospace; line-height:1.6;">MakerDAO · Aave · Compound · Risk Desks</div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="padding:2rem 2.5rem; max-width:780px; margin:0 auto; background:var(--bg-dark); border-color:rgba(255,255,255,0.06);">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
+        <div>
+          <div class="eyebrow" style="color:rgba(162,155,254,0.6); margin-bottom:0.75rem;">The Analogy</div>
+          <p style="font-size:1rem; font-weight:500; color:rgba(255,255,255,0.88); line-height:1.6; margin-bottom:0.5rem;">On-chain data platforms became the system of record for what's happening on-chain. The GENIUS Act is creating the same moment for off-chain reserve data.</p>
+          <p style="font-size:0.87rem; color:rgba(255,255,255,0.4); line-height:1.65;">Before 2026: no programmatic access. After GENIUS Act: XBRL feeds, OCC APIs, continuous ingest. We are first to build the infrastructure layer above it.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem; font-family:'IBM Plex Mono',monospace; color:rgba(162,155,254,0.45); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.25rem;">Business Model</div>
+            <div style="font-size:0.87rem; color:rgba(255,255,255,0.7);">API-first · Enterprise contracts · Warehouse delivery · Real-time streaming</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:0.75rem 1rem;">
+            <div style="font-size:0.72rem; font-family:'IBM Plex Mono',monospace; color:rgba(162,155,254,0.45); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.25rem;">Moat</div>
+            <div style="font-size:0.87rem; color:rgba(255,255,255,0.7);">WAM engine + FDIC mining + weather multiplier + LLM jury. No one combines all four.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════ VISION ═══════ -->
 <section class="section section-alt" id="vision">
   <div class="container">
@@ -944,7 +1015,14 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
 <footer>
   <div class="container">
     <div class="footer-inner">
-      <span class="foot-brand">katabatic<span>.</span></span>
+      <span class="foot-brand kb-logo-h" style="gap:6px;">
+        <svg class="kb-mark" width="8" height="12" viewBox="0 0 30 44" fill="none">
+          <line x1="3"  y1="2" x2="9"  y2="42" stroke="rgba(108,92,231,0.25)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)"  stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7"               stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <span class="kb-word" style="font-size:0.95rem;color:var(--text);">katabatic</span>
+      </span>
       <div class="foot-links">
         <a data-scroll="#problem">Problem</a>
         <a data-scroll="#method">Methodology</a>

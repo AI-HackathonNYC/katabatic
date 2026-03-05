@@ -1,19 +1,55 @@
-# Katabatic — Liquidity Risk-as-a-Service for Stablecoin Reserves
+# Katabatic — The System of Record for Stablecoin Reserve Risk
 
 > Cornell AI Hackathon 2026 · Programmable Capital Track · 36 Hours · Mar 13–15
 
 ## Product Summary
 
-Katabatic is a **Liquidity Risk-as-a-Service (RaaS) simulator** for stablecoin reserve health. Not a rating agency (NRSRO liability avoided) — a stress-testing engine that gives DAO treasuries and DeFi protocols a real-time "What-If" dashboard. Think Bloomberg Terminal for stablecoin reserve risk.
+Katabatic is **the system of record for stablecoin reserve risk** — a reserve risk data platform that continuously scores the structural fragility of stablecoin reserve portfolios and exposes that data via API. Not a rating agency (NRSRO liability avoided) and not a dashboard product — an **infrastructure layer** whose risk scores are consumed by DAO governance systems, DeFi protocol rebalancing logic, institutional risk desks, and (aspirationally) Chainlink oracle feeds.
 
-The core insight: stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a credit problem. Weather and geopolitical events are *tail-risk multipliers* on top of an already-fragile balance sheet — they're the catalyst, not the cause. The hackathon demo makes this concrete by tracing a hurricane through reserve banking duration risk to produce a live **Liquidity Stress Score** with causal explanation.
+The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jan 2026) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that made continuous reserve data programmatically accessible for the first time.
 
-**Output framing (legal-safe):** Instead of letter grades (requires NRSRO status), we output:
-- `Liquidity Stress Score` (0–100)
-- `Projected redemption latency` (e.g., "72 hours under stress")
-- `Liquidity coverage ratio` (e.g., "88% under Cat 4 + 50bps hike")
+### Why "System of Record" Framing
 
-**Target customers:** DAO Treasuries (MakerDAO, Aave, Compound), DeFi protocols holding stablecoin positions, institutional risk desks.
+On-chain data platforms became the authoritative source for on-chain behavioral data — the single source of truth that Visa, a16z, and Grayscale integrate into their own systems. Katabatic occupies the equivalent position for **off-chain reserve risk**: when a DAO treasury, DeFi protocol, or institutional risk desk needs to know the structural fragility of a stablecoin reserve, Katabatic is the authoritative score they integrate — not one of many dashboards they view.
+
+**Output is consumed by systems, not just viewed by humans:**
+- DAO governance contracts that auto-rebalance stablecoin exposure
+- DeFi protocols that gate borrowing against a reserve health score
+- Risk desks that embed the score into portfolio monitoring infrastructure
+- Oracle feeds (Chainlink) for on-chain risk-gating (aspirational/demo mock layer)
+
+### Stack Positioning
+
+Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jan 2026) is the regulatory catalyst that made continuous reserve data programmatically accessible for the first time — the same unlock that blockchain growth provided for on-chain data.
+
+| Layer | What it does |
+|-------|--------------|
+| On-chain data (Dune, Nansen, Chainalysis) | Mint/burn flows, wallet balances, transaction history |
+| Off-chain regulatory (OCC XBRL, FDIC) | WAM, LTV ratios, bank health, reserve composition |
+| **Reserve Risk — Katabatic** | **Stress Score = WAM × weather multiplier × concentration. API + streaming.** |
+| Downstream consumers | DAO governance · DeFi protocols · Risk desks · Oracle feeds |
+
+On-chain data platforms have no WAM duration engine, no FDIC Call Report mining, no weather tail-risk model, no reserve stress simulation. Katabatic ingests on-chain mint/burn data as *one input* into a multi-signal scoring engine combining off-chain regulatory filings + macroeconomic signals. **Complementary, not competing.**
+
+**The key analogy (use this in pitches):** On-chain data platforms became the single source of truth for on-chain behavior — the data layer that Visa, a16z, and Grayscale integrate into their own systems. Katabatic is building the equivalent layer for off-chain reserve risk. When a DAO treasury or DeFi protocol needs to know the structural fragility of a stablecoin reserve, Katabatic is the score they integrate — not one of many dashboards they view.
+
+### Core Insight
+
+Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a credit problem. Weather and geopolitical events are *tail-risk multipliers* on an already-fragile balance sheet — the catalyst, not the cause.
+
+**Output framing (legal-safe):** Instead of letter grades (requires NRSRO status), the API returns:
+- `liquidity_stress_score` (0–100)
+- `redemption_latency_hours` (e.g., 72 under stress)
+- `liquidity_coverage_ratio` (e.g., 0.88 under Cat 4 + 50bps hike)
+- `causal_narrative` (LLM-generated, multi-model consensus)
+
+**Delivery modes:**
+- REST API (score on demand, <2s re-score)
+- Webhook/streaming (real-time score updates on new data)
+- What-If simulator UI (demo-facing; shows the data product in action)
+- Oracle mock (Chainlink-ready verification hash for the demo narrative)
+
+**Target customers:** DAO Treasuries (MakerDAO, Aave, Compound), DeFi protocols holding stablecoin positions, institutional risk desks, stablecoin issuers needing GENIUS Act compliance tooling.
 
 ---
 

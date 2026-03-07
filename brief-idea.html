@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>katabatic. — Liquidity Risk-as-a-Service for Stablecoin Reserves</title>
+<title>katabatic. | Liquidity Risk as a Service for Stablecoin Reserves</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -267,7 +267,7 @@ nav {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   METHODOLOGY — Pipeline
+   METHODOLOGY | Pipeline
    ═══════════════════════════════════════════════════════════ */
 .pipeline {
   display: grid; grid-template-columns: repeat(5,1fr); gap: 0.5rem;
@@ -457,7 +457,7 @@ nav {
 .team-card .h-sm { margin-bottom: 0.2rem; font-size: 0.88rem; }
 
 /* ═══════════════════════════════════════════════════════════
-   IMPACT — Dark section
+   IMPACT | Dark section
    ═══════════════════════════════════════════════════════════ */
 .impact-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
 .impact-card {
@@ -564,6 +564,44 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
 .kb-logo-h { display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
 .kb-mark    { display:block; flex-shrink:0; overflow:visible; }
 .kb-word    { font-family:var(--font); letter-spacing:-0.04em; font-weight:700; line-height:1; }
+
+/* ── Text shimmer ── */
+@keyframes text-shimmer {
+  0% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-base) 0%,
+    var(--shimmer-base) calc(50% - 40px),
+    var(--shimmer-highlight) 50%,
+    var(--shimmer-base) calc(50% + 40px),
+    var(--shimmer-base) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 3s linear infinite;
+}
+.hero-title .kb-word {
+  --shimmer-base: var(--accent);
+  --shimmer-highlight: var(--accent-light);
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-base) 0%,
+    var(--shimmer-base) calc(50% - 40px),
+    var(--shimmer-highlight) 50%,
+    var(--shimmer-base) calc(50% + 40px),
+    var(--shimmer-base) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 3s linear infinite;
+}
 </style>
 </head>
 <body>
@@ -603,7 +641,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       </svg>
       <span class="kb-word" style="font-size:clamp(3.2rem,7vw,5.5rem);color:var(--text);">katabatic</span>
     </h1>
-    <p class="hero-sub"><strong>Liquidity stress-testing for stablecoin reserves.</strong> Duration risk meets weather tail-risk. Not ratings you get sued over — scenarios you can act on.</p>
+    <p class="hero-sub"><strong>Liquidity stress testing for stablecoin reserves.</strong> Duration risk meets weather tail risk. Not ratings you get sued over. Scenarios you can act on.</p>
     <div class="hero-chips">
       <span class="hero-chip">4-5 Engineers</span>
       <span class="hero-chip">36 Hours</span>
@@ -633,7 +671,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     <div class="section-header">
       <div class="eyebrow reveal">The Problem</div>
       <h2 class="h-lg reveal">$150B in stablecoins. No <span class="em">stress testing.</span></h2>
-      <p class="body-lg reveal">Stablecoin risk is a duration mismatch problem. SVB proved it. Weather and rate shocks are tail-risk multipliers on already-fragile balance sheets — and nobody is modeling them.</p>
+      <p class="body-lg reveal">Stablecoin risk is a duration mismatch problem. SVB proved it. Weather and rate shocks are tail risk multipliers on already fragile balance sheets, and nobody is modeling them.</p>
     </div>
     <div class="problem-grid">
       <div class="card p-card reveal d1">
@@ -645,7 +683,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="card p-card reveal d2">
         <div class="p-num" data-count="3.3" data-prefix="$" data-suffix="B">$0</div>
         <div class="h-sm">USDC Held at SVB</div>
-        <p class="body-sm">SVB held 2-year treasuries when rates spiked — a duration mismatch. The attestation said "US-regulated bank." A stress test would have shown the liquidity freeze coming 48 hours early.</p>
+        <p class="body-sm">SVB held 2 year treasuries when rates spiked: a duration mismatch. The attestation said "US regulated bank." A stress test would have shown the liquidity freeze coming 48 hours early.</p>
         <div class="p-source">Circle attestation &middot; March 2023</div>
       </div>
       <div class="card p-card reveal d3">
@@ -663,8 +701,8 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Stress Engine</div>
-      <h2 class="h-lg reveal">From opaque PDF to real-time <span class="em">liquidity stress score.</span></h2>
-      <p class="body-lg reveal">Attestations are envelopes, not ground truth. We treat them as inference puzzles — cross-referencing vague disclosures against FDIC data and on-chain flows.</p>
+      <h2 class="h-lg reveal">From opaque PDF to realtime <span class="em">liquidity stress score.</span></h2>
+      <p class="body-lg reveal">Attestations are envelopes, not ground truth. We treat them as inference puzzles, cross referencing vague disclosures against FDIC data and on chain flows.</p>
     </div>
     <div class="pipeline reveal">
       <div class="card pipe-step d1">
@@ -680,7 +718,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="card pipe-step d3">
         <div class="pipe-num">3</div>
         <div class="pipe-title">Compute WAM</div>
-        <div class="pipe-desc">Extract Weighted Average Maturity of treasury portfolio — the primary risk signal</div>
+        <div class="pipe-desc">Extract Weighted Average Maturity of treasury portfolio: the primary risk signal</div>
       </div>
       <div class="card pipe-step d4">
         <div class="pipe-num">4</div>
@@ -708,37 +746,37 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="card dim-card featured reveal d1">
         <div class="dim-tag">30% Weight &middot; Primary</div>
         <div class="h-sm">Duration Risk (WAM)</div>
-        <p class="body-sm">Weighted Average Maturity of the treasury portfolio. Longer WAM = more fragile. SVB had 2-year average — our engine would have flagged it weeks before the run.</p>
+        <p class="body-sm">Weighted Average Maturity of the treasury portfolio. Longer WAM = more fragile. SVB had a 2 year average. Our engine would have flagged it weeks before the run.</p>
         <div class="dim-source">OCC filings &middot; LLM extraction &middot; 10-K</div>
       </div>
       <div class="card dim-card reveal d2">
         <div class="dim-tag">20% Weight</div>
         <div class="h-sm">Reserve Transparency</div>
-        <p class="body-sm">Attestations say "US-regulated bank with $100B+ in assets" — that's an envelope, not data. Our probabilistic entity resolver cross-references 10-K filings and on-chain Mint/Burn flows to infer the actual counterparty (e.g., "BNY Mellon, 92% confidence").</p>
+        <p class="body-sm">Attestations say "US regulated bank with $100B+ in assets." That's an envelope, not data. Our probabilistic entity resolver cross references 10K filings and on chain Mint/Burn flows to infer the actual counterparty (e.g., "BNY Mellon, 92% confidence").</p>
         <div class="dim-source">FDIC &middot; Etherscan &middot; 10-K filings</div>
       </div>
       <div class="card dim-card reveal d3">
         <div class="dim-tag">15% Weight</div>
         <div class="h-sm">Geographic + Ops Concentration</div>
-        <p class="body-sm">HHI index of bank locations plus data center corridor overlap. If treasury ops run on AWS us-east-1 and a hurricane hits Northern Virginia, redemption processing freezes — even if the bank is fine.</p>
+        <p class="body-sm">HHI index of bank locations plus data center corridor overlap. If treasury ops run on AWS us east 1 and a hurricane hits Northern Virginia, redemption processing freezes, even if the bank is fine.</p>
         <div class="dim-source">Nominatim &middot; AWS/Azure zones &middot; HHI</div>
       </div>
       <div class="card dim-card featured reveal d4">
         <div class="dim-tag">15% Weight &middot; Demo Focus</div>
         <div class="h-sm">Weather Tail-Risk Multiplier</div>
-        <p class="body-sm">The hurricane doesn't hit the bank — it hits the bank's local economy. FDIC Call Reports reveal Real Estate Loan Concentration by geography. A Cat 5 in Florida means LTV ratios plummet, triggering a liquidity freeze where the bank can't process withdrawals.</p>
+        <p class="body-sm">The hurricane doesn't hit the bank. It hits the bank's local economy. FDIC Call Reports reveal Real Estate Loan Concentration by geography. A Cat 5 in Florida means LTV ratios plummet, triggering a liquidity freeze where the bank can't process withdrawals.</p>
         <div class="dim-source">NOAA &middot; NHC &middot; FDIC Call Reports</div>
       </div>
       <div class="card dim-card reveal d5">
         <div class="dim-tag">15% Weight</div>
         <div class="h-sm">Counterparty Health</div>
-        <p class="body-sm">Named banks tracked against FDIC watch lists, LTV ratios, and liquidity coverage. Multi-model LLM jury (Claude + GPT) independently score each bank — if models disagree by &gt;15 points, the signal is flagged for review.</p>
+        <p class="body-sm">Named banks tracked against FDIC watch lists, LTV ratios, and liquidity coverage. Multi model LLM jury (Claude + GPT) independently score each bank. If models disagree by &gt;15 points, the signal is flagged for review.</p>
         <div class="dim-source">FDIC &middot; LLM consensus jury</div>
       </div>
       <div class="card dim-card reveal d6">
         <div class="dim-tag">5% Weight</div>
         <div class="h-sm">Peg Stability</div>
-        <p class="body-sm">Historical depeg events, current spread, mint/burn velocity. The lagging indicator — by the time the peg moves, the structural damage is already done. Useful for backtest validation.</p>
+        <p class="body-sm">Historical depeg events, current spread, mint/burn velocity. The lagging indicator: by the time the peg moves, the structural damage is already done. Useful for backtest validation.</p>
         <div class="dim-source">On-chain data &middot; DEX spreads</div>
       </div>
     </div>
@@ -758,7 +796,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div class="arch-num">01</div>
         <div>
           <div class="h-sm">Ingestion + Entity Resolution</div>
-          <p class="body-sm">OCC filings and attestation PDFs fed to Claude for extraction. Probabilistic entity resolver cross-references bank 10-K filings and on-chain Mint/Burn flows to identify probable counterparties from vague disclosures.</p>
+          <p class="body-sm">OCC filings and attestation PDFs fed to Claude for extraction. Probabilistic entity resolver cross references bank 10K filings and onchain Mint/Burn flows to identify probable counterparties from vague disclosures.</p>
           <div class="arch-pills">
             <span class="arch-pill">Claude API</span><span class="arch-pill">entity resolver</span>
             <span class="arch-pill">Etherscan</span><span class="arch-pill">FDIC Call Reports</span>
@@ -780,7 +818,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div class="arch-num">03</div>
         <div>
           <div class="h-sm">Duration + Stress Engine</div>
-          <p class="body-sm">Primary: WAM of treasury portfolio (duration mismatch score). Multiplier: weather tail-risk &times; geographic concentration &times; LTV deterioration. LLM jury (Claude + GPT) for qualitative consensus scoring.</p>
+          <p class="body-sm">Primary: WAM of treasury portfolio (duration mismatch score). Multiplier: weather tail risk &times; geographic concentration &times; LTV deterioration. LLM jury (Claude + GPT) for qualitative consensus scoring.</p>
           <div class="arch-pills">
             <span class="arch-pill">WAM calculator</span><span class="arch-pill">LTV stress</span>
             <span class="arch-pill">LLM consensus jury</span><span class="arch-pill">graph propagation</span>
@@ -791,7 +829,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div class="arch-num">04</div>
         <div>
           <div class="h-sm">What-If Simulator + Dashboard</div>
-          <p class="body-sm">Drop a hurricane on the map, move a rate slider, trigger a bank failure. Output: "Redemption latency: 72h. Liquidity coverage: 88%." Not a grade — a scenario you can act on.</p>
+          <p class="body-sm">Drop a hurricane on the map, move a rate slider, trigger a bank failure. Output: "Redemption latency: 72h. Liquidity coverage: 88%." Not a grade. A scenario you can act on.</p>
           <div class="arch-pills">
             <span class="arch-pill">React + Recharts</span><span class="arch-pill">Leaflet</span>
             <span class="arch-pill">scenario engine</span>
@@ -802,10 +840,10 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div class="arch-num">05</div>
         <div>
           <div class="h-sm">Trust Layer (Multi-Model Consensus)</div>
-          <p class="body-sm">Claude + GPT independently analyze the same stress context. If both agree a threshold is crossed, the signal is confirmed. "Multi-SIG for AI" — makes the data feed oracle-grade for DeFi protocols to auto-rebalance.</p>
+          <p class="body-sm">Claude + GPT independently analyze the same stress context. If both agree a threshold is crossed, the signal is confirmed. "Multi SIG for AI" that makes the data feed oracle grade for DeFi protocols to auto rebalance.</p>
           <div class="arch-pills">
             <span class="arch-pill">Claude + GPT jury</span><span class="arch-pill">consensus hash</span>
-            <span class="arch-pill">oracle-ready</span>
+            <span class="arch-pill">oracle ready</span>
           </div>
         </div>
       </div>
@@ -824,10 +862,10 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="demo-script reveal">
         <div class="h-md">Demo Script</div>
         <p class="body-sm">Five beats. Under two minutes.</p>
-        <div class="ds-step"><span class="ds-num">1</span><p><strong>Show the stress score dashboard.</strong> Six stablecoins with Liquidity Stress Scores and projected redemption latencies. <em>"We ingest OCC filings, cross-reference on-chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio — continuously."</em></p></div>
+        <div class="ds-step"><span class="ds-num">1</span><p><strong>Show the stress score dashboard.</strong> Six stablecoins with Liquidity Stress Scores and projected redemption latencies. <em>"We ingest OCC filings, cross reference on chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio. Continuously."</em></p></div>
         <div class="ds-step"><span class="ds-num">2</span><p><strong>Drop a hurricane on the map.</strong> Two things happen: Florida bank markers turn red as their mortgage LTV ratios deteriorate, and the Northern Virginia data center corridor lights up. <em>"This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."</em></p></div>
         <div class="ds-step"><span class="ds-num">3</span><p><strong>Click into the causal explanation.</strong> Two models (Claude + GPT) independently generated the same narrative. <em>"Consensus confirmed. USDC stress score: 68. Redemption latency: 72 hours. Liquidity coverage: 88%."</em></p></div>
-        <div class="ds-step"><span class="ds-num">4</span><p><strong>SVB backtest.</strong> Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. <em>"Our engine would have flagged this 48 hours before the depeg."</em></p></div>
+        <div class="ds-step"><span class="ds-num">4</span><p><strong>SVB backtest.</strong> Rewind to March 2023. Show the WAM chart. SVB was holding 2 year treasuries. Duration mismatch was already critical. The rate hike was just the match. <em>"Our engine would have flagged this 48 hours before the depeg."</em></p></div>
         <div class="ds-step"><span class="ds-num">5</span><p><strong>Close the pitch.</strong> "We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage.' That's what DAO treasuries need. That's Katabatic."</p></div>
       </div>
       <div>
@@ -887,7 +925,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     <div class="team-grid">
       <div class="card team-card reveal d1"><div class="team-label">Role 01</div><div class="h-sm">LLM / Extraction</div><p class="body-sm">Entity resolver, FDIC Call Report mining, LLM jury consensus, narratives</p></div>
       <div class="card team-card reveal d2"><div class="team-label">Role 02</div><div class="h-sm">Graph / Weather</div><p class="body-sm">Knowledge graph, NOAA + LTV overlay, data center corridors, propagation</p></div>
-      <div class="card team-card reveal d3"><div class="team-label">Role 03</div><div class="h-sm">Data / Scoring</div><p class="body-sm">WAM calculator, stress engine, on-chain cross-reference, scenarios</p></div>
+      <div class="card team-card reveal d3"><div class="team-label">Role 03</div><div class="h-sm">Data / Scoring</div><p class="body-sm">WAM calculator, stress engine, onchain cross reference, scenarios</p></div>
       <div class="card team-card reveal d4"><div class="team-label">Role 04</div><div class="h-sm">Frontend</div><p class="body-sm">Stress dashboard, LCR display, map with DC corridors, backtest views</p></div>
     </div>
   </div>
@@ -898,7 +936,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Impact & Market</div>
-      <h2 class="h-lg reveal">Weather is the wedge. Liquidity risk-as-a-service is the <span class="em">business.</span></h2>
+      <h2 class="h-lg reveal">Weather is the wedge. Liquidity risk as a service is the <span class="em">business.</span></h2>
     </div>
     <div class="impact-grid">
       <div class="impact-card reveal d1">
@@ -914,7 +952,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="impact-card reveal d3">
         <div class="impact-num" data-count="0">0</div>
         <div class="h-sm">Competitors</div>
-        <p class="body-sm">Nobody combines entity resolution, duration analysis, LTV stress, and multi-model consensus into a liquidity simulator</p>
+        <p class="body-sm">Nobody combines entity resolution, duration analysis, LTV stress, and multi model consensus into a liquidity simulator</p>
       </div>
     </div>
   </div>
@@ -926,20 +964,20 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     <div class="section-header">
       <div class="eyebrow reveal">Stack Positioning</div>
       <h2 class="h-lg reveal">On-chain data shows the flows.<br>Katabatic shows <span class="em">what's about to break.</span></h2>
-      <p class="body-lg reveal">On-chain data infrastructure became the authoritative source for on-chain behavioral data — the single source of truth institutions integrate into their own systems. Katabatic occupies the equivalent position for off-chain reserve risk. Same infrastructure model. Orthogonal data set.</p>
+      <p class="body-lg reveal">On chain data infrastructure became the authoritative source for on chain behavioral data: the single source of truth institutions integrate into their own systems. Katabatic occupies the equivalent position for offchain reserve risk. Same infrastructure model. Orthogonal data set.</p>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; margin-bottom:3rem;">
       <div class="card p-card reveal d1" style="padding:1.75rem;">
         <div class="eyebrow" style="margin-bottom:0.75rem;">Layer 1</div>
         <div class="h-sm" style="margin-bottom:0.5rem;">On-Chain Data Platforms</div>
-        <p class="body-sm">Mint/burn flows, wallet balances, transaction history. Real-time. Authoritative for on-chain behavior.</p>
+        <p class="body-sm">Mint/burn flows, wallet balances, transaction history. Realtime. Authoritative for onchain behavior.</p>
         <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-3); font-family:'IBM Plex Mono',monospace; line-height:1.6;">Dune · Nansen · Chainalysis</div>
       </div>
       <div class="card p-card reveal d2" style="padding:1.75rem; border-color:rgba(108,92,231,0.2); box-shadow:0 0 0 1px rgba(108,92,231,0.08), var(--shadow);">
-        <div class="eyebrow" style="margin-bottom:0.75rem; color:var(--accent);">★ Layer 2 — Katabatic</div>
+        <div class="eyebrow" style="margin-bottom:0.75rem; color:var(--accent);">★ Layer 2: Katabatic</div>
         <div class="h-sm" style="margin-bottom:0.5rem;">Reserve Risk Infrastructure</div>
-        <p class="body-sm">WAM duration risk, FDIC bank health, weather tail-risk, LLM consensus stress scores. The structural fragility layer that on-chain data can't see.</p>
+        <p class="body-sm">WAM duration risk, FDIC bank health, weather tail risk, LLM consensus stress scores. The structural fragility layer that onchain data can't see.</p>
         <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(108,92,231,0.12); font-size:0.78rem; color:var(--accent); font-family:'IBM Plex Mono',monospace; line-height:1.6;">stress_score · latency_hours · coverage_ratio</div>
       </div>
       <div class="card p-card reveal d3" style="padding:1.75rem;">
@@ -954,7 +992,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
         <div>
           <div class="eyebrow" style="color:rgba(162,155,254,0.6); margin-bottom:0.75rem;">The Analogy</div>
-          <p style="font-size:1rem; font-weight:500; color:rgba(255,255,255,0.88); line-height:1.6; margin-bottom:0.5rem;">On-chain data platforms became the system of record for what's happening on-chain. The GENIUS Act is creating the same moment for off-chain reserve data.</p>
+          <p style="font-size:1rem; font-weight:500; color:rgba(255,255,255,0.88); line-height:1.6; margin-bottom:0.5rem;">Onchain data platforms became the system of record for what's happening onchain. The GENIUS Act is creating the same moment for offchain reserve data.</p>
           <p style="font-size:0.87rem; color:rgba(255,255,255,0.4); line-height:1.65;">Before 2026: no programmatic access. After GENIUS Act: XBRL feeds, OCC APIs, continuous ingest. We are first to build the infrastructure layer above it.</p>
         </div>
         <div style="display:flex; flex-direction:column; gap:0.75rem;">
@@ -978,23 +1016,23 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     <div class="section-header">
       <div class="eyebrow reveal">Future Vision</div>
       <h2 class="h-lg reveal">From stress simulator to <span class="em">financial infrastructure.</span></h2>
-      <p class="body-lg reveal">Weather + duration is how we prove the engine. The endgame is oracle-grade risk data that DeFi protocols auto-rebalance against.</p>
+      <p class="body-lg reveal">Weather + duration is how we prove the engine. The endgame is oracle grade risk data that DeFi protocols auto rebalance against.</p>
     </div>
     <div class="vision-grid">
       <div class="card vision-card reveal d1">
         <div class="vision-label">Phase 1 &middot; Now</div>
         <div class="h-md">Stress-Test Playground</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Prove the engine: duration mismatch as the primary signal, weather as the tail-risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under scenario.</p>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Prove the engine: duration mismatch as the primary signal, weather as the tail risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under scenario.</p>
       </div>
       <div class="card vision-card reveal d2">
         <div class="vision-label">Phase 2 &middot; Next</div>
         <div class="h-md">Oracle-Grade Risk Feed</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Multi-model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto-rebalance stablecoin positions when stress thresholds are crossed. Multi-SIG for AI.</p>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Multi model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto rebalance stablecoin positions when stress thresholds are crossed. Multi SIG for AI.</p>
       </div>
       <div class="card vision-card reveal d3">
         <div class="vision-label">Phase 3 &middot; Endgame</div>
         <div class="h-md">The Katabatic Stablecoin</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design a stablecoin with optimal reserve structure — diversified counterparties, continuously stress-tested, transparently managed by the engine that rates them all.</p>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design a stablecoin with optimal reserve structure: diversified counterparties, continuously stress tested, transparently managed by the engine that rates them all.</p>
       </div>
     </div>
     <p class="body-sm reveal" style="text-align:center; margin-top:2.5rem; max-width:560px; margin-left:auto; margin-right:auto; color:var(--text-3);">Bloomberg started with data terminals and became financial infrastructure. We start with stress simulations and become the most transparent stablecoin in crypto.</p>
@@ -1006,8 +1044,8 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container-sm">
     <div class="cta-frame reveal">
       <div class="eyebrow">Cornell AI Hackathon 2026</div>
-      <h2 class="h-lg">Weather proves the engine. The vision is <span class="em">oracle-grade risk infrastructure.</span></h2>
-      <p class="body-lg" style="margin:0.8rem auto 0; text-align:center; max-width:560px;">If we can trace a hurricane through LTV deterioration to a 72-hour redemption freeze with multi-model consensus — imagine every stress scenario, every stablecoin, continuously simulated.</p>
+      <h2 class="h-lg">Weather proves the engine. The vision is <span class="em">oracle grade risk infrastructure.</span></h2>
+      <p class="body-lg" style="margin:0.8rem auto 0; text-align:center; max-width:560px;">If we can trace a hurricane through LTV deterioration to a 72 hour redemption freeze with multi model consensus, imagine every stress scenario, every stablecoin, continuously simulated.</p>
     </div>
   </div>
 </section>

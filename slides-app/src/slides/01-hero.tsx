@@ -45,7 +45,7 @@ export function SlideHero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
         >
-          Liquidity stress-testing for{" "}
+          Liquidity stress testing for{" "}
           <strong className="text-text-primary font-semibold">stablecoin reserves.</strong>
         </motion.h1>
 
@@ -55,9 +55,9 @@ export function SlideHero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          Duration risk meets weather tail-risk.
+          Duration risk meets weather tail risk.
           <br />
-          Not ratings you get sued over &mdash; scenarios you can act on.
+          Not ratings you get sued over. Scenarios you can act on.
         </motion.p>
 
         <motion.p

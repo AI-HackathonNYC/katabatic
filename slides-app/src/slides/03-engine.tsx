@@ -19,14 +19,14 @@ export function SlideEngine() {
         className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold leading-tight tracking-[-0.028em]"
         {...fadeUp(0)}
       >
-        From opaque PDF to <span className="gradient-text">real-time liquidity stress score.</span>
+        From opaque PDF to <span className="gradient-text">realtime liquidity stress score.</span>
       </motion.h2>
 
       <motion.div {...fadeUp(0.1)}>
         <Card className="!bg-accent/[0.07] !border-accent/[0.12]">
           <div className="text-base text-text-secondary leading-relaxed">
-            Attestations say <em className="text-text-tertiary">&ldquo;US-regulated bank with $100B+ in assets&rdquo;</em> &mdash; that&apos;s an envelope, not data.
-            We treat them as <strong className="text-accent">inference puzzles</strong> &mdash; cross-referencing vague disclosures against FDIC Call Reports and on-chain Mint/Burn flows to infer the actual counterparty.
+            Attestations say <em className="text-text-tertiary">&ldquo;US-regulated bank with $100B+ in assets.&rdquo;</em> That&apos;s an envelope, not data.
+            We treat them as <strong className="text-accent">inference puzzles</strong>, cross referencing vague disclosures against FDIC Call Reports and onchain Mint/Burn flows to infer the actual counterparty.
           </div>
         </Card>
       </motion.div>

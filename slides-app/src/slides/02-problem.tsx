@@ -43,13 +43,13 @@ export function SlideProblem() {
                 Invisible until it wasn&apos;t.
               </div>
               <div className="mt-2">
-                <Badge variant="accent">Root cause: duration mismatch &mdash; not credit risk</Badge>
+                <Badge variant="accent">Root cause: duration mismatch, not credit risk</Badge>
               </div>
             </div>
             <div className="shrink-0 border-l border-accent/20 pl-4">
               <div className="text-[0.7rem] font-medium uppercase tracking-[0.08em] text-accent/50 mb-1">Attestation said:</div>
               <div className="text-base text-text-tertiary leading-relaxed">
-                &ldquo;Held at a US-regulated
+                &ldquo;Held at a US regulated
                 <br />
                 bank with $100B+ assets&rdquo;
               </div>

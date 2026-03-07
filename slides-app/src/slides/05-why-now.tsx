@@ -33,9 +33,9 @@ export function SlideWhyNow() {
             <div className="text-[0.7rem] font-medium uppercase tracking-[0.1em] text-text-tertiary mb-2">Regulatory Timeline</div>
             <div className="flex flex-col">
               {[
-                { dot: "border", date: "Before 2026", text: <><strong className="text-text-primary">PDF attestations.</strong> 30-day lag. No programmatic access. Continuous monitoring was technically impossible.</> },
-                { dot: "active", date: "Jan 2026", text: <><strong className="text-text-primary">GENIUS Act signed.</strong> All PPSIs must provide XBRL filings + OCC-standardized API feeds. Programmatic ingest is now mandated.</> },
-                { dot: "done", date: "Today", text: <><strong className="text-text-primary">We have the pipeline.</strong> First time in history that real-time reserve stress monitoring is technically and legally possible.</> },
+                { dot: "border", date: "Before 2026", text: <><strong className="text-text-primary">PDF attestations.</strong> 30 day lag. No programmatic access. Continuous monitoring was technically impossible.</> },
+                { dot: "active", date: "Jan 2026", text: <><strong className="text-text-primary">GENIUS Act signed.</strong> All PPSIs must provide XBRL filings + OCC standardized API feeds. Programmatic ingest is now mandated.</> },
+                { dot: "done", date: "Today", text: <><strong className="text-text-primary">We have the pipeline.</strong> First time in history that realtime reserve stress monitoring is technically and legally possible.</> },
               ].map((item, i) => (
                 <div key={i} className={`flex gap-3.5 items-start py-2.5 ${i < 2 ? "border-b border-black/7" : ""}`}>
                   <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-1 border-2 ${
@@ -61,14 +61,14 @@ export function SlideWhyNow() {
                 <br />
                 <span className="text-accent font-semibold">Now it does.</span>
                 <br />
-                We&apos;re first in a regulation-mandated market.
+                We&apos;re first in a regulation mandated market.
               </div>
               <div className="flex flex-col gap-1">
                 {[
                   "GENIUS Act mandates XBRL feeds for all US PPSIs",
-                  "OCC APIs enable real-time programmatic ingest",
-                  "On-chain Mint/Burn cross-reference now automatable",
-                  "Multi-model LLM for qualitative signal extraction",
+                  "OCC APIs enable realtime programmatic ingest",
+                  "Onchain Mint/Burn cross reference now automatable",
+                  "Multi model LLM for qualitative signal extraction",
                 ].map(t => (
                   <div key={t} className="flex items-center gap-2 py-1">
                     <Dot />

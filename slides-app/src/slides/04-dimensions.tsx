@@ -10,12 +10,12 @@ const fadeUp = (delay = 0) => ({
 })
 
 const dimensions = [
-  { weight: "30% \u00B7 Primary", title: "Duration Risk (WAM)", desc: "Weighted Average Maturity of treasury portfolio. SVB: 730-day WAM vs daily redemptions \u2014 critical mismatch flagged 48h early.", featured: true },
-  { weight: "20%", title: "Reserve Transparency", desc: "XBRL/OCC feed freshness + Mint/Burn cross-reference divergence. Probabilistic entity resolver: BNY Mellon, 92% confidence.", featured: false },
-  { weight: "15%", title: "Geographic + Ops Concentration", desc: "HHI of bank locations + data center corridor overlap. AWS us-east-1 (NoVA) as treasury ops risk node.", featured: false },
-  { weight: "15% \u00B7 Demo Focus", title: "Weather Tail-Risk Multiplier", desc: "Storm track \u00D7 bank LTV exposure (FDIC Call Reports). The hurricane doesn\u2019t hit the bank \u2014 it hits the LTV ratio.", featured: true },
-  { weight: "15%", title: "Counterparty Health", desc: "FDIC watch list status, LTV ratios, liquidity coverage. Multi-model LLM jury: Claude + GPT average, flag if delta >15.", featured: false },
-  { weight: "5%", title: "Peg Stability", desc: "Historical depeg events, current spread, Mint/Burn velocity. Lagging signal \u2014 the other 95% is structural.", featured: false },
+  { weight: "30% \u00B7 Primary", title: "Duration Risk (WAM)", desc: "Weighted Average Maturity of treasury portfolio. SVB: 730 day WAM vs daily redemptions. Critical mismatch flagged 48h early.", featured: true },
+  { weight: "20%", title: "Reserve Transparency", desc: "XBRL/OCC feed freshness + Mint/Burn cross reference divergence. Probabilistic entity resolver: BNY Mellon, 92% confidence.", featured: false },
+  { weight: "15%", title: "Geographic + Ops Concentration", desc: "HHI of bank locations + data center corridor overlap. AWS us east 1 (NoVA) as treasury ops risk node.", featured: false },
+  { weight: "15% \u00B7 Demo Focus", title: "Weather Tail Risk Multiplier", desc: "Storm track \u00D7 bank LTV exposure (FDIC Call Reports). The hurricane doesn\u2019t hit the bank. It hits the LTV ratio.", featured: true },
+  { weight: "15%", title: "Counterparty Health", desc: "FDIC watch list status, LTV ratios, liquidity coverage. Multi model LLM jury: Claude + GPT average, flag if delta >15.", featured: false },
+  { weight: "5%", title: "Peg Stability", desc: "Historical depeg events, current spread, Mint/Burn velocity. Lagging signal: the other 95% is structural.", featured: false },
 ]
 
 export function SlideDimensions() {

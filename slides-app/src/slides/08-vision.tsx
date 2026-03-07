@@ -26,22 +26,22 @@ export function SlideVision() {
         {[
           {
             label: "Phase 1 \u00B7 Now", labelColor: "text-text-tertiary",
-            title: "Stress-Test Playground",
-            desc: "Prove the engine: duration mismatch as the primary signal, weather as the tail-risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under any scenario.",
+            title: "Stress Test Playground",
+            desc: "Prove the engine: duration mismatch as the primary signal, weather as the tail risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under any scenario.",
             badge: <Badge variant="accent">Output \u2192 latency + coverage under scenario</Badge>,
             featured: false,
           },
           {
             label: "Phase 2 \u00B7 Next", labelColor: "text-accent",
-            title: "Oracle-Grade Risk Feed",
-            desc: "Multi-model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto-rebalance stablecoin positions when stress thresholds are crossed.",
-            badge: <Badge variant="consensus" dot>Multi-SIG for AI \u00B7 Chainlink-ready</Badge>,
+            title: "Oracle Grade Risk Feed",
+            desc: "Multi model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto rebalance stablecoin positions when stress thresholds are crossed.",
+            badge: <Badge variant="consensus" dot>Multi SIG for AI \u00B7 Chainlink ready</Badge>,
             featured: true,
           },
           {
             label: "Phase 3 \u00B7 Endgame", labelColor: "text-text-tertiary",
             title: "The Katabatic Stablecoin",
-            desc: "Use our own risk intelligence to design a stablecoin with optimal reserve structure \u2014 diversified counterparties, continuously stress-tested, managed by the engine that rates them all.",
+            desc: "Use our own risk intelligence to design a stablecoin with optimal reserve structure: diversified counterparties, continuously stress tested, managed by the engine that rates them all.",
             badge: null,
             featured: false,
           },
@@ -97,7 +97,7 @@ export function SlideVision() {
             ))}
           </div>
           <div className="mt-2 text-[0.7rem] text-text-tertiary">
-            Katabatic computes WAM continuously &mdash; flagged SVB critical 48h before the $0.87 depeg.
+            Katabatic computes WAM continuously. Flagged SVB critical 48h before the $0.87 depeg.
           </div>
         </Card>
       </motion.div>

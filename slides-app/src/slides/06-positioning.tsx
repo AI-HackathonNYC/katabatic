@@ -21,7 +21,7 @@ export function SlidePositioning() {
         className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold leading-tight tracking-[-0.028em]"
         {...fadeUp(0)}
       >
-        On-chain shows the flows.
+        Onchain shows the flows.
         <br />
         Katabatic shows <span className="gradient-text">what&apos;s about to break.</span>
       </motion.h2>
@@ -32,8 +32,8 @@ export function SlidePositioning() {
           {
             num: "Layer 1",
             numClass: "text-text-tertiary",
-            title: "On-Chain Data Platforms",
-            desc: "Mint/burn flows, wallet balances, transaction history. Authoritative for on-chain behavior.",
+            title: "Onchain Data Platforms",
+            desc: "Mint/burn flows, wallet balances, transaction history. Authoritative for onchain behavior.",
             tags: ["Dune", "Nansen", "Chainalysis"],
             tagClass: "bg-bg-alt text-text-secondary",
             featured: false,
@@ -42,7 +42,7 @@ export function SlidePositioning() {
             num: "\u2605 Layer 2 \u2014 Katabatic",
             numClass: "text-accent",
             title: "Reserve Risk Infrastructure",
-            desc: "WAM duration risk, FDIC health, weather tail-risk, LLM consensus. The structural fragility layer on-chain can\u2019t see.",
+            desc: "WAM duration risk, FDIC health, weather tail risk, LLM consensus. The structural fragility layer onchain can\u2019t see.",
             tags: ["stress_score", "latency_hours", "coverage_ratio"],
             tagClass: "bg-accent/[0.07] text-accent",
             featured: true,
@@ -80,10 +80,10 @@ export function SlidePositioning() {
         <div className="flex-[1.3] border-r border-white/[0.09] pr-5">
           <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-2">The Analogy</div>
           <div className="text-base text-white/[0.92] leading-relaxed mb-1.5">
-            On-chain data platforms became the system of record for what&apos;s happening on-chain &mdash; the data layer Visa and a16z integrate into their own systems.
+            Onchain data platforms became the system of record for what&apos;s happening onchain: the data layer Visa and a16z integrate into their own systems.
           </div>
           <div className="text-base text-white/55 leading-relaxed">
-            The GENIUS Act is creating the same unlock for off-chain reserve data. We are first to build the infrastructure layer above it.
+            The GENIUS Act is creating the same unlock for offchain reserve data. We are first to build the infrastructure layer above it.
           </div>
         </div>
         <div className="flex-1 flex flex-col gap-2">
@@ -94,7 +94,7 @@ export function SlidePositioning() {
           <div className="glass-dark rounded-xl p-3">
             <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-1.5">Defensible Moat</div>
             <div className="flex flex-col gap-0.5">
-              {["WAM duration scoring engine", "Geo knowledge graph + DC ops risk", "Multi-model LLM consensus oracle layer"].map(t => (
+              {["WAM duration scoring engine", "Geo knowledge graph + DC ops risk", "Multi model LLM consensus oracle layer"].map(t => (
                 <div key={t} className="flex items-center gap-2 py-0.5">
                   <Dot color="accent-light" />
                   <span className="text-base text-white/55">{t}</span>

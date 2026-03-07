@@ -30,7 +30,7 @@ export function SlideBusiness() {
         {/* Left: 3 pricing tiers */}
         <div className="flex-[1.4] flex flex-col gap-3">
           {[
-            { tier: "Starter API", tierColor: "text-text-tertiary", price: "$500", period: "/mo", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s re-score \u00B7 1M calls/mo", featured: false },
+            { tier: "Starter API", tierColor: "text-text-tertiary", price: "$500", period: "/mo", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
             { tier: "Enterprise", tierColor: "text-accent", price: "$5K", period: "/mo", desc: "Real-time streaming \u00B7 custom stablecoin onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
             { tier: "Institutional", tierColor: "text-text-tertiary", price: "Custom", period: "", desc: "FDIC Call Report mining \u00B7 oracle feed integration \u00B7 dedicated scoring pipeline", featured: false },
           ].map((t, i) => (
@@ -72,10 +72,10 @@ export function SlideBusiness() {
               <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-2">Moat</div>
               <div className="flex flex-col gap-1.5">
                 {[
-                  "First-mover on GENIUS Act data pipeline",
+                  "First mover on GENIUS Act data pipeline",
                   "Proprietary WAM duration engine",
-                  "Multi-model LLM consensus layer",
-                  "Oracle-grade signal (Chainlink-ready)",
+                  "Multi model LLM consensus layer",
+                  "Oracle grade signal (Chainlink ready)",
                 ].map(m => (
                   <div key={m} className="flex items-center gap-2 text-base text-text-secondary"><Dot />{m}</div>
                 ))}
@@ -89,7 +89,7 @@ export function SlideBusiness() {
       <motion.div {...fadeUp(0.4)}>
         <Card className="!py-4 !px-6 shrink-0">
           <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-2.5">
-            Stablecoin total supply &mdash; TAM &middot; GENIUS Act creates continuous monitoring market
+            Stablecoin total supply (TAM) &middot; GENIUS Act creates continuous monitoring market
           </div>
           <div className="flex items-end gap-2 h-[62px]">
             {[

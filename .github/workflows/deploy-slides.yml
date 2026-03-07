@@ -27,6 +27,7 @@ jobs:
         working-directory: slides-app
       - run: npm run build
         working-directory: slides-app
+      - run: cp brief-idea.html slides-app/dist/brief-idea.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: slides-app/dist

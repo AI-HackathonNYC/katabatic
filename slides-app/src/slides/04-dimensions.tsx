@@ -14,7 +14,7 @@ const dimensions = [
   { pct: 20, tag: null, title: "Reserve Transparency", desc: "XBRL/OCC feed freshness + Mint/Burn cross-reference divergence. Entity resolver: BNY Mellon at 92% confidence.", featured: false },
   { pct: 15, tag: null, title: "Geographic + Ops Concentration", desc: "HHI of bank locations + data center corridor overlap. AWS us-east-1 (NoVA) as treasury ops risk node.", featured: false },
   { pct: 15, tag: "Demo Focus", title: "Weather Tail Risk", desc: "Storm track \u00D7 bank LTV exposure via FDIC Call Reports. The hurricane doesn\u2019t hit the bank. It hits the LTV ratio.", featured: true },
-  { pct: 15, tag: null, title: "Counterparty Health", desc: "FDIC watch list, LTV ratios, liquidity coverage. Multi-model LLM jury: Claude + GPT, flag if delta >15.", featured: false },
+  { pct: 15, tag: null, title: "Counterparty Health", desc: "FDIC watch list, LTV ratios, liquidity coverage. Multi-model LLM jury: Claude + Gemini, flag if delta >15.", featured: false },
   { pct: 5, tag: null, title: "Peg Stability", desc: "Historical depeg events, current spread, Mint/Burn velocity. Lagging signal. The other 95% is structural.", featured: false },
 ]
 

@@ -12,7 +12,7 @@ networkx==3.4.*
 
 # LLM APIs
 anthropic==0.52.*
-openai==1.82.*
+google-genai==1.14.*
 
 # Database
 aiosqlite==0.21.*

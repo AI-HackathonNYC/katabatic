@@ -36,7 +36,7 @@ async def health():
 async def startup_check():
     keys = {
         "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
-        "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+        "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
         "NOAA_API_TOKEN": os.getenv("NOAA_API_TOKEN"),
         "ETHERSCAN_API_KEY": os.getenv("ETHERSCAN_API_KEY"),
         "PINATA_API_KEY": os.getenv("PINATA_API_KEY"),

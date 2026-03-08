@@ -17,7 +17,7 @@
 - [ ] Create `dev` branch from `main`, push scaffold commits
 
 ### Backend Bootstrap
-- [ ] Install FastAPI, uvicorn, python-dotenv, httpx, networkx, anthropic, openai into `requirements.txt`
+- [ ] Install FastAPI, uvicorn, python-dotenv, httpx, networkx, anthropic, google-genai into `requirements.txt`
 - [ ] Implement `/health` endpoint returning `{ "status": "ok", "timestamp": "..." }`
 - [ ] Configure CORS middleware (allow all origins for dev, restrict to frontend origin in prod)
 - [ ] Set up `.env` loading with `python-dotenv` — all API keys read from env
@@ -178,7 +178,7 @@
   - `score_counterparty(banks: list[BankNode], llm_scores: dict[str, float]) -> float`
   - Average FDIC health proxies (LTV, liquidity coverage) across banks weighted by reserve %
   - Blend with LLM jury score (50/50)
-  - Flag if Claude vs GPT delta > 15 points — surface as "Models disagree" warning
+  - Flag if Claude vs Gemini delta > 15 points — surface as "Models disagree" warning
 
 - [ ] **Dimension 6 — Peg Stability (5% weight):**
   - `score_peg(depeg_events_90d: int, current_spread_bps: float, mint_burn_velocity: float) -> float`
@@ -198,11 +198,11 @@
 
 #### LLM Jury
 - [ ] Write `app/services/llm_jury.py` — `get_jury_score(context: str) -> JuryResult`
-- [ ] Send identical prompt to Claude (anthropic SDK) and GPT (openai SDK) concurrently using `asyncio.gather`
+- [ ] Send identical prompt to Claude (anthropic SDK) and Gemini (google-genai SDK) concurrently using `asyncio.gather`
 - [ ] Prompt: "Given the following reserve data and market context, score the counterparty health risk from 0–100 where 0 = no risk and 100 = imminent failure. Respond with only a JSON object: { score: int, rationale: str }"
 - [ ] Parse both responses, compute delta
-- [ ] If delta ≤ 15: return `{ score: avg, consensus: true, claude_score, gpt_score, delta }`
-- [ ] If delta > 15: return `{ score: avg, consensus: false, claude_score, gpt_score, delta, warning: "Models disagree — review manually" }`
+- [ ] If delta ≤ 15: return `{ score: avg, consensus: true, claude_score, gemini_score, delta }`
+- [ ] If delta > 15: return `{ score: avg, consensus: false, claude_score, gemini_score, delta, warning: "Models disagree — review manually" }`
 
 #### Endpoints
 - [ ] `GET /api/stress-scores` — returns all stablecoin stress scores with all 6 dimension breakdowns
@@ -235,7 +235,7 @@
 - [ ] Create `src/components/WAMChart.tsx` — Recharts BarChart showing WAM in days per counterparty bank, color-coded by maturity bucket (<30d green, 30–90d yellow, 90–365d orange, 365d+ red)
 - [ ] Create `src/components/DimensionBreakdown.tsx` — Recharts RadarChart showing all 6 dimension scores (0–100) on a hexagonal radar, with dimension labels
 - [ ] Create `src/components/MintBurnSparkline.tsx` — Recharts AreaChart showing 7-day mint/burn volume with divergence annotation line
-- [ ] Create `src/components/ConsensusPanel.tsx` — shows "Claude: 68 | GPT: 71 | Delta: 3 → CONSENSUS" or "Models disagree" warning
+- [ ] Create `src/components/ConsensusPanel.tsx` — shows "Claude: 68 | Gemini: 71 | Delta: 3 → CONSENSUS" or "Models disagree" warning
 - [ ] Create `src/components/CounterpartyList.tsx` — table of banks with: name, city, %, WAM, LTV, FDIC status, geographic stress contribution
 
 #### UI Polish
@@ -293,10 +293,10 @@
 - [ ] Build narrative prompt `app/prompts/narrative_generation.txt`:
   - Include: stablecoin name, stress score, top 3 contributing dimensions, affected banks with LTV, affected data center corridors, scenario params
   - Instruct: "Generate a 3–5 sentence causal explanation of the stress score. Focus on the chain of causation: duration mismatch → weather multiplier → operational risk. Be specific about bank names, percentages, and data center corridors."
-- [ ] Call Claude and GPT concurrently with identical prompt
+- [ ] Call Claude and Gemini concurrently with identical prompt
 - [ ] Compare narratives: extract key claims from each (use a short Claude call: "List the top 3 causal claims in this narrative as JSON array of strings")
 - [ ] Compute claim overlap: if > 70% claims match → consensus = True
-- [ ] `NarrativeResult`: `{ narrative_claude: str, narrative_gpt: str, consensus_narrative: str, consensus: bool, agreement_score: float }`
+- [ ] `NarrativeResult`: `{ narrative_claude: str, narrative_gemini: str, consensus_narrative: str, consensus: bool, agreement_score: float }`
 - [ ] Consensus narrative: use Claude narrative if consensus, else display both side-by-side
 
 #### Endpoint
@@ -370,7 +370,7 @@
 **Backend — IPFS Pinning**
 - [ ] Install `pinata-sdk` or use Pinata REST API via `httpx` in `requirements.txt`
 - [ ] Write `app/services/ipfs.py` — `pin_score_to_ipfs(score_data: dict) -> PinResult` using Pinata API
-  - Accepts: `{ stablecoin, stress_score, latency_hours, coverage_ratio, claude_score, gpt_score, consensus, narrative, timestamp }`
+  - Accepts: `{ stablecoin, stress_score, latency_hours, coverage_ratio, claude_score, gemini_score, consensus, narrative, timestamp }`
   - Pins JSON blob to IPFS via `https://api.pinata.cloud/pinning/pinJSONToIPFS`
   - Returns: `{ cid: str, ipfs_url: str, gateway_url: str, timestamp: str }`
 - [ ] Endpoint: `POST /api/publish-score` — accepts stress score context, pins to Pinata, returns CID + gateway URL
@@ -380,7 +380,7 @@
 
 **Frontend — IPFS Verification Display**
 - [ ] Create `src/components/TrustBadge.tsx`:
-  - Shows "Model Consensus: Claude 68 | GPT 71 | Delta: 3 → SIGNAL CONFIRMED" when consensus = true
+  - Shows "Model Consensus: Claude 68 | Gemini 71 | Delta: 3 → SIGNAL CONFIRMED" when consensus = true
   - Shows IPFS CID: `ipfs://Qm...` as clickable link to Pinata gateway
   - Tooltip: "Score pinned to IPFS. Click to verify. In production: computed inside a TEE and published to Chainlink oracle"
   - "IPFS Verified · TEE-Ready" label with lock icon
@@ -466,7 +466,7 @@
 ## Environment Variables Checklist
 
 - [ ] `ANTHROPIC_API_KEY` — obtained and set in `.env`
-- [ ] `OPENAI_API_KEY` — obtained and set in `.env`
+- [ ] `GEMINI_API_KEY` — obtained and set in `.env`
 - [ ] `NOAA_API_TOKEN` — obtained from api.weather.gov (free registration)
 - [ ] `ETHERSCAN_API_KEY` — obtained from etherscan.io (free tier)
 - [ ] `VITE_API_BASE_URL` — set to backend URL (local: `http://localhost:8000`, prod: Railway URL)

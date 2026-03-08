@@ -35,7 +35,7 @@ chmod +x setup.sh
 
 This will:
 - Create a Python virtual environment in `backend/venv/`
-- Install all Python dependencies (FastAPI, anthropic, openai, networkx, etc.)
+- Install all Python dependencies (FastAPI, anthropic, google-genai, networkx, etc.)
 - Copy `.env.example` to `.env` (you'll fill in keys next)
 - Install all Node dependencies for the frontend
 - Run a health check to verify the backend starts
@@ -47,7 +47,7 @@ Edit `backend/.env` and fill in your keys:
 ```bash
 # Required — get these BEFORE the hackathon
 ANTHROPIC_API_KEY=sk-ant-...        # https://console.anthropic.com
-OPENAI_API_KEY=sk-...               # https://platform.openai.com/api-keys
+GEMINI_API_KEY=...                   # https://aistudio.google.com/apikey
 NOAA_API_TOKEN=...                  # https://api.weather.gov (free, instant)
 ETHERSCAN_API_KEY=...               # https://etherscan.io/myapikey (free tier)
 PINATA_API_KEY=...                  # https://app.pinata.cloud/developers (free tier)

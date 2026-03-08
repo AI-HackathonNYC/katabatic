@@ -98,7 +98,7 @@ export function SlideEngine(_props: { subStep?: number }) {
           {/* Consensus badge — pushed right, no URL */}
           <div className="ml-auto">
             <Badge variant="consensus" dot>
-              CONSENSUS &middot; Claude 68 &middot; GPT 71 &middot; &delta;=3
+              CONSENSUS &middot; Claude 68 &middot; Gemini 71 &middot; &delta;=3
             </Badge>
           </div>
         </div>

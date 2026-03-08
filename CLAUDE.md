@@ -74,7 +74,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 **Fix:** "Risk-as-a-Service Simulator." UI output is a What-If dashboard, not a grade. Sell to DAO treasuries who input scenarios and get operational outputs (latency, coverage ratio), not grades they could be sued over.
 
 ### Hole 5: Single-Source Trust Problem
-**Fix:** Multi-model LLM consensus (Claude + GPT-5 + Gemini) run inside a TEE (Trusted Execution Environment). If all three models agree a stress threshold is crossed, the signal is pushed to a Chainlink oracle — making it grade-A data for DeFi protocols to automatically rebalance. **Score snapshots are pinned to IPFS via Pinata after each scoring run**, producing a content-addressable CID that serves as an immutable, verifiable proof of the score at a given timestamp. Downstream consumers (DAOs, DeFi protocols, Chainlink oracles) can independently verify the score was not tampered with by resolving the CID. *For the hackathon: demo with Claude + one other model as a "jury"; pin consensus scores to IPFS via Pinata API; display the IPFS CID alongside the mock TEE/Chainlink proof.*
+**Fix:** Multi-model LLM consensus (Claude + Gemini) run inside a TEE (Trusted Execution Environment). If all three models agree a stress threshold is crossed, the signal is pushed to a Chainlink oracle — making it grade-A data for DeFi protocols to automatically rebalance. **Score snapshots are pinned to IPFS via Pinata after each scoring run**, producing a content-addressable CID that serves as an immutable, verifiable proof of the score at a given timestamp. Downstream consumers (DAOs, DeFi protocols, Chainlink oracles) can independently verify the score was not tampered with by resolving the CID. *For the hackathon: demo with Claude + one other model as a "jury"; pin consensus scores to IPFS via Pinata API; display the IPFS CID alongside the mock TEE/Chainlink proof.*
 
 ---
 
@@ -89,7 +89,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Backend** | FastAPI (Python 3.11+) | REST API, scoring engine, data pipelines |
 | **Knowledge Graph** | NetworkX | Stablecoin → Bank → DataCenter → Jurisdiction graph |
 | **LLM (Primary)** | Claude API (Anthropic SDK) | XBRL/PDF extraction, FDIC Call Report mining, stress narratives |
-| **LLM (Jury)** | OpenAI API | Second model for consensus scoring |
+| **LLM (Jury)** | Gemini API (Google GenAI) | Second model for consensus scoring |
 | **Weather Data** | NOAA API, NHC (hurricane tracks), OpenMeteo | Tail-risk weather multipliers |
 | **Bank Data** | FDIC API + FDIC Call Reports | WAM proxy, LTV ratios, liquidity data |
 | **On-Chain Data** | Etherscan API / Dune Analytics | Mint/Burn flow cross-reference |
@@ -121,7 +121,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 │  Primary: WAM of treasury portfolio (duration mismatch score)    │
 │  Multiplier: Weather tail-risk × Geographic concentration        │
 │  Operational: Data center corridor overlap with storm track       │
-│  LLM jury: Claude + GPT consensus on qualitative signals         │
+│  LLM jury: Claude + Gemini consensus on qualitative signals      │
 │  Output: Liquidity Stress Score (0–100) + redemption latency     │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 4: WHAT-IF DASHBOARD                                      │
@@ -130,7 +130,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 │  Output: "Redemption latency: 72h. Liquidity coverage: 88%"      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 5: TRUST + VERIFICATION LAYER                             │
-│  Multi-model consensus hash (Claude + OpenAI agree → signal)     │
+│  Multi-model consensus hash (Claude + Gemini agree → signal)     │
 │  Score snapshot pinned to IPFS via Pinata → verifiable CID       │
 │  CID serves as immutable proof for Chainlink oracle integration  │
 └─────────────────────────────────────────────────────────────────┘
@@ -275,7 +275,7 @@ main                               ← Production-ready, deploy target
 - [ ] WAM calculator: `duration_score = normalize(weighted_avg_maturity_days, 0, 365)`
 - [ ] Weather multiplier: `weather_stress = ltv_stress × storm_category_factor × concentration_hhi`
 - [ ] Operational risk score: binary flag if storm track hits any data center corridor serving the issuer
-- [ ] LLM jury: call Claude + OpenAI with same FDIC Call Report context; average their 0–100 counterparty health scores; flag if delta > 15 (models disagree)
+- [ ] LLM jury: call Claude + Gemini with same FDIC Call Report context; average their 0–100 counterparty health scores; flag if delta > 15 (models disagree)
 - [ ] Composite: `stress_score = Σ(weight_i × dimension_i)` per table above
 - [ ] Output mapping: stress score → redemption latency + liquidity coverage estimate
 - [ ] Endpoint: `GET /api/stress-scores` — returns all stablecoin stress scores
@@ -304,7 +304,7 @@ main                               ← Production-ready, deploy target
 
 **feat/narratives (LLM/Extraction role)**
 - [ ] Multi-model narrative generation:
-  - Send same context to Claude + OpenAI
+  - Send same context to Claude + Gemini
   - If both models produce consistent causal chains → display narrative with "consensus" badge
   - If models diverge → surface both interpretations as "Model A / Model B" views
 - [ ] Example output: "USDC stress score elevated to 68. 35% of reserves at BNY Mellon, which processes operations via AWS us-east-1 (Northern Virginia). Hurricane tracking toward the corridor could delay redemption processing. Separately, 22% exposure to FL regional banks shows LTV ratios of 0.71 in FDIC Call Reports — elevated given hurricane-driven property value stress."
@@ -325,7 +325,7 @@ main                               ← Production-ready, deploy target
 
 **feat/demo-polish (Everyone)**
 - [ ] Trust + Verification Layer:
-  - Show "Model Consensus: Claude 68 | GPT 71 | Delta: 3 → SIGNAL CONFIRMED" badge
+  - Show "Model Consensus: Claude 68 | Gemini 71 | Delta: 3 → SIGNAL CONFIRMED" badge
   - Pin consensus score snapshot (JSON blob: score + narrative + timestamp + model scores) to IPFS via Pinata API
   - Display the returned IPFS CID: `ipfs://Qm...` (clickable, resolves to the pinned score data)
   - Endpoint: `POST /api/publish-score` — pins score to Pinata, returns `{ "cid": "Qm...", "ipfs_url": "https://gateway.pinata.cloud/ipfs/Qm...", "timestamp": "..." }`
@@ -357,7 +357,7 @@ main                               ← Production-ready, deploy target
 
 2. **Drop a hurricane on the map.** Two things happen simultaneously: Florida bank markers turn red as their mortgage LTV ratios deteriorate under the storm, and the Northern Virginia data center corridor lights up — because that's where treasury ops run. Stress score spikes. "This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."
 
-3. **Click into the causal explanation.** Two models (Claude + GPT) independently generated the same narrative. Score pinned to IPFS — click the CID to verify. "Consensus confirmed. USDC stress score: 68. Redemption latency under this scenario: 72 hours. Liquidity coverage: 88%. Verified: ipfs://Qm..."
+3. **Click into the causal explanation.** Two models (Claude + Gemini) independently generated the same narrative. Score pinned to IPFS — click the CID to verify. "Consensus confirmed. USDC stress score: 68. Redemption latency under this scenario: 72 hours. Liquidity coverage: 88%. Verified: ipfs://Qm..."
 
 4. **SVB backtest.** Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. "Our engine would have flagged this 48 hours before the depeg."
 
@@ -369,7 +369,7 @@ main                               ← Production-ready, deploy target
 
 ```
 ANTHROPIC_API_KEY=           # Claude API for extraction, narratives, LLM jury
-OPENAI_API_KEY=              # GPT for multi-model consensus scoring
+GEMINI_API_KEY=              # Gemini for multi-model consensus scoring
 NOAA_API_TOKEN=              # NOAA weather data
 OPENMETEO_API_KEY=           # Historical weather (free tier)
 ETHERSCAN_API_KEY=           # On-chain Mint/Burn cross-reference

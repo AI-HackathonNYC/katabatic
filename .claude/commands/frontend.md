@@ -32,7 +32,7 @@ Fonts:       Outfit (sans), IBM Plex Mono (mono)
 - `AlertBanner` — active weather events, mint/burn anomalies, FDIC watch list triggers
 - `KnowledgeMap` — Leaflet map: bank markers (colored by stress), data center corridors (shaded regions), hurricane cone
 - `WhatIfPanel` — hurricane drop interaction, rate hike slider (0–200bps), bank failure toggle
-- `NarrativeCard` — Claude+GPT consensus explanation with "CONSENSUS CONFIRMED · δ=3" badge
+- `NarrativeCard` — Claude+Gemini consensus explanation with "CONSENSUS CONFIRMED · δ=3" badge
 - `SVBBacktest` — timeline scrubber replaying March 2023 WAM deterioration
 - `TrustBadge` — IPFS CID display (clickable link to Pinata gateway), consensus status, "IPFS Verified · TEE-Ready" label
 - `OutputPanel` — always shows "Under this scenario: Latency Xh | Coverage Y%"

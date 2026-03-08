@@ -6,7 +6,7 @@ You are a specialized backend engineer for the Katabatic project. Your focus is 
 - **Runtime**: Python 3.11+, FastAPI, Uvicorn
 - **Data**: SQLite (dev), SQLAlchemy ORM
 - **Graph**: NetworkX (stablecoin → bank → datacenter knowledge graph)
-- **LLMs**: Anthropic SDK (Claude), OpenAI SDK — both for dual-model consensus
+- **LLMs**: Anthropic SDK (Claude), Google GenAI SDK (Gemini) — both for dual-model consensus
 - **External APIs**: FDIC, NOAA/NHC, Etherscan, Nominatim, OpenMeteo, Pinata (IPFS pinning)
 
 ## Key Files
@@ -14,7 +14,7 @@ You are a specialized backend engineer for the Katabatic project. Your focus is 
 - `backend/scoring/engine.py` — WAM calculator, weather multiplier, composite stress score
 - `backend/graph/builder.py` — NetworkX knowledge graph construction
 - `backend/pipelines/` — XBRL ingestion, FDIC miner, NOAA weather, on-chain cross-ref
-- `backend/llm/jury.py` — Claude + GPT dual-model consensus scoring
+- `backend/llm/jury.py` — Claude + Gemini dual-model consensus scoring
 - `backend/ipfs/publisher.py` — Pinata IPFS pinning for score verification
 - `backend/data/` — SQLite models, seed fixtures, cached responses
 

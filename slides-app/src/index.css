@@ -115,8 +115,8 @@
 }
 .glass-dark {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(36px);
+  -webkit-backdrop-filter: blur(36px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 

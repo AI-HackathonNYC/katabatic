@@ -11,8 +11,8 @@ const fadeUp = (delay = 0) => ({
 
 const stats = [
   { value: "$150B+", label: "Unstressed Reserve Assets", desc: "Real banking relationships with hidden duration risk. No one models what breaks under rate shocks or weather events." },
-  { value: "$3.3B", label: "USDC Held at SVB", desc: "SVB held 2-year treasuries when rates spiked  - duration mismatch. A stress test would have flagged the freeze 48h early." },
-  { value: "30 Days", label: "Between Attestations", desc: "Rate shocks, bank failures, hurricanes  - all invisible between monthly snapshots. Zero continuous risk monitors exist today." },
+  { value: "$3.3B", label: "USDC Held at SVB", desc: "SVB held 2-year treasuries when rates spiked. Duration mismatch. A stress test would have flagged the freeze 48h early." },
+  { value: "30 Days", label: "Between Attestations", desc: "Rate shocks, bank failures, hurricanes: all invisible between monthly snapshots. Zero continuous risk monitors exist today." },
 ]
 
 export function SlideProblem(_props: { subStep?: number }) {
@@ -59,7 +59,7 @@ export function SlideProblem(_props: { subStep?: number }) {
             <div className="text-[0.92rem] text-white/40 leading-relaxed">
               &ldquo;Held at a US regulated bank with $100B+ assets&rdquo;
             </div>
-            <div className="text-[0.92rem] text-accent-light mt-1">&rarr; envelope, not data</div>
+            <div className="text-[0.92rem] text-accent-light mt-1">Envelope, not data.</div>
           </div>
         </motion.div>
 
@@ -92,7 +92,7 @@ export function SlideProblem(_props: { subStep?: number }) {
           <div className="text-[0.78rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-1">
             USDC peg &middot; SVB collapse &middot; Mar 2023
           </div>
-          <div className="text-2xl font-bold text-accent tracking-tight leading-tight">$1.00 &rarr; $0.87</div>
+          <div className="text-2xl font-bold text-accent tracking-tight leading-tight">$1.00 to $0.87</div>
           <div className="text-[0.78rem] text-text-tertiary mt-0.5">&minus;13&cent; in 48 hours</div>
         </div>
         <div className="flex-1 relative h-[64px]">

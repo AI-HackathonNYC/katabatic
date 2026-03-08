@@ -11,8 +11,8 @@ const fadeUp = (delay = 0) => ({
 
 const pipelineSteps = [
   { num: "01", title: "Resolve Entities", desc: "LLM infers counterparties from PDFs + FDIC Call Reports" },
-  { num: "02", title: "Build Graph", desc: "Banks \u2192 geography, LTV ratios, WAM, data center corridors" },
-  { num: "03", title: "Compute WAM", desc: "Weighted Average Maturity \u2014 the primary risk signal" },
+  { num: "02", title: "Build Graph", desc: "Banks, geography, LTV ratios, WAM, data center corridors" },
+  { num: "03", title: "Compute WAM", desc: "Weighted Average Maturity: the primary risk signal" },
   { num: "04", title: "Apply Stress", desc: "Weather, rate shocks, LTV deterioration as force multipliers" },
   { num: "05", title: "Output LCR", desc: "Liquidity coverage ratio + redemption latency. Not a grade." },
   { num: "06", title: "Pin to IPFS", desc: "Score snapshot pinned via Pinata. Verifiable CID for oracle grade trust." },

@@ -16,7 +16,7 @@ const phases = [
     labelColor: "text-text-tertiary",
     title: "Stress Test Playground",
     desc: "Prove the engine: duration mismatch as the primary signal, weather as the tail risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under any scenario.",
-    badge: <Badge variant="accent">Output &rarr; latency + coverage under scenario</Badge>,
+    badge: <Badge variant="accent">Output: latency + coverage under scenario</Badge>,
     featured: false,
   },
   {

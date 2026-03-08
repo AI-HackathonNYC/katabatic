@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Badge } from "@/components/ui/badge"
 import { HurricaneRings } from "@/components/ui/hurricane-rings"
+import { KatabaticLogo } from "@/components/katabatic-logo"
 
 export function SlideHero(_props: { subStep?: number }) {
   return (
@@ -23,21 +24,7 @@ export function SlideHero(_props: { subStep?: number }) {
           <Badge dot>Cornell AI Hackathon 2026 &middot; Programmable Capital Track</Badge>
         </motion.div>
 
-        <motion.div
-          className="flex items-center justify-center gap-3.5 mb-4"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          <svg width="32" height="46" viewBox="0 0 30 44" fill="none">
-            <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.25)" strokeWidth="3.5" strokeLinecap="round" />
-            <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
-            <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
-          </svg>
-          <span className="text-[58px] font-bold text-text-primary tracking-[-0.04em] leading-none">
-            katabatic
-          </span>
-        </motion.div>
+        <KatabaticLogo />
 
         <motion.h1
           className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-normal text-text-secondary leading-relaxed max-w-[520px] mx-auto mb-1.5"

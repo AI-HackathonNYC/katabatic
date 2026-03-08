@@ -66,7 +66,7 @@ export function SlideHero(_props: { subStep?: number }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.4 }}
         >
-          Adi Prathapa &middot; Aritro Ganguly
+          Adi Prathapa &middot; Aritro Ganguly &middot; Connor Mark &middot; Krish Jana &middot; Suchit Basineni &middot; Vikram Davey
         </motion.p>
       </motion.div>
     </SlideLayout>

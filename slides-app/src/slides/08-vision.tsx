@@ -101,12 +101,12 @@ export function SlideVision(_props: { subStep?: number }) {
         </div>
         <div className="flex flex-col gap-2">
           {[
-            { name: "USDC", width: "6.2%", color: "bg-success", days: "45d", dayColor: "text-success", note: "safe \u00B7 daily redemptions matched", delay: 0.3 },
+            { name: "USDC", width: "9%", color: "bg-success", days: "45d", dayColor: "text-success", note: "safe \u00B7 daily redemptions matched", delay: 0.3 },
             { name: "SVB 2023", width: "100%", color: "bg-accent", days: "730d", dayColor: "text-accent", note: "critical \u00B7 2-yr bonds vs daily redemptions", delay: 0.55 },
           ].map(bar => (
             <div key={bar.name} className="flex items-center gap-3">
-              <div className="text-[0.82rem] text-text-secondary min-w-[68px] text-right font-medium">{bar.name}</div>
-              <div className="flex-1 h-6 bg-bg-alt rounded overflow-hidden">
+              <div className="text-[0.82rem] text-text-secondary w-[68px] text-right font-medium shrink-0">{bar.name}</div>
+              <div className="w-[55%] h-6 bg-bg-alt rounded overflow-hidden shrink-0">
                 <div
                   className={`h-full ${bar.color} rounded origin-left`}
                   style={{
@@ -116,7 +116,7 @@ export function SlideVision(_props: { subStep?: number }) {
                   }}
                 />
               </div>
-              <div className={`text-[0.82rem] font-bold min-w-[36px] ${bar.dayColor}`}>{bar.days}</div>
+              <div className={`text-[0.82rem] font-bold shrink-0 ${bar.dayColor}`}>{bar.days}</div>
               <div className={`text-[0.72rem] ${bar.dayColor === "text-accent" ? "text-accent font-semibold" : "text-text-tertiary italic"}`}>{bar.note}</div>
             </div>
           ))}

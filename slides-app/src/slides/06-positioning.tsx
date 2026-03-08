@@ -24,7 +24,7 @@ const layers = [
     featured: false,
   },
   {
-    num: "\u2605 Layer 2  - Katabatic",
+    num: "Layer 2",
     numColor: "text-accent",
     borderColor: "border-accent",
     title: "Reserve Risk Infrastructure",
@@ -104,7 +104,7 @@ export function SlidePositioning(_props: { subStep?: number }) {
           <div className="border-l-2 border-accent-light/40 pl-3.5">
             <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-1.5">Defensible Moat</div>
             <div className="flex flex-col gap-0.5">
-              {["WAM duration scoring engine", "Geo knowledge graph + DC ops risk", "Multi model LLM consensus oracle layer"].map(t => (
+              {["WAM duration scoring engine", "Geo knowledge graph + DC ops risk", "Multi model LLM consensus oracle layer", "IPFS pinned score provenance (Pinata)"].map(t => (
                 <div key={t} className="flex items-center gap-2 py-0.5">
                   <Dot />
                   <span className="text-[0.92rem] text-white/55">{t}</span>

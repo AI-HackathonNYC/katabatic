@@ -12,24 +12,37 @@ const fadeUp = (delay = 0) => ({
 const base = import.meta.env.BASE_URL
 
 const logos = [
-  { name: "makerdao", src: `${base}logos/mkr.svg`, font: "'DM Sans', sans-serif", weight: 300 },
-  { name: "aave", src: `${base}logos/aave.svg`, font: "'Plus Jakarta Sans', sans-serif", weight: 300 },
-  { name: "compound", src: `${base}logos/comp.svg`, font: "'Inter', sans-serif", weight: 300 },
-  { name: "chainlink", src: `${base}logos/link.svg`, font: "'Space Grotesk', sans-serif", weight: 300 },
-  { name: "usdc", src: `${base}logos/usdc.svg`, font: "'Inter', sans-serif", weight: 300 },
-  { name: "tether", src: `${base}logos/usdt.svg`, font: "'Nunito Sans', sans-serif", weight: 300 },
-  { name: "uniswap", src: `${base}logos/uni.svg`, font: "'DM Sans', sans-serif", weight: 300 },
-  { name: "ethereum", src: `${base}logos/eth.svg`, font: "'Inter', sans-serif", weight: 300 },
+  { name: "MakerDAO", src: `${base}logos/mkr-wordmark.svg` },
+  { name: "Aave", src: `${base}logos/aave-wordmark.svg` },
+  { name: "Compound", src: `${base}logos/comp-wordmark.svg` },
+  { name: "Chainlink", src: `${base}logos/link-wordmark.svg` },
+  { name: "USDC", src: `${base}logos/usdc-wordmark.svg` },
+  { name: "Tether", src: `${base}logos/usdt-wordmark.svg` },
+  { name: "Uniswap", src: `${base}logos/uni-wordmark.svg` },
+  { name: "Ethereum", src: `${base}logos/eth-wordmark.svg` },
 ]
 
-function LogoConveyor({ items, speed = 30 }: { items: typeof logos; speed?: number }) {
+function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: number }) {
   const setRef = useRef<HTMLDivElement>(null)
   const [setWidth, setSetWidth] = useState(0)
 
   useEffect(() => {
-    if (setRef.current) {
-      setSetWidth(setRef.current.scrollWidth)
-    }
+    const el = setRef.current
+    if (!el) return
+    const measure = () => setSetWidth(el.scrollWidth)
+    const images = el.querySelectorAll("img")
+    let loaded = 0
+    images.forEach((img) => {
+      if (img.complete) {
+        loaded++
+      } else {
+        img.addEventListener("load", () => {
+          loaded++
+          if (loaded === images.length) measure()
+        })
+      }
+    })
+    if (loaded === images.length) measure()
   }, [])
 
   return (
@@ -51,31 +64,27 @@ function LogoConveyor({ items, speed = 30 }: { items: typeof logos; speed?: numb
         }}
       >
         {/* First set — measured */}
-        <div ref={setRef} className="flex items-center gap-20 shrink-0 pr-20">
-              {items.map((logo, i) => (
-            <div key={i} className="flex items-center gap-3 shrink-0">
-                  <img src={logo.src} alt={logo.name} className="w-[4rem] h-[4rem]" />
-                  <span
-                    className="text-[3rem] text-text-tertiary whitespace-nowrap tracking-[0.04em]"
-                    style={{ fontFamily: logo.font, fontWeight: logo.weight }}
-                  >
-                    {logo.name}
-                  </span>
-            </div>
+        <div ref={setRef} className="flex items-center gap-16 shrink-0 pr-16">
+          {items.map((logo, i) => (
+            <img
+              key={i}
+              src={logo.src}
+              alt={logo.name}
+              className="h-[64px] w-auto shrink-0"
+              style={{ opacity: 0.7 }}
+            />
           ))}
         </div>
         {/* Second set — duplicate for seamless loop */}
-        <div className="flex items-center gap-20 shrink-0 pr-20">
+        <div className="flex items-center gap-16 shrink-0 pr-16">
           {items.map((logo, i) => (
-            <div key={`d-${i}`} className="flex items-center gap-3 shrink-0">
-                  <img src={logo.src} alt={logo.name} className="w-[4rem] h-[4rem]" />
-              <span
-                className="text-[3rem] text-text-tertiary whitespace-nowrap tracking-[0.04em]"
-                style={{ fontFamily: logo.font, fontWeight: logo.weight }}
-              >
-                {logo.name}
-              </span>
-            </div>
+            <img
+              key={`d-${i}`}
+              src={logo.src}
+              alt={logo.name}
+              className="h-[64px] w-auto shrink-0"
+              style={{ opacity: 0.7 }}
+            />
           ))}
         </div>
       </div>

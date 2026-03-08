@@ -34,6 +34,7 @@ Fonts:       Outfit (sans), IBM Plex Mono (mono)
 - `WhatIfPanel` — hurricane drop interaction, rate hike slider (0–200bps), bank failure toggle
 - `NarrativeCard` — Claude+GPT consensus explanation with "CONSENSUS CONFIRMED · δ=3" badge
 - `SVBBacktest` — timeline scrubber replaying March 2023 WAM deterioration
+- `TrustBadge` — IPFS CID display (clickable link to Pinata gateway), consensus status, "IPFS Verified · TEE-Ready" label
 - `OutputPanel` — always shows "Under this scenario: Latency Xh | Coverage Y%"
 
 ## API Integration
@@ -47,6 +48,7 @@ Backend base URL from `VITE_API_URL` env var. All responses follow:
 - Data center corridors: AWS us-east-1 = N. Virginia bbox, Azure eastus = similar
 - Hurricane cone of uncertainty (GeoJSON from NHC)
 - Click map → POST `/api/stress-scores/simulate` → real-time score update
+- After scoring → POST `/api/publish-score` → display IPFS CID in TrustBadge
 
 ## Conventions
 - Functional components + hooks only

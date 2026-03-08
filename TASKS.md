@@ -365,13 +365,27 @@
 
 ### feat/demo-polish
 
-#### Trust Layer Mock
+#### Trust + Verification Layer (Pinata IPFS)
+
+**Backend — IPFS Pinning**
+- [ ] Install `pinata-sdk` or use Pinata REST API via `httpx` in `requirements.txt`
+- [ ] Write `app/services/ipfs.py` — `pin_score_to_ipfs(score_data: dict) -> PinResult` using Pinata API
+  - Accepts: `{ stablecoin, stress_score, latency_hours, coverage_ratio, claude_score, gpt_score, consensus, narrative, timestamp }`
+  - Pins JSON blob to IPFS via `https://api.pinata.cloud/pinning/pinJSONToIPFS`
+  - Returns: `{ cid: str, ipfs_url: str, gateway_url: str, timestamp: str }`
+- [ ] Endpoint: `POST /api/publish-score` — accepts stress score context, pins to Pinata, returns CID + gateway URL
+- [ ] Cache CIDs in SQLite `score_pins` table: `(stablecoin, score, cid, timestamp)`
+- [ ] Endpoint: `GET /api/score-history/{stablecoin}` — returns historical pinned scores with CIDs
+- [ ] Graceful degradation: if `PINATA_API_KEY` missing → skip pinning, return mock CID with warning
+
+**Frontend — IPFS Verification Display**
 - [ ] Create `src/components/TrustBadge.tsx`:
   - Shows "Model Consensus: Claude 68 | GPT 71 | Delta: 3 → SIGNAL CONFIRMED" when consensus = true
-  - Shows mock verification hash: `katabatic-proof-0x{first8ofsha256(score+timestamp)}`
-  - Tooltip: "In production: computed inside a Trusted Execution Environment (TEE) and published to Chainlink oracle"
-  - "TEE-Ready" label with lock icon
+  - Shows IPFS CID: `ipfs://Qm...` as clickable link to Pinata gateway
+  - Tooltip: "Score pinned to IPFS. Click to verify. In production: computed inside a TEE and published to Chainlink oracle"
+  - "IPFS Verified · TEE-Ready" label with lock icon
 - [ ] Integrate TrustBadge into: StablecoinDetail page, ScenarioOutput panel, NarrativeCard
+- [ ] After each scoring run in Simulator, auto-call `POST /api/publish-score` and display returned CID
 
 #### Demo Mode
 - [ ] Add `VITE_DEMO_MODE=true` env flag
@@ -384,7 +398,7 @@
   - **Scenario C**: 100bps rate hike → WAM sensitivity for all 6 stablecoins → sorted by impact
 
 #### End-to-End Wiring
-- [ ] Wire Scenario A end-to-end: click map → hurricane drop → bank markers turn red → corridor highlights → score updates → narrative generates → trust badge shows "CONFIRMED"
+- [ ] Wire Scenario A end-to-end: click map → hurricane drop → bank markers turn red → corridor highlights → score updates → narrative generates → score pinned to IPFS → trust badge shows "CONFIRMED · ipfs://Qm..."
 - [ ] Wire Scenario B end-to-end: navigate to Backtests → SVB tab → scrub to Mar 8 → score crosses red line → annotation appears
 - [ ] Wire Scenario C end-to-end: open Simulator → rate hike slider to 100bps → all stablecoin scores update → detail view shows WAM sensitivity chart
 - [ ] Test all 3 paths on local dev before deploy
@@ -456,6 +470,8 @@
 - [ ] `NOAA_API_TOKEN` — obtained from api.weather.gov (free registration)
 - [ ] `ETHERSCAN_API_KEY` — obtained from etherscan.io (free tier)
 - [ ] `VITE_API_BASE_URL` — set to backend URL (local: `http://localhost:8000`, prod: Railway URL)
+- [ ] `PINATA_API_KEY` — obtained from pinata.cloud (free tier)
+- [ ] `PINATA_SECRET_API_KEY` — obtained from pinata.cloud
 - [ ] `VITE_DEMO_MODE` — set to `true` for demo, `false` for live data
 
 ---
@@ -470,4 +486,4 @@
 | Phase 4: Backtests & Trust Layer | `[ ]` | |
 | Phase 5: Ship | `[ ]` | |
 
-**Last updated:** 2026-03-04
+**Last updated:** 2026-03-07

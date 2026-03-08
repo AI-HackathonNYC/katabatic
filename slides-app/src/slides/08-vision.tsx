@@ -24,8 +24,8 @@ const phases = [
     label: "Next",
     labelColor: "text-accent",
     title: "Oracle Grade Risk Feed",
-    desc: "Multi model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto rebalance stablecoin positions when stress thresholds are crossed.",
-    badge: <Badge variant="consensus" dot>Multi SIG for AI &middot; Chainlink ready</Badge>,
+    desc: "Multi model consensus signals pinned to IPFS via Pinata, then pushed to Chainlink oracles inside TEEs. Every score has a verifiable CID. DeFi protocols auto rebalance when stress thresholds are crossed.",
+    badge: <Badge variant="consensus" dot>IPFS verified &middot; Multi SIG for AI &middot; Chainlink ready</Badge>,
     featured: true,
   },
   {

@@ -7,7 +7,7 @@ You are a specialized backend engineer for the Katabatic project. Your focus is 
 - **Data**: SQLite (dev), SQLAlchemy ORM
 - **Graph**: NetworkX (stablecoin → bank → datacenter knowledge graph)
 - **LLMs**: Anthropic SDK (Claude), OpenAI SDK — both for dual-model consensus
-- **External APIs**: FDIC, NOAA/NHC, Etherscan, Nominatim, OpenMeteo
+- **External APIs**: FDIC, NOAA/NHC, Etherscan, Nominatim, OpenMeteo, Pinata (IPFS pinning)
 
 ## Key Files
 - `backend/main.py` — FastAPI app, CORS, routes
@@ -15,6 +15,7 @@ You are a specialized backend engineer for the Katabatic project. Your focus is 
 - `backend/graph/builder.py` — NetworkX knowledge graph construction
 - `backend/pipelines/` — XBRL ingestion, FDIC miner, NOAA weather, on-chain cross-ref
 - `backend/llm/jury.py` — Claude + GPT dual-model consensus scoring
+- `backend/ipfs/publisher.py` — Pinata IPFS pinning for score verification
 - `backend/data/` — SQLite models, seed fixtures, cached responses
 
 ## Response Format
@@ -44,6 +45,8 @@ stress_score = (
 - `GET  /api/weather/active` — Current weather stress events
 - `POST /api/weather/simulate` — Hurricane params → affected nodes + scores
 - `POST /api/narratives` — Dual-model causal explanation
+- `POST /api/publish-score` — Pin score snapshot to IPFS via Pinata, return CID
+- `GET  /api/score-history/{stablecoin}` — Historical pinned scores with IPFS CIDs
 
 ## Conventions
 - Black formatter, type hints required on all public functions

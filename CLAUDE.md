@@ -47,7 +47,7 @@ Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a cre
 - REST API (score on demand, <2s re-score)
 - Webhook/streaming (real-time score updates on new data)
 - What-If simulator UI (demo-facing; shows the data product in action)
-- Oracle mock (Chainlink-ready verification hash for the demo narrative)
+- Oracle mock (Chainlink-ready; scores pinned to IPFS via Pinata with verifiable CID)
 
 **Target customers:** DAO Treasuries (MakerDAO, Aave, Compound), DeFi protocols holding stablecoin positions, institutional risk desks, stablecoin issuers needing GENIUS Act compliance tooling.
 
@@ -74,7 +74,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 **Fix:** "Risk-as-a-Service Simulator." UI output is a What-If dashboard, not a grade. Sell to DAO treasuries who input scenarios and get operational outputs (latency, coverage ratio), not grades they could be sued over.
 
 ### Hole 5: Single-Source Trust Problem
-**Fix (aspirational/future state for demo narrative):** Multi-model LLM consensus (Claude + GPT-5 + Gemini) run inside a TEE (Trusted Execution Environment). If all three models agree a stress threshold is crossed, the signal is pushed to a Chainlink oracle — making it grade-A data for DeFi protocols to automatically rebalance. *For the hackathon: demo with Claude + one other model as a "jury"; mock the TEE/Chainlink layer with a verification hash.*
+**Fix:** Multi-model LLM consensus (Claude + GPT-5 + Gemini) run inside a TEE (Trusted Execution Environment). If all three models agree a stress threshold is crossed, the signal is pushed to a Chainlink oracle — making it grade-A data for DeFi protocols to automatically rebalance. **Score snapshots are pinned to IPFS via Pinata after each scoring run**, producing a content-addressable CID that serves as an immutable, verifiable proof of the score at a given timestamp. Downstream consumers (DAOs, DeFi protocols, Chainlink oracles) can independently verify the score was not tampered with by resolving the CID. *For the hackathon: demo with Claude + one other model as a "jury"; pin consensus scores to IPFS via Pinata API; display the IPFS CID alongside the mock TEE/Chainlink proof.*
 
 ---
 
@@ -96,6 +96,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Regulatory Data** | OCC XBRL feeds / PDF fallback | Reserve composition, frequency, custodians |
 | **Geocoding** | Nominatim (OpenStreetMap) | Bank + data center → lat/lng resolution |
 | **Database** | SQLite (dev) | Reserve data, stress history, cached API responses |
+| **IPFS Pinning** | Pinata API | Pin score snapshots to IPFS for verifiable, immutable score provenance |
 | **Deployment** | Vercel (frontend) + Railway/Render (backend) | Demo hosting |
 
 ---
@@ -128,9 +129,10 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 │  Hurricane drop + rate hike + bank failure sliders               │
 │  Output: "Redemption latency: 72h. Liquidity coverage: 88%"      │
 ├─────────────────────────────────────────────────────────────────┤
-│  Layer 5: TRUST LAYER (demo mock)                                │
+│  Layer 5: TRUST + VERIFICATION LAYER                             │
 │  Multi-model consensus hash (Claude + OpenAI agree → signal)     │
-│  Mock TEE verification proof for oracle-readiness narrative      │
+│  Score snapshot pinned to IPFS via Pinata → verifiable CID       │
+│  CID serves as immutable proof for Chainlink oracle integration  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -322,10 +324,13 @@ main                               ← Production-ready, deploy target
 - [ ] Timeline scrubber UI component for both backtests
 
 **feat/demo-polish (Everyone)**
-- [ ] Mock Trust Layer for demo narrative:
+- [ ] Trust + Verification Layer:
   - Show "Model Consensus: Claude 68 | GPT 71 | Delta: 3 → SIGNAL CONFIRMED" badge
-  - Display a mock verification hash: `katabatic-proof-0xabc123` (framing: "TEE-ready for Chainlink")
-  - This narrative positions Katabatic as oracle-grade infrastructure, not just a dashboard
+  - Pin consensus score snapshot (JSON blob: score + narrative + timestamp + model scores) to IPFS via Pinata API
+  - Display the returned IPFS CID: `ipfs://Qm...` (clickable, resolves to the pinned score data)
+  - Endpoint: `POST /api/publish-score` — pins score to Pinata, returns `{ "cid": "Qm...", "ipfs_url": "https://gateway.pinata.cloud/ipfs/Qm...", "timestamp": "..." }`
+  - Display alongside: "TEE-ready for Chainlink · Score verified on IPFS"
+  - This positions Katabatic as oracle-grade infrastructure with verifiable, immutable score provenance
 - [ ] Wire up all 3 demo scenarios end-to-end:
   - Scenario A: Hurricane → Northern Virginia data center corridor → ops risk + FL bank LTV stress → stress score spike (primary demo)
   - Scenario B: SVB collapse backtest — duration mismatch as root cause
@@ -352,11 +357,11 @@ main                               ← Production-ready, deploy target
 
 2. **Drop a hurricane on the map.** Two things happen simultaneously: Florida bank markers turn red as their mortgage LTV ratios deteriorate under the storm, and the Northern Virginia data center corridor lights up — because that's where treasury ops run. Stress score spikes. "This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."
 
-3. **Click into the causal explanation.** Two models (Claude + GPT) independently generated the same narrative. "Consensus confirmed. USDC stress score: 68. Redemption latency under this scenario: 72 hours. Liquidity coverage: 88%."
+3. **Click into the causal explanation.** Two models (Claude + GPT) independently generated the same narrative. Score pinned to IPFS — click the CID to verify. "Consensus confirmed. USDC stress score: 68. Redemption latency under this scenario: 72 hours. Liquidity coverage: 88%. Verified: ipfs://Qm..."
 
 4. **SVB backtest.** Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. "Our engine would have flagged this 48 hours before the depeg."
 
-5. **Close the pitch.** "This is the difference between a rating agency and a risk engine. We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage.' That's what DAO treasuries and DeFi protocols need. That's Katabatic."
+5. **Close the pitch.** "This is the difference between a rating agency and a risk engine. We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage' — pinned to IPFS so anyone can verify it. That's what DAO treasuries and DeFi protocols need. That's Katabatic."
 
 ---
 
@@ -368,6 +373,8 @@ OPENAI_API_KEY=              # GPT for multi-model consensus scoring
 NOAA_API_TOKEN=              # NOAA weather data
 OPENMETEO_API_KEY=           # Historical weather (free tier)
 ETHERSCAN_API_KEY=           # On-chain Mint/Burn cross-reference
+PINATA_API_KEY=              # Pinata IPFS pinning for score verification
+PINATA_SECRET_API_KEY=       # Pinata secret key for authenticated pinning
 ```
 
 ---

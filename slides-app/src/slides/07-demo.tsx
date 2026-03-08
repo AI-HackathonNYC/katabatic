@@ -12,7 +12,7 @@ const fadeUp = (delay = 0) => ({
 const beats = [
   { n: 1, text: <><strong className="text-text-primary">Show dashboard.</strong> 6 stablecoins, WAM based stress scores. &ldquo;Continuously rescoring against OCC filings + onchain flows.&rdquo;</> },
   { n: 2, text: <><strong className="text-text-primary">Drop hurricane.</strong> FL bank markers turn red. NoVA data center corridor lights up. &ldquo;This isn&apos;t a bank flooding. It&apos;s a liquidity squeeze.&rdquo;</> },
-  { n: 3, text: <><strong className="text-text-primary">Click causal explanation.</strong> Claude + GPT agree. &ldquo;Consensus confirmed. Score 68 &middot; Latency 72h &middot; Coverage 88%.&rdquo;</> },
+  { n: 3, text: <><strong className="text-text-primary">Click causal explanation.</strong> Claude + GPT agree. Score pinned to IPFS. &ldquo;Consensus confirmed. Score 68 &middot; Latency 72h &middot; Coverage 88% &middot; ipfs://Qm...&rdquo;</> },
   { n: 4, text: <><strong className="text-text-primary">SVB backtest.</strong> WAM 730 days + rate hike. &ldquo;Our engine flags critical 48 hours before the $0.87 depeg.&rdquo;</> },
   { n: 5, text: <><strong className="text-text-primary">Close.</strong> &ldquo;Not a grade. 72h latency and 88% coverage under Cat 4 + 50bps. That&apos;s what DAOs need. That&apos;s Katabatic.&rdquo;</> },
 ]

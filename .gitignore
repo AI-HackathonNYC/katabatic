@@ -1,27 +1,57 @@
-# Environment variables
+# ===== SECURITY — NEVER COMMIT SECRETS =====
+# Environment variables (API keys, credentials)
 .env
-.env.local
-.env.*.local
-settings.local.json
+.env.*
+!.env.example
+*.local
 
-# Dependencies
+# Key files
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+credentials.json
+service-account*.json
+*secret*
+*credential*
+
+# SQLite databases (may contain cached API responses)
+*.sqlite
+*.sqlite3
+*.db
+
+# ===== Dependencies =====
 node_modules/
 __pycache__/
 *.pyc
+*.pyo
 .venv/
 venv/
+env/
+*.egg-info/
+pip-log.txt
 
-# Build outputs
+# ===== Build outputs =====
 dist/
 build/
-*.egg-info/
+*.egg
 
-# IDE
+# ===== IDE =====
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
-# OS
+# ===== OS =====
 .DS_Store
+Thumbs.db
 
-# Logs
+# ===== Logs =====
 *.log
+npm-debug.log*
+
+# ===== Claude Code local settings =====
+settings.local.json

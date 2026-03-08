@@ -407,3 +407,14 @@ All project work is tracked in **`TASKS.md`** at the repo root. This is the mast
 - All API responses follow: `{ "data": ..., "error": null, "timestamp": "..." }`
 - Branch names: `feat/short-description`, `fix/short-description`
 - Never use "rating" or "grade" in UI copy — always "Liquidity Stress Score" or "stress level"
+
+### Security — THIS IS A PUBLIC REPO
+
+**Claude must follow these rules without exception:**
+- **NEVER** write API keys, tokens, passwords, or secrets into any file other than `.env` (which is gitignored)
+- **NEVER** hardcode credentials in source code — always read from `os.getenv()` or `import.meta.env`
+- **NEVER** commit `.env`, `.env.local`, `.env.production`, `credentials.json`, `*.pem`, `*.key`, or any file matching `*secret*`
+- **NEVER** log or print API key values — only log whether a key is set or missing
+- Before every commit, verify no secrets are staged: check `git diff --cached` for API keys, tokens, or passwords
+- Use `.env.example` with empty values as the template — never populate it with real keys
+- If you accidentally write a secret to a tracked file, **immediately** remove it and warn the user that the key must be rotated (git history preserves secrets even after deletion)

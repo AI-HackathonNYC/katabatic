@@ -101,6 +101,7 @@ const layers: {
       { src: `${base}logos/dune.svg`, name: "Dune" },
       { src: `${base}logos/nansen.svg`, name: "Nansen" },
       { src: `${base}logos/chainalysis.svg`, name: "Chainalysis" },
+      { src: `${base}logos/glassnode.png`, name: "Glassnode" },
     ],
     featured: false,
   },
@@ -120,8 +121,8 @@ const layers: {
     title: "Downstream Consumers",
     logos: [
       { src: `${base}logos/mkr.svg`, name: "MakerDAO" },
-      { src: `${base}logos/aave.svg`, name: "Aave" },
       { src: `${base}logos/risk-desks.svg`, name: "Risk Desks" },
+      { src: `${base}logos/aave.svg`, name: "Aave" },
       { src: `${base}logos/ai-agents.svg`, name: "AI Agents" },
     ],
     featured: false,
@@ -160,12 +161,16 @@ export function SlidePositioning(_props: { subStep?: number }) {
                 <div className="text-[1.3rem] font-semibold text-text-primary mb-4">{layer.title}</div>
 
                 {layer.katabatic ? (
-                  <div className="flex items-center gap-3">
-                    <KatabaticMark />
-                    <span className="text-[1.15rem] font-semibold text-accent tracking-[-0.02em]">katabatic</span>
+                  <div className="flex items-center gap-3 py-2">
+                    <svg width="30" height="42" viewBox="0 0 30 44" fill="none">
+                      <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.35)" strokeWidth="3.5" strokeLinecap="round" />
+                      <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.65)" strokeWidth="3.5" strokeLinecap="round" />
+                      <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
+                    </svg>
+                    <span className="text-[1.5rem] font-semibold text-accent tracking-[-0.02em]">katabatic</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 flex-wrap">
+                  <div className={`${layer.logos.length > 3 ? "grid grid-cols-2 gap-x-4 gap-y-2" : "flex items-center gap-4"}`}>
                     {layer.logos.map(logo => (
                       <div key={logo.name} className="flex items-center gap-1.5" title={logo.name}>
                         <img src={logo.src} alt={logo.name} className="w-7 h-7 rounded-full" />

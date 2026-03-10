@@ -16,7 +16,7 @@ export function SlideWhyNow(_props: { subStep?: number }) {
         className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold leading-tight tracking-[-0.028em]"
         {...fadeUp(0)}
       >
-        The GENIUS Act 2026
+        The GENIUS Act 2025
         <br />
         just <span className="gradient-text">created this market.</span>
       </motion.h2>
@@ -29,8 +29,8 @@ export function SlideWhyNow(_props: { subStep?: number }) {
 
           <div className="flex flex-col flex-1">
             {[
-              { dot: "border", date: "Before 2026", text: "PDF attestations. 30-day lag. No programmatic access." },
-              { dot: "active", date: "Jan 2026", text: "GENIUS Act passed. XBRL + OCC API feeds mandated for all PPSIs." },
+              { dot: "border", date: "Before 2025", text: "PDF attestations. 30-day lag. No programmatic access." },
+              { dot: "active", date: "Jul 2025", text: "GENIUS Act signed into law. XBRL + OCC API feeds mandated for all PPSIs." },
               { dot: "done", date: "Today", text: "We have the pipeline. Realtime reserve stress monitoring is now possible." },
             ].map((item, i) => (
               <div key={i} className={`flex gap-4 items-start py-5 relative flex-1 ${i < 2 ? "border-b border-black/5" : ""}`}>
@@ -46,29 +46,36 @@ export function SlideWhyNow(_props: { subStep?: number }) {
           </div>
         </motion.div>
 
-        {/* Right: Why now + stats */}
-        <div className="flex-1 flex flex-col gap-3">
-          <motion.div
-            className="border-l-4 border-accent pl-4 py-3"
-            {...fadeUp(0.2)}
-          >
-            <div className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-accent mb-1">Why hasn&apos;t someone done this before?</div>
-            <div className="text-[0.95rem] text-text-primary leading-relaxed">
-              The data didn&apos;t exist. <span className="text-accent font-semibold">Now it does.</span>
+        {/* Right: Signing image with overlay */}
+        <motion.div
+          className="flex-1 relative rounded-xl overflow-hidden min-h-[200px]"
+          {...fadeUp(0.2)}
+        >
+          <img
+            src="https://images.foxtv.com/static.livenowfox.com/www.livenowfox.com/content/uploads/2025/07/932/524/gettyimages-2224969528-copy-scaled.jpg?ve=1&tl=1"
+            alt="President Trump signs the GENIUS Act into law, July 2025"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+          <div className="relative z-10 flex flex-col justify-end h-full p-5 gap-3">
+            <div>
+              <div className="text-[0.72rem] font-medium uppercase tracking-[0.1em] text-white/70 mb-1">Why hasn&apos;t someone done this before?</div>
+              <div className="text-[1rem] text-white font-semibold leading-snug">
+                The data didn&apos;t exist. <span className="text-accent-light">Now it does.</span>
+              </div>
             </div>
-          </motion.div>
-
-          <motion.div className="flex gap-3" {...fadeUp(0.3)}>
-            <div className="flex items-center gap-2 bg-accent/[0.06] rounded-full px-4 py-2">
-              <span className="text-[1.6rem] font-bold text-accent leading-none">6</span>
-              <span className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-text-tertiary">Stablecoins tracked</span>
+            <div className="flex gap-3">
+              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2">
+                <span className="text-[1.6rem] font-bold text-white leading-none">6</span>
+                <span className="text-[0.72rem] font-medium uppercase tracking-[0.06em] text-white/70">Stablecoins tracked</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2">
+                <span className="text-[1.6rem] font-bold text-white leading-none">&lt;2s</span>
+                <span className="text-[0.72rem] font-medium uppercase tracking-[0.06em] text-white/70">Re-score time</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 bg-accent/[0.06] rounded-full px-4 py-2">
-              <span className="text-[1.6rem] font-bold text-accent leading-none">&lt;2s</span>
-              <span className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-text-tertiary">Re-score time</span>
-            </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
       {/* Market growth chart */}
       <motion.div className="border-t border-black/7 pt-3" {...fadeUp(0.4)}>
@@ -77,9 +84,9 @@ export function SlideWhyNow(_props: { subStep?: number }) {
         </div>
         <div className="flex items-end gap-3 h-[140px]">
           {[
-            { pct: 22, opacity: 0.3, delay: 0.2 },
-            { pct: 48, opacity: 0.5, delay: 0.4 },
-            { pct: 73, opacity: 0.72, delay: 0.6 },
+            { pct: 30, opacity: 0.3, delay: 0.2 },
+            { pct: 26, opacity: 0.5, delay: 0.4 },
+            { pct: 46, opacity: 0.72, delay: 0.6 },
             { pct: 100, opacity: 1, delay: 0.8 },
           ].map((bar, i) => (
             <div
@@ -108,10 +115,10 @@ export function SlideWhyNow(_props: { subStep?: number }) {
         </div>
         <div className="flex gap-2 mt-1.5">
           {[
-            { val: "$30B", year: "2021" },
-            { val: "$80B", year: "2023" },
-            { val: "$180B", year: "2025" },
-            { val: "$350B", year: "2027", accent: true },
+            { val: "$150B", year: "2021" },
+            { val: "$130B", year: "2023" },
+            { val: "$230B", year: "2025" },
+            { val: "$500B", year: "2027", accent: true },
           ].map(d => (
             <div key={d.year} className="flex-1 text-center text-[0.75rem]">
               <strong className={d.accent ? "text-accent" : "text-text-secondary"}>{d.val}</strong>

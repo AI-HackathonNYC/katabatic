@@ -20,7 +20,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 ### Monorepo & Scaffold
 - [ ] Create `/backend` directory with FastAPI skeleton (`main.py`, `requirements.txt`, `.env.example`)
-- [ ] Create `/frontend` directory with Vite + React 18 (`npm create vite@latest`)
+- [ ] Create `/frontend` directory with Vite + React 19 (`npm create vite@latest`)
 - [ ] Create `/data` directory with subdirs: `/data/extracted/`, `/data/fixtures/`, `/data/call_reports/`
 - [ ] Create `/scripts` directory for one-off processing scripts
 - [ ] Add root-level `.gitignore` (env files, `__pycache__`, `node_modules`, `.DS_Store`, `*.sqlite`)
@@ -38,8 +38,8 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Write `app/models/stress.py` — Pydantic models for stress score output (score, latency, coverage, dimensions)
 
 ### Frontend Bootstrap
-- [ ] Install dependencies: `tailwindcss`, `recharts`, `leaflet`, `react-leaflet`, `react-router-dom`
-- [ ] Configure Tailwind CSS — add `tailwind.config.js` with Katabatic color palette (`#7b6fc4` purple accent, `#f4f3fa` light bg)
+- [ ] Install dependencies: `tailwindcss@4`, `recharts`, `leaflet`, `react-leaflet`, `react-router-dom`, `framer-motion`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`
+- [ ] Configure Tailwind CSS 4 — use `@theme` directive with Katabatic color palette (`#6c5ce7` accent, `#a29bfe` accent-light, `#4834d4` accent-dark, `#fafafa` bg, `#f3f2f7` bg-alt, `#0c0a14` bg-dark — see Design System in CLAUDE.md)
 - [ ] Create layout shell: `src/components/Layout.tsx` — sidebar nav + main content area
 - [ ] Create route structure: `/` (dashboard), `/simulator` (what-if map), `/backtests` (SVB + Ian), `/stablecoin/:id` (detail view)
 - [ ] Create `src/lib/api.ts` — typed fetch wrapper pointing to backend base URL, handles response envelope unwrapping
@@ -274,12 +274,12 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Create `src/components/CounterpartyList.tsx` — table of banks with: name, city, %, WAM, LTV, FDIC status, geographic stress contribution
 
 #### UI Polish
-- [ ] Add Katabatic logo/wordmark to sidebar (SVG, purple `#7b6fc4`)
-- [ ] Implement dark/light mode toggle (default: light `#f4f3fa` bg)
+- [ ] Add Katabatic logo/wordmark to sidebar (SVG, purple `#6c5ce7` — reuse from `slides-app/src/components/katabatic-logo.tsx`)
+- [ ] Implement dark/light mode toggle (default: light `#fafafa` bg, dark: `#0c0a14` bg)
 - [ ] Loading skeleton components for all data-fetching states (use `src/components/Skeleton.tsx`)
 - [ ] Empty state component for no-data scenarios
 - [ ] Error boundary with friendly error message and retry button
-- [ ] Global font: Inter (import from Google Fonts or bundle locally)
+- [ ] Global font: Sora (already imported in slides-app; use same Google Fonts import, weights 300–700)
 - [ ] Never use "rating" or "grade" in any UI copy — always "Liquidity Stress Score" or "stress level"
 
 ---
@@ -483,7 +483,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Check `.gitignore` covers all `.env` files
 
 ### Demo Prep
-- [ ] Rehearse 5-beat demo script 5× (target: < 2 minutes total)
+- [ ] Rehearse 10-slide presentation 5× (target: < 4 minutes total including 60s live demo)
 - [ ] Record screen capture backup of full demo (OBS or QuickTime)
 - [ ] Prepare fallback: browser tab pre-loaded with demo mode on, all 3 scenarios pre-run and cached
 - [ ] Print cheat sheet: bullet points for each of the 5 demo beats

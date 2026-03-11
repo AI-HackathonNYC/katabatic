@@ -22,6 +22,9 @@
   --accent-light: #a29bfe;
   --accent-lighter: rgba(108,92,231,0.08);
   --accent-deep: #4834d4;
+  --success: #00b894;
+  --warn: #e17055;
+  --danger: #e84393;
   --text: #0f0f0f;
   --text-2: #555;
   --text-3: #999;
@@ -270,7 +273,7 @@ nav {
    METHODOLOGY | Pipeline
    ═══════════════════════════════════════════════════════════ */
 .pipeline {
-  display: grid; grid-template-columns: repeat(5,1fr); gap: 0.5rem;
+  display: grid; grid-template-columns: repeat(6,1fr); gap: 0.5rem;
 }
 .pipe-step {
   padding: 1.8rem 1.2rem; text-align: center;
@@ -310,6 +313,114 @@ nav {
   background: linear-gradient(135deg, rgba(108,92,231,0.03) 0%, var(--bg-card) 100%);
 }
 .dim-card.featured .dim-tag { color: var(--accent); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════════
+   WHY NOW
+   ═══════════════════════════════════════════════════════════ */
+.why-now-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
+}
+.timeline-track { position: relative; padding-left: 2.2rem; }
+.timeline-track::before {
+  content: ''; position: absolute; left: 7px; top: 12px; bottom: 12px;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 2rem; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-dot {
+  position: absolute; left: -2.2rem; top: 4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--border); background: var(--bg-alt);
+}
+.tl-item.active .tl-dot {
+  border-color: var(--accent); background: var(--accent);
+  box-shadow: 0 0 12px rgba(108,92,231,0.4);
+}
+.tl-item.done .tl-dot {
+  border-color: var(--success); background: var(--success);
+  box-shadow: 0 0 10px rgba(0,184,148,0.3);
+}
+.tl-date { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 0.2rem; }
+.tl-item.active .tl-date { color: var(--accent); }
+.tl-item.done .tl-date { color: var(--success); }
+.tl-text { font-size: 0.87rem; color: var(--text-2); line-height: 1.6; }
+.tl-text strong { color: var(--text); font-weight: 600; }
+
+.market-bars { display: flex; flex-direction: column; gap: 0.75rem; }
+.market-bar-row { display: flex; align-items: center; gap: 0.75rem; }
+.market-year { font-size: 0.78rem; font-weight: 600; color: var(--text-3); width: 44px; font-family: 'IBM Plex Mono', monospace; }
+.market-bar {
+  height: 28px; border-radius: 8px; position: relative;
+  display: flex; align-items: center; padding: 0 0.75rem;
+  transition: width 1s var(--transition);
+}
+.market-bar.solid { background: var(--accent); }
+.market-bar.projected {
+  background: repeating-linear-gradient(
+    -45deg, var(--accent-lighter) 0 4px, transparent 4px 8px
+  );
+  border: 1px dashed rgba(108,92,231,0.3);
+}
+.market-bar .bar-label {
+  font-size: 0.72rem; font-weight: 700; color: white; white-space: nowrap;
+}
+.market-bar.projected .bar-label { color: var(--accent); }
+.market-caption {
+  font-size: 0.82rem; color: var(--text-3); margin-top: 0.5rem; text-align: center;
+}
+.market-caption strong { color: var(--text); font-weight: 600; }
+
+.hero-badges {
+  display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.5rem;
+}
+.hero-badge {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.78rem; font-weight: 600; color: var(--accent);
+  background: var(--accent-lighter); padding: 0.4rem 0.9rem;
+  border-radius: 100px; border: 1px solid rgba(108,92,231,0.12);
+}
+.hero-badge .badge-num { font-size: 1rem; font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════
+   BUSINESS MODEL
+   ═══════════════════════════════════════════════════════════ */
+.biz-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; max-width: 1100px; margin: 0 auto 3rem; }
+.biz-card { padding: 2rem 1.6rem; text-align: left; position: relative; overflow: hidden; }
+.biz-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--border);
+}
+.biz-card.featured {
+  border-color: var(--accent); background: linear-gradient(135deg, rgba(108,92,231,0.03) 0%, var(--bg-card) 100%);
+}
+.biz-card.featured::before { background: var(--accent); }
+.biz-tier {
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 0.6rem;
+}
+.biz-card.featured .biz-tier { color: var(--accent); }
+.biz-card .h-sm { margin-bottom: 0.75rem; }
+.biz-features { list-style: none; padding: 0; }
+.biz-features li {
+  font-size: 0.82rem; color: var(--text-2); line-height: 1.65;
+  padding: 0.2rem 0 0.2rem 1.1rem; position: relative;
+}
+.biz-features li::before {
+  content: ''; position: absolute; left: 0; top: 0.55rem;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--border-hover);
+}
+.biz-card.featured .biz-features li::before { background: var(--accent); }
+
+.logo-conveyor {
+  display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+  align-items: center; padding: 1.5rem 0;
+}
+.logo-conveyor span {
+  font-size: 0.82rem; font-weight: 600; color: var(--text-3);
+  letter-spacing: -0.01em; opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
+}
+.logo-conveyor span:hover { opacity: 1; color: var(--accent); }
 
 /* ═══════════════════════════════════════════════════════════
    ARCHITECTURE
@@ -537,6 +648,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   .hero-title { font-size: clamp(2.4rem, 9vw, 3.2rem); }
   .hero-product { max-width: 360px; }
   .problem-grid { grid-template-columns: 1fr; }
+  .why-now-grid { grid-template-columns: 1fr; }
   .pipeline { grid-template-columns: 1fr; gap: 0.5rem; }
   .pipe-step::after { display: none; }
   .dim-grid { grid-template-columns: 1fr; }
@@ -549,6 +661,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   .road-time { margin-top: 0; }
   .team-grid, .impact-grid { grid-template-columns: 1fr 1fr; }
   .vision-grid { grid-template-columns: 1fr; }
+  .biz-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .foot-links { display: none; }
 }
@@ -618,12 +731,14 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     </a>
     <div class="nav-links">
       <a data-scroll="#problem">Problem</a>
-      <a data-scroll="#method">Methodology</a>
+      <a data-scroll="#why-now">Why Now</a>
+      <a data-scroll="#method">Engine</a>
       <a data-scroll="#dimensions">Dimensions</a>
       <a data-scroll="#arch">Architecture</a>
       <a data-scroll="#demo">Demo</a>
       <a data-scroll="#positioning">Positioning</a>
-      <a data-scroll="#roadmap">Roadmap</a>
+      <a data-scroll="#business">Business</a>
+      <a data-scroll="#vision">Vision</a>
     </div>
     <span class="nav-badge">Cornell AI Hackathon 2026</span>
   </div>
@@ -653,11 +768,11 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <span class="hp-live">LIVE</span>
       </div>
       <div class="hp-body">
-        <div class="hp-row"><span class="hp-label">USDC</span><span class="hp-grade">62</span><span class="hp-detail">LCR 88% &middot; latency 72h</span></div>
-        <div class="hp-row"><span class="hp-label">USDT</span><span class="hp-grade" style="color:#27ae60">18</span><span class="hp-detail">LCR 100% &middot; latency &lt;4h</span></div>
-        <div class="hp-row"><span class="hp-label">BUSD</span><span class="hp-grade" style="color:#27ae60">12</span><span class="hp-detail">LCR 100% &middot; latency &lt;4h</span></div>
-        <div class="hp-row"><span class="hp-label">DAI</span><span class="hp-grade">54</span><span class="hp-detail">LCR 92% &middot; latency 24h</span></div>
-        <div class="hp-row"><span class="hp-label">FRAX</span><span class="hp-grade" style="color:#e74c3c">78</span><span class="hp-detail">LCR 81% &middot; latency 72h+</span></div>
+        <div class="hp-row"><span class="hp-label">USDC</span><span class="hp-grade" style="color:var(--warn)">68</span><span class="hp-detail">LCR 88% &middot; latency 72h</span></div>
+        <div class="hp-row"><span class="hp-label">USDT</span><span class="hp-grade" style="color:var(--success)">18</span><span class="hp-detail">LCR 100% &middot; latency &lt;4h</span></div>
+        <div class="hp-row"><span class="hp-label">BUSD</span><span class="hp-grade" style="color:var(--success)">12</span><span class="hp-detail">LCR 100% &middot; latency &lt;4h</span></div>
+        <div class="hp-row"><span class="hp-label">DAI</span><span class="hp-grade" style="color:var(--warn)">54</span><span class="hp-detail">LCR 92% &middot; latency 24h</span></div>
+        <div class="hp-row"><span class="hp-label">FRAX</span><span class="hp-grade" style="color:var(--danger)">78</span><span class="hp-detail">LCR 81% &middot; latency 72h+</span></div>
         <hr class="hp-divider">
         <div class="hp-footer hp-row"><span class="hp-label">ALERTS</span><span class="hp-grade" style="color:var(--text)">2</span><span class="hp-detail">FL LTV stress &middot; WAM &gt;2yr</span></div>
       </div>
@@ -670,12 +785,12 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">The Problem</div>
-      <h2 class="h-lg reveal">$150B in stablecoins. No <span class="em">stress testing.</span></h2>
+      <h2 class="h-lg reveal">$310B in stablecoins. No <span class="em">stress testing.</span></h2>
       <p class="body-lg reveal">Stablecoin risk is a duration mismatch problem. SVB proved it. Weather and rate shocks are tail risk multipliers on already fragile balance sheets, and nobody is modeling them.</p>
     </div>
     <div class="problem-grid">
       <div class="card p-card reveal d1">
-        <div class="p-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div>
+        <div class="p-num" data-count="310" data-prefix="$" data-suffix="B+">$0</div>
         <div class="h-sm">Unstressed Reserve Assets</div>
         <p class="body-sm">Backed by real-world banking relationships with hidden duration risk. No one is modeling what happens to these reserves under rate shocks, weather events, or liquidity freezes.</p>
         <div class="p-source">Monthly attestation reports</div>
@@ -696,8 +811,67 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   </div>
 </section>
 
+<!-- ═══════ WHY NOW ═══════ -->
+<section class="section" id="why-now">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Why Now</div>
+      <h2 class="h-lg reveal">The GENIUS Act 2025 just <span class="em">created this market.</span></h2>
+      <p class="body-lg reveal">Before 2025, reserve data was locked in PDFs with 30-day lag. The GENIUS Act mandated machine-readable disclosure for the first time. We build the infrastructure layer above it.</p>
+    </div>
+    <div class="why-now-grid">
+      <div class="timeline-track reveal d1">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-date">Before 2025</div>
+          <div class="tl-text">PDF attestations. 30-day lag. No programmatic access. Reserve data locked behind accounting firms and opaque disclosures.</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-dot"></div>
+          <div class="tl-date">Jul 2025 &middot; GENIUS Act Signed</div>
+          <div class="tl-text"><strong>XBRL + OCC API feeds mandated for all PPSIs.</strong> Monthly attestation reports certified by registered accounting firms. Reserve composition, asset types, maturities, and custodian identities now machine-readable at the source.</div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-dot"></div>
+          <div class="tl-date">Today</div>
+          <div class="tl-text">We have the pipeline. <strong>Realtime reserve stress monitoring is now possible.</strong> First mover on structured XBRL ingestion + stress scoring.</div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="market-bars">
+          <div class="market-bar-row">
+            <span class="market-year">2021</span>
+            <div class="market-bar solid" style="width:21%;"><span class="bar-label">$150B</span></div>
+          </div>
+          <div class="market-bar-row">
+            <span class="market-year">2023</span>
+            <div class="market-bar solid" style="width:18%;"><span class="bar-label">$125B</span></div>
+          </div>
+          <div class="market-bar-row">
+            <span class="market-year">2025</span>
+            <div class="market-bar solid" style="width:44%;"><span class="bar-label">$310B</span></div>
+          </div>
+          <div class="market-bar-row">
+            <span class="market-year" style="color:var(--text-3);opacity:0.6;">2027</span>
+            <div class="market-bar projected" style="width:71%;"><span class="bar-label">$500B</span></div>
+          </div>
+          <div class="market-bar-row">
+            <span class="market-year" style="color:var(--text-3);opacity:0.6;">2030</span>
+            <div class="market-bar projected" style="width:100%;"><span class="bar-label">$700B+</span></div>
+          </div>
+        </div>
+        <p class="market-caption">The data didn't exist. <strong>Now it does.</strong></p>
+        <div class="hero-badges">
+          <span class="hero-badge"><span class="badge-num">6</span> Stablecoins tracked</span>
+          <span class="hero-badge"><span class="badge-num">&lt;2s</span> Re-score time</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════ METHODOLOGY ═══════ -->
-<section class="section" id="method">
+<section class="section section-alt" id="method">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow reveal">Stress Engine</div>
@@ -722,13 +896,18 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       </div>
       <div class="card pipe-step d4">
         <div class="pipe-num">4</div>
-        <div class="pipe-title">Multiply Stress</div>
+        <div class="pipe-title">Apply Stress</div>
         <div class="pipe-desc">Weather, rate shocks, LTV deterioration act as force multipliers on duration risk</div>
       </div>
       <div class="card pipe-step d5">
         <div class="pipe-num">5</div>
         <div class="pipe-title">Output LCR</div>
         <div class="pipe-desc">Liquidity coverage ratio + redemption latency under scenario, not a letter grade</div>
+      </div>
+      <div class="card pipe-step d6">
+        <div class="pipe-num">6</div>
+        <div class="pipe-title">Pin to IPFS</div>
+        <div class="pipe-desc">Score snapshot pinned to IPFS via Pinata. Immutable CID for oracle-grade verification</div>
       </div>
     </div>
   </div>
@@ -817,11 +996,11 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="card arch-row reveal d3">
         <div class="arch-num">03</div>
         <div>
-          <div class="h-sm">Duration + Stress Engine</div>
-          <p class="body-sm">Primary: WAM of treasury portfolio (duration mismatch score). Multiplier: weather tail risk &times; geographic concentration &times; LTV deterioration. LLM jury (Claude + Gemini) for qualitative consensus scoring.</p>
+          <div class="h-sm">Duration + Stress Engine + MCP Server</div>
+          <p class="body-sm">Primary: WAM of treasury portfolio (duration mismatch score). Multiplier: weather tail risk &times; geographic concentration &times; LTV deterioration. LLM jury (Claude + Gemini) for qualitative consensus scoring. MCP server: 5 tools for AI agent consumption.</p>
           <div class="arch-pills">
             <span class="arch-pill">WAM calculator</span><span class="arch-pill">LTV stress</span>
-            <span class="arch-pill">LLM consensus jury</span><span class="arch-pill">graph propagation</span>
+            <span class="arch-pill">LLM consensus jury</span><span class="arch-pill">MCP server</span>
           </div>
         </div>
       </div>
@@ -839,11 +1018,11 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       <div class="card arch-row reveal d5">
         <div class="arch-num">05</div>
         <div>
-          <div class="h-sm">Trust Layer (Multi-Model Consensus)</div>
-          <p class="body-sm">Claude + Gemini independently analyze the same stress context. If both agree a threshold is crossed, the signal is confirmed. "Multi SIG for AI" that makes the data feed oracle grade for DeFi protocols to auto rebalance.</p>
+          <div class="h-sm">Trust Layer (Multi-Model Consensus + IPFS)</div>
+          <p class="body-sm">Claude + Gemini independently analyze the same stress context. If both agree a threshold is crossed, the signal is confirmed. Score snapshots pinned to IPFS via Pinata for immutable, verifiable provenance. "Multi SIG for AI" that makes the data feed oracle grade.</p>
           <div class="arch-pills">
             <span class="arch-pill">Claude + Gemini jury</span><span class="arch-pill">consensus hash</span>
-            <span class="arch-pill">oracle ready</span>
+            <span class="arch-pill">IPFS via Pinata</span><span class="arch-pill">Chainlink ready</span>
           </div>
         </div>
       </div>
@@ -860,8 +1039,8 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     </div>
     <div class="demo-grid">
       <div class="demo-script reveal">
-        <div class="h-md">Demo Script</div>
-        <p class="body-sm">Five beats. Under two minutes.</p>
+        <div class="h-md">Live Demo (Slide 7)</div>
+        <p class="body-sm">10-slide presentation, ~4 minutes. 60-second live demo embedded as Slide 7.</p>
         <div class="ds-step"><span class="ds-num">1</span><p><strong>Show the stress score dashboard.</strong> Six stablecoins with Liquidity Stress Scores and projected redemption latencies. <em>"We ingest OCC filings, cross reference on chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio. Continuously."</em></p></div>
         <div class="ds-step"><span class="ds-num">2</span><p><strong>Drop a hurricane on the map.</strong> Two things happen: Florida bank markers turn red as their mortgage LTV ratios deteriorate, and the Northern Virginia data center corridor lights up. <em>"This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."</em></p></div>
         <div class="ds-step"><span class="ds-num">3</span><p><strong>Click into the causal explanation.</strong> Two models (Claude + Gemini) independently generated the same narrative. <em>"Consensus confirmed. USDC stress score: 68. Redemption latency: 72 hours. Liquidity coverage: 88%."</em></p></div>
@@ -940,9 +1119,9 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     </div>
     <div class="impact-grid">
       <div class="impact-card reveal d1">
-        <div class="impact-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div>
+        <div class="impact-num" data-count="310" data-prefix="$" data-suffix="B+">$0</div>
         <div class="h-sm">Unstressed Reserve Assets</div>
-        <p class="body-sm">No one is modeling what happens to these reserves under rate shocks, weather events, or liquidity freezes</p>
+        <p class="body-sm">$310B in stablecoin reserves (2025). No one is modeling what happens under rate shocks, weather events, or liquidity freezes</p>
       </div>
       <div class="impact-card reveal d2">
         <div class="impact-num" data-count="4000" data-suffix="+">0</div>
@@ -984,7 +1163,21 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div class="eyebrow" style="margin-bottom:0.75rem;">Layer 3</div>
         <div class="h-sm" style="margin-bottom:0.5rem;">Downstream Consumers</div>
         <p class="body-sm">DAO governance contracts, DeFi protocol rebalancing logic, institutional risk desks, Chainlink oracle feeds, AI trading agents (via MCP). Output is consumed by systems, not just viewed by humans.</p>
-        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-3); font-family:'IBM Plex Mono',monospace; line-height:1.6;">MakerDAO · Aave · Compound · Risk Desks · AI Agents</div>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-3); font-family:'IBM Plex Mono',monospace; line-height:1.6;">MakerDAO · Aave · Compound · Chainlink · USDC · Tether · Uniswap · Risk Desks · AI Agents</div>
+      </div>
+    </div>
+
+    <!-- What Onchain Can't See -->
+    <div class="card reveal" style="padding:1.5rem 2rem; max-width:780px; margin:0 auto 2rem; background:var(--accent); border-color:var(--accent);">
+      <div style="display:flex; align-items:center; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <span style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.65);">What Onchain Can't See</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.92); font-weight:500;">Duration mismatch</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.55);">&middot;</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.92); font-weight:500;">Bank health signals</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.55);">&middot;</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.92); font-weight:500;">Data center ops risk</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.55);">&middot;</span>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.92); font-weight:500;">Weather tail-risk</span>
       </div>
     </div>
 
@@ -993,7 +1186,7 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
         <div>
           <div class="eyebrow" style="color:rgba(162,155,254,0.6); margin-bottom:0.75rem;">The Analogy</div>
           <p style="font-size:1rem; font-weight:500; color:rgba(255,255,255,0.88); line-height:1.6; margin-bottom:0.5rem;">Onchain data platforms became the system of record for what's happening onchain. The GENIUS Act is creating the same moment for offchain reserve data.</p>
-          <p style="font-size:0.87rem; color:rgba(255,255,255,0.4); line-height:1.65;">Before 2026: no programmatic access. After GENIUS Act: XBRL feeds, OCC APIs, continuous ingest. We are first to build the infrastructure layer above it.</p>
+          <p style="font-size:0.87rem; color:rgba(255,255,255,0.4); line-height:1.65;">Before 2025: no programmatic access. After GENIUS Act: XBRL + OCC API feeds mandated for all PPSIs. We are first to build the infrastructure layer above it.</p>
         </div>
         <div style="display:flex; flex-direction:column; gap:0.75rem;">
           <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:0.75rem 1rem;">
@@ -1010,6 +1203,62 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
   </div>
 </section>
 
+<!-- ═══════ BUSINESS MODEL ═══════ -->
+<section class="section" id="business">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Go to Market</div>
+      <h2 class="h-lg reveal">API-first infrastructure. Not a <span class="em">consulting fee.</span></h2>
+      <p class="body-lg reveal">Same model as on-chain data infrastructure: API subscriptions, enterprise contracts, warehouse delivery, real-time streaming. Risk scores consumed by systems, not dashboards.</p>
+    </div>
+    <div class="biz-grid">
+      <div class="card biz-card reveal d1">
+        <div class="biz-tier">Starter API</div>
+        <div class="h-sm">Developer Access</div>
+        <ul class="biz-features">
+          <li>REST API access</li>
+          <li>MCP for AI agents</li>
+          <li>6 stablecoins tracked</li>
+          <li>&lt;2s rescore time</li>
+          <li>Webhook alerts</li>
+        </ul>
+      </div>
+      <div class="card biz-card featured reveal d2">
+        <div class="biz-tier">Enterprise</div>
+        <div class="h-sm">Production Infrastructure</div>
+        <ul class="biz-features">
+          <li>Real-time streaming</li>
+          <li>IPFS verified scores</li>
+          <li>Multi-model consensus</li>
+          <li>Enterprise SLA</li>
+          <li>Warehouse delivery</li>
+        </ul>
+      </div>
+      <div class="card biz-card reveal d3">
+        <div class="biz-tier">Institutional</div>
+        <div class="h-sm">Compliance Grade</div>
+        <ul class="biz-features">
+          <li>FDIC Call Report mining</li>
+          <li>Oracle feed integration</li>
+          <li>GENIUS Act compliance</li>
+          <li>Dedicated scoring pipeline</li>
+          <li>Custom stress scenarios</li>
+        </ul>
+      </div>
+    </div>
+    <div class="logo-conveyor reveal">
+      <span>MakerDAO</span>
+      <span>Aave</span>
+      <span>Compound</span>
+      <span>Chainlink</span>
+      <span>USDC</span>
+      <span>Tether</span>
+      <span>Uniswap</span>
+      <span>Ethereum</span>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════ VISION ═══════ -->
 <section class="section section-alt" id="vision">
   <div class="container">
@@ -1020,22 +1269,54 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
     </div>
     <div class="vision-grid">
       <div class="card vision-card reveal d1">
-        <div class="vision-label">Phase 1 &middot; Now</div>
+        <div class="vision-label">Phase 01 &middot; Now</div>
         <div class="h-md">Stress-Test Playground</div>
         <p class="body-sm" style="max-width:280px; margin:0 auto;">Prove the engine: duration mismatch as the primary signal, weather as the tail risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under scenario.</p>
+        <div style="display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">IPFS verified</span>
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">MCP for AI agents</span>
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">Chainlink ready</span>
+        </div>
       </div>
-      <div class="card vision-card reveal d2">
-        <div class="vision-label">Phase 2 &middot; Next</div>
+      <div class="card vision-card featured reveal d2" style="border-color:var(--accent); background:linear-gradient(135deg, rgba(108,92,231,0.03) 0%, var(--bg-card) 100%);">
+        <div class="vision-label" style="color:var(--accent);">Phase 02 &middot; Next</div>
         <div class="h-md">Oracle-Grade Risk Feed</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Multi model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto rebalance stablecoin positions when stress thresholds are crossed. Multi SIG for AI.</p>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Multi model consensus signals pushed to Chainlink oracles inside TEEs. DeFi protocols auto rebalance stablecoin positions when stress thresholds are crossed.</p>
+        <div style="display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">Enterprise API</span>
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">Streaming</span>
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">TEE execution</span>
+        </div>
       </div>
       <div class="card vision-card reveal d3">
-        <div class="vision-label">Phase 3 &middot; Endgame</div>
+        <div class="vision-label">Phase 03 &middot; Endgame</div>
         <div class="h-md">The Katabatic Stablecoin</div>
-        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design a stablecoin with optimal reserve structure: diversified counterparties, continuously stress tested, transparently managed by the engine that rates them all.</p>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design a stablecoin with optimal reserve structure: diversified counterparties, continuously stress tested, transparently managed by the engine.</p>
+        <div style="display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+          <span style="font-size:0.68rem; padding:0.2rem 0.5rem; border-radius:100px; background:var(--accent-lighter); color:var(--accent); font-weight:500;">The system of record for stablecoin reserve risk</span>
+        </div>
       </div>
     </div>
-    <p class="body-sm reveal" style="text-align:center; margin-top:2.5rem; max-width:560px; margin-left:auto; margin-right:auto; color:var(--text-3);">Bloomberg started with data terminals and became financial infrastructure. We start with stress simulations and become the most transparent stablecoin in crypto.</p>
+    <!-- WAM Comparison -->
+    <div class="card reveal" style="padding:2rem 2.5rem; max-width:600px; margin:2.5rem auto 0;">
+      <div style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); margin-bottom:1rem;">WAM: The Difference Between Safe and Catastrophic</div>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span style="font-size:0.78rem; font-weight:600; color:var(--text-3); width:80px; font-family:'IBM Plex Mono',monospace;">USDC</span>
+          <div style="height:24px; width:6%; background:var(--success); border-radius:6px; display:flex; align-items:center; padding:0 0.5rem; min-width:60px;">
+            <span style="font-size:0.72rem; font-weight:700; color:white; white-space:nowrap;">45d</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span style="font-size:0.78rem; font-weight:600; color:var(--text-3); width:80px; font-family:'IBM Plex Mono',monospace;">SVB 2023</span>
+          <div style="height:24px; width:100%; background:var(--accent-light); border-radius:6px; display:flex; align-items:center; padding:0 0.5rem;">
+            <span style="font-size:0.72rem; font-weight:700; color:white; white-space:nowrap;">2,040d</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-sm reveal" style="text-align:center; margin-top:2rem; max-width:560px; margin-left:auto; margin-right:auto; color:var(--text-3);">Bloomberg started with data terminals and became financial infrastructure. We start with stress simulations and become the most transparent stablecoin in crypto.</p>
   </div>
 </section>
 
@@ -1063,10 +1344,11 @@ footer { padding: 2rem 0; border-top: 1px solid var(--border); }
       </span>
       <div class="foot-links">
         <a data-scroll="#problem">Problem</a>
-        <a data-scroll="#method">Methodology</a>
-        <a data-scroll="#dimensions">Dimensions</a>
-        <a data-scroll="#arch">Architecture</a>
-        <a data-scroll="#demo">Demo</a>
+        <a data-scroll="#why-now">Why Now</a>
+        <a data-scroll="#method">Engine</a>
+        <a data-scroll="#positioning">Positioning</a>
+        <a data-scroll="#business">Business</a>
+        <a data-scroll="#vision">Vision</a>
       </div>
       <span class="foot-right">Programmable Capital &middot; Built in 36 hours</span>
     </div>

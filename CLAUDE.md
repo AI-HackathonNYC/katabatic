@@ -6,7 +6,7 @@
 
 Katabatic is **the system of record for stablecoin reserve risk** — a reserve risk data platform that continuously scores the structural fragility of stablecoin reserve portfolios and exposes that data via API. Not a rating agency (NRSRO liability avoided) and not a dashboard product — an **infrastructure layer** whose risk scores are consumed by DAO governance systems, DeFi protocol rebalancing logic, institutional risk desks, and (aspirationally) Chainlink oracle feeds.
 
-The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that forced stablecoin issuers to disclose reserve composition, asset maturities, and custodian identities for the first time via monthly attestation reports.
+The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that forced stablecoin issuers to disclose reserve composition, asset maturities, and custodian identities for the first time via XBRL-formatted filings and OCC API feeds mandated for all PPSIs.
 
 ### Why "System of Record" Framing
 
@@ -21,7 +21,7 @@ On-chain data platforms became the authoritative source for on-chain behavioral 
 
 ### Stack Positioning
 
-Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that forced standardized reserve disclosure for the first time — monthly attestation reports with reserve composition, maturity data, and custodian identities. We structure that mandated data into programmable risk intelligence.
+Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that forced standardized reserve disclosure for the first time — XBRL + OCC API feeds mandated for all PPSIs, with monthly attestation reports covering reserve composition, maturity data, and custodian identities. We structure that mandated data into programmable risk intelligence.
 
 | Layer | What it does |
 |-------|--------------|
@@ -58,7 +58,7 @@ Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a cre
 ## Strategic Improvements Over Original Brief
 
 ### Hole 1: Data Opacity (30+ day PDF lag)
-**Fix:** Under the 2025 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must publish monthly attestation reports certified by registered accounting firms, disclosing reserve composition, asset types, maturities, and custodian identities. We use LLM extraction (Claude) to structure these attestation reports and FDIC Call Reports into machine-readable data — turning compliance filings into programmable risk intelligence. Cross-reference attestation data with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
+**Fix:** Under the 2025 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must publish monthly attestation reports certified by registered accounting firms, disclosing reserve composition, asset types, maturities, and custodian identities. The Act mandates **XBRL-formatted filings and OCC API feeds** for all PPSIs — meaning reserve data is now machine-readable at the source, not locked in PDFs. We ingest these structured feeds (with Claude LLM extraction as fallback for non-compliant issuers) and cross-reference with FDIC Call Reports — turning compliance filings into programmable risk intelligence. Cross-reference attestation data with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
 
 ### Hole 2: Causal Gap (hurricane → bank → downgrade is too blunt)
 **Fix — two sub-signals:**
@@ -84,10 +84,14 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| **Frontend** | React 18 + Vite | Dashboard SPA |
-| **Charts** | Recharts | Stress score timelines, WAM breakdowns |
+| **Pitch Deck** | React 19 + Vite 7 + TypeScript 5.9 | 10-slide presentation SPA (`/slides-app`) |
+| **Slide Animations** | Framer Motion 12 | Transitions, staggered reveals, animated counters |
+| **Slide UI** | CVA + clsx + tailwind-merge + Lucide React | Component variants, conditional styling, icons |
+| **Frontend (Dashboard)** | React 19 + Vite | Dashboard SPA (`/frontend`) — demo vehicle for the API |
+| **Charts** | Recharts | Stress score timelines, WAM breakdowns (dashboard) |
 | **Maps** | Leaflet + React-Leaflet (OpenStreetMap) | Geographic exposure map, hurricane overlay, data center corridors |
-| **Styling** | Tailwind CSS | Rapid UI development |
+| **Styling** | Tailwind CSS 4 | Utility-first styling across slides + dashboard |
+| **Typography** | Sora (Google Fonts, 300–700) | Primary font across all UI |
 | **Backend** | FastAPI (Python 3.11+) | REST API, scoring engine, data pipelines |
 | **Knowledge Graph** | NetworkX | Stablecoin → Bank → DataCenter → Jurisdiction graph |
 | **LLM (Primary)** | Claude API (Anthropic SDK) | Attestation/PDF extraction, FDIC Call Report mining, stress narratives |
@@ -95,12 +99,54 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Weather Data** | NOAA API, NHC (hurricane tracks), OpenMeteo | Tail-risk weather multipliers |
 | **Bank Data** | FDIC API + FDIC Call Reports | WAM proxy, LTV ratios, liquidity data |
 | **On-Chain Data** | Etherscan API / Dune Analytics | Mint/Burn flow cross-reference |
-| **Regulatory Data** | GENIUS Act attestation reports / FDIC filings | Reserve composition, maturities, custodians (LLM-extracted) |
+| **Regulatory Data** | GENIUS Act XBRL feeds / OCC API / FDIC filings | Reserve composition, maturities, custodians (LLM-extracted) |
 | **Geocoding** | Nominatim (OpenStreetMap) | Bank + data center → lat/lng resolution |
 | **Database** | SQLite (dev) | Reserve data, stress history, cached API responses |
 | **IPFS Pinning** | Pinata API | Pin score snapshots to IPFS for verifiable, immutable score provenance |
 | **MCP Server** | FastMCP (Python SDK) | AI-agent-native delivery of risk scores as tool calls |
-| **Deployment** | Vercel (frontend) + Railway/Render (backend) | Demo hosting |
+| **Deployment** | Vercel (frontend/slides) + Railway/Render (backend) | Demo hosting |
+
+---
+
+## Design System
+
+> **Source of truth:** `slides-app/src/index.css` — all design tokens are defined as CSS custom properties via Tailwind CSS 4's `@theme` directive.
+
+### Color Palette
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--color-accent` | `#6c5ce7` | Primary purple accent (buttons, links, highlights) |
+| `--color-accent-light` | `#a29bfe` | Gradient endpoints, secondary highlights |
+| `--color-accent-dark` | `#4834d4` | Hover states, emphasis |
+| `--color-bg` | `#fafafa` | Default slide/page background |
+| `--color-bg-alt` | `#f3f2f7` | Alternate section background |
+| `--color-bg-dark` | `#0c0a14` | Dark variant slides (hero, close) |
+| `--color-card` | `#ffffff` | Card surfaces |
+| `--color-success` | `#00b894` | Positive indicators (low stress, consensus confirmed) |
+| `--color-warn` | `#e17055` | Warning indicators (moderate stress, model divergence) |
+| `--color-danger` | `#e84393` | Critical indicators (high stress, depeg events) |
+| `--color-text-primary` | `#0f0f0f` | Headlines, primary copy |
+| `--color-text-secondary` | `#555555` | Body text, descriptions |
+| `--color-text-tertiary` | `#888888` | Labels, captions |
+| `--color-text-muted` | `#bbbbbb` | Disabled states, subtle annotations |
+
+### Visual Patterns
+
+- **Gradient text:** `linear-gradient(135deg, #6c5ce7, #a29bfe)` with `-webkit-background-clip: text`
+- **Glass morphism:** `backdrop-filter: blur(36px)` with semi-transparent backgrounds (`.glass`, `.glass-dark`)
+- **Borders:** Subtle `border-black/7` or `border-black/10` for light mode separation
+- **Hurricane rings:** Animated concentric rings (custom keyframes) used on hero + close slides
+- **Animated numbers:** Counters that animate from 0 to target value (e.g., 68/100 stress score)
+- **Pipeline visualization:** Numbered circles with connecting line, step-by-step flow
+
+### Typography Scale
+
+- Hero headlines: `clamp(1.9rem, 3vw, 2.6rem)`
+- Large displays: `2.2rem`–`3.2rem`
+- Body: `0.95rem`–`1.15rem`
+- UI labels: `0.7rem`–`0.85rem`, uppercase with `letter-spacing: 0.08em`
+- Monospace (code/data): IBM Plex Mono
 
 ---
 
@@ -121,6 +167,8 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 │  Weather events attach as stress multipliers on bank + DC nodes  │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 3: DURATION + STRESS ENGINE                               │
+│  Pipeline: Resolve Entities → Build Graph → Compute WAM →        │
+│           Apply Stress → Output LCR → Pin to IPFS                │
 │  Primary: WAM of treasury portfolio (duration mismatch score)    │
 │  Multiplier: Weather tail-risk × Geographic concentration        │
 │  Operational: Data center corridor overlap with storm track       │
@@ -162,6 +210,76 @@ Stress Score 26–50  → "Moderate Stress. Latency: 4–24h. Coverage: 95–100
 Stress Score 51–75  → "Elevated Stress. Latency: 24–72h. Coverage: 85–95%"
 Stress Score 76–100 → "Critical Stress. Latency: 72h+. Coverage: <85%"
 ```
+
+---
+
+## Competitive Positioning (Slide 6)
+
+> **Key pitch line:** "Onchain shows the flows. Katabatic shows what's about to break."
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  Layer 1 — Onchain Data Platforms                            │
+│  Dune · Nansen · Chainalysis · Glassnode                     │
+│  (Mint/burn flows, wallet balances, transaction history)     │
+├───────────────────────── ▼ ──────────────────────────────────┤
+│  Layer 2 — Reserve Risk Infrastructure  ★ KATABATIC ★        │
+│  WAM duration engine · FDIC Call Report mining                │
+│  Weather tail-risk model · Reserve stress simulation          │
+│  What onchain can't see:                                     │
+│    • Duration mismatch   • Bank health signals                │
+│    • Data center ops risk • Weather tail-risk                 │
+├───────────────────────── ▼ ──────────────────────────────────┤
+│  Layer 3 — Downstream Consumers                              │
+│  MakerDAO · Aave · Compound · Risk Desks · AI Agents         │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Vision & Roadmap (Slide 8)
+
+> **Key pitch line:** "Bloomberg started with terminals. We start with stress simulations."
+
+| Phase | Name | Capabilities |
+|-------|------|-------------|
+| **01 Now** | Stress Test Playground | IPFS verified scores · MCP for AI agents · Chainlink ready |
+| **02 Next** | Oracle Grade Risk Feed | Enterprise API · Real-time streaming · TEE execution |
+| **03 Endgame** | The Katabatic Stablecoin | The system of record for stablecoin reserve risk |
+
+**WAM comparison (Slide 8 visual):** USDC 45-day WAM (green, healthy) vs SVB 2,040-day WAM (purple accent, catastrophic). That's the difference between safe and catastrophic.
+
+---
+
+## Business Model (Slide 9)
+
+> **Key pitch line:** "API-first infrastructure. Not a consulting fee."
+
+| Tier | Features |
+|------|----------|
+| **Starter API** | REST API access · MCP for AI agents · 6 stablecoins · <2s rescore · webhook alerts |
+| **Enterprise** *(featured)* | Real-time streaming · IPFS verified scores · multi-model consensus · SLA · warehouse delivery |
+| **Institutional** | FDIC Call Report mining · oracle feed integration · GENIUS Act compliance · dedicated scoring pipeline |
+
+**Target logos (Slide 9 conveyor):** MakerDAO, Aave, Compound, Chainlink, USDC, Tether, Uniswap, Ethereum
+
+---
+
+## Stablecoin Market (Slide 5)
+
+The GENIUS Act (Jul 2025) is the regulatory catalyst. Market trajectory:
+
+| Year | Market Cap | Context |
+|------|-----------|---------|
+| 2021 | $150B | Pre-regulation peak |
+| 2023 | $125B | Post-Terra/UST crash |
+| 2025 | $310B | GENIUS Act signed — XBRL + OCC API feeds mandated for all PPSIs |
+| 2027 (proj.) | $500B | Institutional adoption accelerates |
+| 2030 (proj.) | $700B+ | Full regulatory integration |
+
+**Key stat:** 6 stablecoins tracked, <2s re-score time.
+
+**The pitch (Slide 5):** "The data didn't exist. Now it does." Before 2025: PDF attestations with 30-day lag, no programmatic access. After GENIUS Act: XBRL + OCC API feeds mandated. Realtime reserve stress monitoring is now possible.
 
 ---
 
@@ -209,7 +327,8 @@ main                               ← Production-ready, deploy target
 - [ ] Initialize monorepo structure:
   ```
   /backend        ← FastAPI app
-  /frontend       ← React + Vite app
+  /frontend       ← React 19 + Vite dashboard SPA (demo vehicle for the API)
+  /slides-app     ← React 19 + Vite + Framer Motion pitch deck (10 slides, DONE)
   /data           ← Seed data, attestation fixtures, FDIC Call Report samples
   /scripts        ← One-off data processing scripts
   ```
@@ -302,7 +421,7 @@ main                               ← Production-ready, deploy target
 - [ ] Stress score table: all stablecoins with Liquidity Stress Score + redemption latency + coverage ratio
 - [ ] Detail view: click a stablecoin → WAM chart, 6-dimension breakdown (Recharts), mint/burn divergence sparkline
 - [ ] Alert banner: active weather events, mint/burn anomalies, FDIC watch list triggers
-- [ ] Responsive layout matching Katabatic design language (purple accent `#7b6fc4`, light bg `#f4f3fa`)
+- [ ] Responsive layout matching Katabatic design language (purple accent `#6c5ce7`, light bg `#fafafa`, alt `#f3f2f7` — see Design System section)
 - [ ] Framing copy: "Liquidity Stress Score" not "Rating" throughout all UI
 
 **feat/what-if-simulator (Frontend + Graph/Weather roles)**
@@ -358,23 +477,35 @@ main                               ← Production-ready, deploy target
 - [ ] Code freeze at **hour 30**
 - [ ] Deploy frontend to Vercel, backend to Railway/Render
 - [ ] Verify all 3 demo paths work on deployed URLs
-- [ ] Rehearse demo script 5× (target: under 2 minutes)
+- [ ] Rehearse 10-slide presentation 5× (target: under 4 minutes including live demo)
 - [ ] Prepare backup: pre-recorded screen capture of demo in case of live failure
 - [ ] Final merge `dev` → `main`, tag `v1.0-demo`
 
 ---
 
-## Demo Script (5 Beats, <2 Minutes)
+## Presentation: 10 Slides (~4 Minutes)
 
-1. **Show the stress score dashboard.** Six stablecoins with Liquidity Stress Scores and projected redemption latencies. "The GENIUS Act forces stablecoin issuers to disclose reserve composition for the first time. We structure those attestation reports, cross-reference on-chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio — continuously."
+> **Full presenter script with timing cues:** `slides-app/PRESENTER-SCRIPT.md`
+> **Slide source code:** `slides-app/src/slides/01-hero.tsx` through `10-close.tsx`
 
-2. **Drop a hurricane on the map.** Two things happen simultaneously: Florida bank markers turn red as their mortgage LTV ratios deteriorate under the storm, and the Northern Virginia data center corridor lights up — because that's where treasury ops run. Stress score spikes. "This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."
+| # | Slide | Time | Key Line |
+|---|-------|------|----------|
+| 01 | **Hero** | 10s | "Liquidity stress testing for stablecoin reserves." |
+| 02 | **The Problem** | 20s | "The attestation said fine. Then SVB failed." ($3.3B USDC reserves, $0.87 depeg, −13¢ in 48h) |
+| 03 | **The Engine** | 20s | "From opaque PDF to realtime liquidity stress score." (4 inputs → 6-step pipeline → 68/100 score, 72h latency, 88% coverage, consensus badge) |
+| 04 | **Six Dimensions** | 20s | "Duration risk is primary. Weather is the force multiplier." (formula + 6 weighted bars, SVB 2,040-day WAM) |
+| 05 | **Why Now** | 20s | "The GENIUS Act just created this market." (timeline: Before 2025 → Jul 2025 GENIUS Act → Today. Market $150B→$700B+) |
+| 06 | **Positioning** | 20s | "Onchain shows the flows. Katabatic shows what's about to break." (3-layer diagram + "What Onchain Can't See" panel) |
+| 07 | **Live Demo** | 10s + **60s demo** | Three scenarios: hurricane ops freeze, SVB backtest, rate hike sensitivity |
+| 08 | **Vision** | 20s | "Bloomberg started with terminals. We start with stress simulations." (3-phase roadmap + WAM comparison bars) |
+| 09 | **Go to Market** | 15s | "API-first infrastructure. Not a consulting fee." (3 tiers + logo conveyor) |
+| 10 | **The Close** | 20s | "Weather proves the engine." (72h latency, 88% coverage hero metrics + Katabatic logo) |
 
-3. **Click into the causal explanation.** Two models (Claude + Gemini) independently generated the same narrative. Score pinned to IPFS — click the CID to verify. "Consensus confirmed. USDC stress score: 68. Redemption latency under this scenario: 72 hours. Liquidity coverage: 88%. Verified: ipfs://Qm..."
+### Live Demo Scenarios (Slide 7, ~60 seconds)
 
-4. **SVB backtest.** Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. "Our engine would have flagged this 48 hours before the depeg."
-
-5. **Close the pitch.** "This is the difference between a rating agency and a risk engine. We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage' — pinned to IPFS so anyone can verify it, consumed as an API call or an MCP tool call. That's what DAO treasuries, DeFi protocols, and AI agents need. That's Katabatic."
+1. **Hurricane** — Drop on map → stress spike + 72h latency + affected data center corridors
+2. **SVB backtest** — WAM chart showing 2,040-day duration, stress crossing critical 48h before depeg
+3. **Rate hike** — 100bps slider → show which stablecoins are most exposed by WAM sensitivity
 
 ---
 

@@ -1,24 +1,32 @@
 # Frontend Agent — Katabatic React Dashboard
 
-You are a specialized frontend engineer for the Katabatic project. Your focus is the React 18 dashboard at `/frontend/`.
+You are a specialized frontend engineer for the Katabatic project. Your focus is the React 19 dashboard at `/frontend/`. Reuse design tokens and components from `/slides-app/` where possible.
 
 ## Stack
-- **Framework**: React 18 + Vite
-- **Styling**: Tailwind CSS
+- **Framework**: React 19 + Vite 7 + TypeScript 5.9
+- **Styling**: Tailwind CSS 4 (use `@theme` directive for design tokens)
+- **Animations**: Framer Motion 12
+- **UI Utilities**: class-variance-authority (CVA), clsx, tailwind-merge, Lucide React (icons)
 - **Charts**: Recharts (stress score timelines, WAM breakdowns, 6-dimension radar)
 - **Maps**: Leaflet + React-Leaflet (OpenStreetMap) — bank markers, data center corridors, hurricane overlay
 - **State**: React hooks only (no Redux, no class components)
 
-## Design System
+## Design System (source of truth: `slides-app/src/index.css`)
 ```
-Background:  #f4f3fa  (light lavender)
-Accent:      #7b6fc4  (purple)
-Deep:        #524399
-Text:        #18132e
-Dark slide:  #1e1740 → #2a2154
-Danger:      #d64545
-Success:     #2d9e6b
-Fonts:       Outfit (sans), IBM Plex Mono (mono)
+Background:  #fafafa  (--color-bg)
+Alt bg:      #f3f2f7  (--color-bg-alt)
+Dark bg:     #0c0a14  (--color-bg-dark)
+Accent:      #6c5ce7  (--color-accent, primary purple)
+Accent lt:   #a29bfe  (--color-accent-light)
+Accent dk:   #4834d4  (--color-accent-dark)
+Text:        #0f0f0f  (--color-text-primary)
+Text 2:      #555555  (--color-text-secondary)
+Text 3:      #888888  (--color-text-tertiary)
+Muted:       #bbbbbb  (--color-text-muted)
+Success:     #00b894  (--color-success)
+Warn:        #e17055  (--color-warn)
+Danger:      #e84393  (--color-danger)
+Font:        Sora (300–700), IBM Plex Mono (mono)
 ```
 
 **Critical rule**: Never use "rating" or "grade" in UI copy. Always use:

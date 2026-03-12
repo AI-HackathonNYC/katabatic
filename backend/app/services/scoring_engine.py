@@ -1,0 +1,361 @@
+"""6-dimension scoring engine — computes Liquidity Stress Scores from live data."""
+
+import asyncio
+from datetime import datetime, timezone
+from typing import Optional
+
+from app.models.reserve import ReserveData
+from app.models.stress import DimensionScore, StressScoreResult
+from app.services.cache import Cache
+from app.services.fdic_provider import FDICProvider
+from app.services.weather_provider import WeatherProvider
+from app.services.etherscan_provider import EtherscanProvider
+from app.services.knowledge_graph import KnowledgeGraphService
+from app.services.llm_jury import LLMJuryService
+from app.services.registry import get_all_symbols, get_reserve_data, get_all_states
+
+
+class ScoringEngine:
+    """Computes Liquidity Stress Scores across 6 dimensions using live data providers."""
+
+    def __init__(
+        self,
+        cache: Cache,
+        graph: KnowledgeGraphService,
+        llm_jury: LLMJuryService,
+    ) -> None:
+        self.cache = cache
+        self.graph = graph
+        self.llm_jury = llm_jury
+        self.fdic = FDICProvider(cache)
+        self.weather = WeatherProvider(cache)
+        self.etherscan = EtherscanProvider(cache)
+
+    async def compute_stress_score(self, symbol: str) -> StressScoreResult:
+        """Compute the full 6-dimension stress score for a stablecoin."""
+        reserve = get_reserve_data(symbol)
+
+        # Compute all 6 dimensions in parallel
+        dims = await asyncio.gather(
+            self._duration_risk(reserve),
+            self._reserve_transparency(reserve),
+            self._geographic_concentration(reserve),
+            self._weather_tail_risk(reserve),
+            self._counterparty_health(reserve),
+            self._peg_stability(reserve),
+        )
+
+        composite = sum(d.weighted_score for d in dims)
+        composite = min(100.0, max(0.0, composite))
+        level, latency, coverage = _map_score(composite)
+
+        # Track worst resolution source across providers
+        sources = set()
+        for d in dims:
+            if d.detail and "fixture" in d.detail.lower():
+                sources.add("fixture")
+            elif d.detail and "cache" in d.detail.lower():
+                sources.add("cache")
+            else:
+                sources.add("live")
+        resolution = "fixture" if "fixture" in sources else ("cache" if "cache" in sources else "live")
+
+        # Generate narrative (async, non-blocking)
+        narrative = None
+        jury = None
+        if self.llm_jury.available:
+            context = _build_context(reserve, dims, composite)
+            jury_result = await self.llm_jury.evaluate_counterparty_health(context)
+            if jury_result:
+                jury = jury_result
+            narrative = await self.llm_jury.generate_narrative(context)
+
+        return StressScoreResult(
+            stablecoin=symbol,
+            stress_score=round(composite, 1),
+            redemption_latency_hours=latency,
+            liquidity_coverage_ratio=coverage,
+            stress_level=level,
+            dimensions=list(dims),
+            jury=jury,
+            narrative=narrative,
+            resolution_source=resolution,
+            source_timestamp=datetime.now(timezone.utc).isoformat(),
+        )
+
+    async def compute_all_scores(self) -> list[StressScoreResult]:
+        """Compute stress scores for all tracked stablecoins."""
+        symbols = get_all_symbols()
+        tasks = [self.compute_stress_score(s) for s in symbols]
+        return await asyncio.gather(*tasks)
+
+    # --- Dimension 1: Duration Risk (30% weight) ---
+
+    async def _duration_risk(self, reserve: ReserveData) -> DimensionScore:
+        wam = reserve.weighted_avg_maturity_days
+        score = min(100.0, (wam / 365.0) * 100.0)
+        return DimensionScore(
+            name="Duration Risk (WAM)",
+            score=round(score, 1),
+            weight=0.30,
+            weighted_score=round(score * 0.30, 2),
+            detail=f"WAM: {wam} days. Score scales linearly — 365d = max risk.",
+        )
+
+    # --- Dimension 2: Reserve Transparency (20% weight) ---
+
+    async def _reserve_transparency(self, reserve: ReserveData) -> DimensionScore:
+        score = 0.0
+
+        # Data source quality
+        if reserve.data_source == "genius_act_attestation":
+            score += 0
+        elif reserve.data_source == "pdf_attestation":
+            score += 25
+        else:
+            score += 50
+
+        # Report staleness
+        try:
+            report_date = datetime.strptime(reserve.report_date, "%Y-%m-%d")
+            days_old = (datetime.now() - report_date).days
+            score += min(30, days_old)  # +1 per day, cap at 30
+        except ValueError:
+            score += 30
+
+        # On-chain cross-check divergence
+        if reserve.onchain_cross_check:
+            div = reserve.onchain_cross_check.divergence_pct
+            if div is not None:
+                if div > 5:
+                    score += 25
+                elif div > 2:
+                    score += 10
+
+        # Counterparties with missing FDIC data
+        opaque = sum(1 for cp in reserve.counterparties if cp.fdic_cert is None)
+        score += opaque * 5
+
+        score = min(100.0, score)
+        return DimensionScore(
+            name="Reserve Transparency",
+            score=round(score, 1),
+            weight=0.20,
+            weighted_score=round(score * 0.20, 2),
+            detail=f"Source: {reserve.data_source}. Report date: {reserve.report_date}. {opaque} opaque counterparties.",
+        )
+
+    # --- Dimension 3: Geographic + Operational Concentration (15% weight) ---
+
+    async def _geographic_concentration(self, reserve: ReserveData) -> DimensionScore:
+        # HHI of counterparty reserve shares
+        hhi = self.graph.get_concentration_hhi(reserve.stablecoin)
+        # Normalize HHI: 10000 = max (all in one bank), 0 = perfectly distributed
+        hhi_score = min(100.0, hhi / 100.0)
+
+        # Data center corridor concentration
+        corridors = [cp.data_center_corridor for cp in reserve.counterparties if cp.data_center_corridor]
+        if corridors:
+            unique_corridors = set(corridors)
+            corridor_concentration = 1.0 - (len(unique_corridors) / max(len(corridors), 1))
+            ops_bonus = corridor_concentration * 30  # up to 30 points for single-corridor risk
+        else:
+            ops_bonus = 0
+
+        score = min(100.0, hhi_score * 0.6 + ops_bonus * 0.4 + (20 if len(set(corridors)) <= 1 and corridors else 0))
+        return DimensionScore(
+            name="Geographic Concentration",
+            score=round(score, 1),
+            weight=0.15,
+            weighted_score=round(score * 0.15, 2),
+            detail=f"HHI: {round(hhi, 0)}. Corridors: {len(set(corridors)) if corridors else 0} unique.",
+        )
+
+    # --- Dimension 4: Weather Tail-Risk Multiplier (15% weight) ---
+
+    async def _weather_tail_risk(self, reserve: ReserveData) -> DimensionScore:
+        # Fetch active weather alerts for all states where counterparties are located
+        states = set()
+        state_weights: dict[str, float] = {}
+        for cp in reserve.counterparties:
+            if cp.state and len(cp.state) == 2:
+                states.add(cp.state)
+                state_weights[cp.state] = state_weights.get(cp.state, 0) + cp.percentage
+
+        if not states:
+            return DimensionScore(
+                name="Weather Tail-Risk",
+                score=0.0,
+                weight=0.15,
+                weighted_score=0.0,
+                detail="No US-based counterparties to assess weather risk.",
+            )
+
+        severity_map = {"Extreme": 1.0, "Severe": 0.7, "Moderate": 0.4, "Minor": 0.1}
+        total_weather_score = 0.0
+        alert_details = []
+        source = "live"
+
+        for state in states:
+            try:
+                result = await self.weather.resolve(f"alerts:{state}")
+                if result.source == "fixture":
+                    source = "fixture"
+                elif result.source == "cache" and source != "fixture":
+                    source = "cache"
+
+                if result.data and result.data.get("alert_count", 0) > 0:
+                    max_severity = 0.0
+                    for alert in result.data["alerts"]:
+                        sev = severity_map.get(alert.get("severity", ""), 0.0)
+                        max_severity = max(max_severity, sev)
+                        if sev >= 0.7:
+                            alert_details.append(f"{alert.get('event', 'Alert')} in {state}")
+
+                    weight = state_weights.get(state, 0) / 100.0
+                    # Factor in LTV for banks in this state
+                    ltv_factor = 1.0
+                    for cp in reserve.counterparties:
+                        if cp.state == state and cp.fdic_ltv_ratio:
+                            ltv_factor = max(ltv_factor, cp.fdic_ltv_ratio)
+
+                    total_weather_score += max_severity * weight * ltv_factor * 100
+            except Exception:
+                continue
+
+        score = min(100.0, total_weather_score)
+        detail = f"Active alerts: {', '.join(alert_details) if alert_details else 'None'}. Source: {source}."
+        return DimensionScore(
+            name="Weather Tail-Risk",
+            score=round(score, 1),
+            weight=0.15,
+            weighted_score=round(score * 0.15, 2),
+            detail=detail,
+        )
+
+    # --- Dimension 5: Counterparty Health (15% weight) ---
+
+    async def _counterparty_health(self, reserve: ReserveData) -> DimensionScore:
+        health_scores = []
+        source = "live"
+
+        for cp in reserve.counterparties:
+            if cp.fdic_cert:
+                try:
+                    result = await self.fdic.resolve(str(cp.fdic_cert))
+                    if result.source == "fixture":
+                        source = "fixture"
+                    elif result.source == "cache" and source != "fixture":
+                        source = "cache"
+
+                    if result.data:
+                        # Higher LTV = worse health. Score 0-100.
+                        ltv = result.data.get("ltv_proxy") or cp.fdic_ltv_ratio or 0.5
+                        roa = result.data.get("roa") or 0
+                        nim = result.data.get("net_interest_margin") or 0
+
+                        # Health heuristic: high leverage + low profitability = bad
+                        ltv_score = min(100, ltv * 100)
+                        roa_penalty = max(0, 30 - roa * 30) if roa < 1 else 0
+                        health = ltv_score * 0.6 + roa_penalty * 0.4
+
+                        health_scores.append((health, cp.percentage / 100.0))
+                except Exception:
+                    # Default moderate risk for failed lookups
+                    health_scores.append((50.0, cp.percentage / 100.0))
+            else:
+                # No FDIC cert = opaque = higher risk
+                health_scores.append((65.0, cp.percentage / 100.0))
+
+        if not health_scores:
+            score = 50.0
+        else:
+            score = sum(h * w for h, w in health_scores) / sum(w for _, w in health_scores)
+
+        score = min(100.0, score)
+        return DimensionScore(
+            name="Counterparty Health",
+            score=round(score, 1),
+            weight=0.15,
+            weighted_score=round(score * 0.15, 2),
+            detail=f"Assessed {len(health_scores)} counterparties. Source: {source}.",
+        )
+
+    # --- Dimension 6: Peg Stability (5% weight) ---
+
+    async def _peg_stability(self, reserve: ReserveData) -> DimensionScore:
+        score = 0.0
+        source = "fixture"
+
+        try:
+            result = await self.etherscan.resolve(reserve.stablecoin)
+            source = result.source
+
+            if result.data:
+                div = result.data.get("divergence_pct")
+                if div is not None and div > 5:
+                    score += 40
+                elif div is not None and div > 2:
+                    score += 15
+
+                burn = result.data.get("burn_7d_usd")
+                if burn and reserve.total_reserves > 0:
+                    burn_ratio = burn / reserve.total_reserves
+                    if burn_ratio > 0.05:  # >5% of reserves burned in 7d
+                        score += 40
+                    elif burn_ratio > 0.02:
+                        score += 20
+        except Exception:
+            score = 10.0  # Default low risk
+
+        # Cross-check from fixture data
+        if reserve.onchain_cross_check:
+            div = reserve.onchain_cross_check.divergence_pct
+            if div is not None and div > 5:
+                score = max(score, 30)
+
+        score = min(100.0, score)
+        return DimensionScore(
+            name="Peg Stability",
+            score=round(score, 1),
+            weight=0.05,
+            weighted_score=round(score * 0.05, 2),
+            detail=f"On-chain source: {source}.",
+        )
+
+
+def _map_score(score: float) -> tuple[str, str, str]:
+    """Map composite score to stress level, redemption latency, and coverage ratio."""
+    if score <= 25:
+        return ("Low Stress", "<4h", "100%+")
+    elif score <= 50:
+        return ("Moderate Stress", "4-24h", "95-100%")
+    elif score <= 75:
+        return ("Elevated Stress", "24-72h", "85-95%")
+    else:
+        return ("Critical Stress", "72h+", "<85%")
+
+
+def _build_context(reserve: ReserveData, dims: tuple, composite: float) -> str:
+    """Build context string for LLM jury from reserve data and dimension scores."""
+    lines = [
+        f"Stablecoin: {reserve.stablecoin} ({reserve.issuer})",
+        f"Total Reserves: ${reserve.total_reserves:,.0f}",
+        f"WAM: {reserve.weighted_avg_maturity_days} days",
+        f"Data Source: {reserve.data_source}",
+        f"Report Date: {reserve.report_date}",
+        f"Composite Stress Score: {composite:.1f}/100",
+        "",
+        "Counterparties:",
+    ]
+    for cp in reserve.counterparties:
+        lines.append(
+            f"  - {cp.bank_name} ({cp.city}, {cp.state}): "
+            f"{cp.percentage}% | {cp.asset_class} | {cp.maturity_days}d maturity | "
+            f"LTV: {cp.fdic_ltv_ratio or 'N/A'}"
+        )
+    lines.append("")
+    lines.append("Dimension Scores:")
+    for d in dims:
+        lines.append(f"  - {d.name}: {d.score}/100 (weight {d.weight}, contributes {d.weighted_score})")
+    return "\n".join(lines)

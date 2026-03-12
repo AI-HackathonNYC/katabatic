@@ -4,66 +4,63 @@
 
 **Legend:** `[ ]` = pending · `[x]` = done · `[~]` = in progress · `[!]` = blocked
 
-### Product Positioning — API-First Infrastructure
+### Product Positioning — API-First Infrastructure + Data-Driven Risk Modeling
 
-Katabatic is an **API-first data infrastructure product**, not a dashboard. The dashboard/simulator is a demo vehicle to showcase the data product in action. The core deliverables are the **REST API** and **MCP server** — the two channels through which risk scores are consumed by downstream systems.
+Katabatic is an **API-first data infrastructure product** with a **data-driven risk modeling sandbox** for humans. The dashboard surfaces real-world data (live NOAA weather, FDIC bank health, on-chain flows) and projects how current events will impact stablecoin reserve liquidity. AI agents handle deeper modeling via API/MCP.
 
-**Comparable models:**
-- **21st.dev** — sells UI components via API + MCP. Developers consume components programmatically through API calls or MCP tool calls from AI agents. Katabatic does the same for risk scores: systems (DAOs, DeFi protocols, AI trading agents) consume scores via REST API or MCP tool calls.
-- **Pinata** — sells IPFS pinning as an API product. Developers integrate Pinata's API to pin and retrieve content. Katabatic integrates Pinata's API to pin score snapshots, and similarly exposes its own scores as an API product for downstream integration.
+**Three delivery modes:**
+1. **Risk Modeling Dashboard** — Data-driven sandbox for humans to see how real-world events impact reserve risk
+2. **REST API** — Programmatic access for DAO governance, DeFi protocols, risk desks
+3. **MCP Server** — AI-agent-native delivery for trading bots and agent frameworks
 
-**Priority order for hackathon:** REST API endpoints → MCP server → IPFS pinning → Chainlink oracle mock → Dashboard UI (demo vehicle)
+**Priority order for hackathon:** REST API endpoints → Scoring Engine → Dashboard → MCP server → IPFS pinning → Chainlink oracle mock
 
 ---
 
 ## Phase 1: Foundation (Hours 0–4) · Fri Evening
 
 ### Monorepo & Scaffold
-- [ ] Create `/backend` directory with FastAPI skeleton (`main.py`, `requirements.txt`, `.env.example`)
-- [ ] Create `/frontend` directory with Vite + React 19 (`npm create vite@latest`)
-- [ ] Create `/data` directory with subdirs: `/data/extracted/`, `/data/fixtures/`, `/data/call_reports/`
-- [ ] Create `/scripts` directory for one-off processing scripts
-- [ ] Add root-level `.gitignore` (env files, `__pycache__`, `node_modules`, `.DS_Store`, `*.sqlite`)
+- [x] Create `/backend` directory with FastAPI skeleton (`main.py`, `requirements.txt`, `.env.example`)
+- [x] Create `/frontend` directory with Vite + React (`npm create vite@latest`)
+- [x] Create `/data` directory with subdirs: `/data/extracted/`, `/data/fixtures/`, `/data/call_reports/`
+- [x] Create `/scripts` directory for one-off processing scripts
+- [x] Add root-level `.gitignore` (env files, `__pycache__`, `node_modules`, `.DS_Store`, `*.sqlite`)
 - [ ] Create `dev` branch from `main`, push scaffold commits
 
 ### Backend Bootstrap
-- [ ] Install FastAPI, uvicorn, python-dotenv, httpx, networkx, anthropic, google-genai into `requirements.txt`
-- [ ] Implement `/health` endpoint returning `{ "status": "ok", "timestamp": "..." }`
-- [ ] Configure CORS middleware (allow all origins for dev, restrict to frontend origin in prod)
-- [ ] Set up `.env` loading with `python-dotenv` — all API keys read from env
-- [ ] Create `app/` package structure: `app/routers/`, `app/services/`, `app/models/`, `app/db/`
+- [x] Install FastAPI, uvicorn, python-dotenv, httpx, networkx, anthropic, google-genai into `requirements.txt`
+- [x] Implement `/health` endpoint returning `{ "status": "ok", "timestamp": "..." }`
+- [x] Configure CORS middleware (allow all origins for dev, restrict to frontend origin in prod)
+- [x] Set up `.env` loading with `python-dotenv` — all API keys read from env
+- [x] Create `app/` package structure: `app/routers/`, `app/services/`, `app/models/`, `app/db/`
 - [ ] Set up SQLite with `app/db/database.py` — tables: `reserve_data`, `stress_scores`, `api_cache`
-- [ ] Implement API response envelope: `{ "data": ..., "error": null, "timestamp": "...", "resolution_source": "live|cache|fixture" }` as a shared utility
-- [ ] Write `app/models/reserve.py` — Pydantic models for the reserve JSON schema (stablecoin, counterparties, onchain_cross_check)
-- [ ] Write `app/models/stress.py` — Pydantic models for stress score output (score, latency, coverage, dimensions)
+- [x] Implement API response envelope: `{ "data": ..., "error": null, "timestamp": "...", "resolution_source": "live|cache|fixture" }` as a shared utility
+- [x] Write `app/models/reserve.py` — Pydantic models for the reserve JSON schema (stablecoin, counterparties, onchain_cross_check)
+- [x] Write `app/models/stress.py` — Pydantic models for stress score output (score, latency, coverage, dimensions)
 
 ### Frontend Bootstrap
-- [ ] Install dependencies: `tailwindcss@4`, `recharts`, `leaflet`, `react-leaflet`, `react-router-dom`, `framer-motion`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`
-- [ ] Configure Tailwind CSS 4 — use `@theme` directive with Katabatic color palette (`#6c5ce7` accent, `#a29bfe` accent-light, `#4834d4` accent-dark, `#fafafa` bg, `#f3f2f7` bg-alt, `#0c0a14` bg-dark — see Design System in CLAUDE.md)
-- [ ] Create layout shell: `src/components/Layout.tsx` — sidebar nav + main content area
-- [ ] Create route structure: `/` (dashboard), `/simulator` (what-if map), `/backtests` (SVB + Ian), `/stablecoin/:id` (detail view)
-- [ ] Create `src/lib/api.ts` — typed fetch wrapper pointing to backend base URL, handles response envelope unwrapping
-- [ ] Add `.env` for `VITE_API_BASE_URL`
+- [x] Install dependencies: `tailwindcss`, `recharts`, `leaflet`, `react-leaflet`, `react-router-dom`
+- [x] Configure Tailwind CSS with Katabatic color palette (see Design System in CLAUDE.md)
+- [x] Create layout shell with header nav + main content area
+- [x] Create route structure: `/` (dashboard), `/stablecoin/:symbol` (detail view), `/map` (full map)
+- [x] Create `src/lib/api.ts` — typed fetch wrapper pointing to backend base URL
+- [x] Add `.env` for `VITE_API_URL`
 
 ### Data Provider Layer + Fixtures
 
 > **Architecture:** Every data source follows a 3-tier resolution pattern: **Live API → SQLite Cache (TTL) → Fixture Fallback**. Every API response includes a `data_source` field (`"live"`, `"cache"`, `"fixture"`) so the UI shows data provenance.
 
-- [ ] Build `app/services/data_provider.py` — abstract base class with `Live→Cache→Fixture` resolution pattern + `DataResult` model carrying `source` provenance field
-- [ ] Build `app/services/cache.py` — async SQLite cache with TTL-based `get`/`set`/`invalidate`, key = `(provider, source_id)`, configurable TTL per provider
-- [ ] Build `app/services/fdic_provider.py` — FDIC BankFind API client (`https://api.fdic.gov/financials`, no auth needed). Derives WAM proxy from `SC/ASSET × avg maturity` and LTV proxy from `(ASSET-EQ)/ASSET`
-- [ ] Build `app/services/weather_provider.py` — NOAA NWS alerts (`https://api.weather.gov/alerts/active`, User-Agent header only, no API token) + Open-Meteo historical weather (`https://archive-api.open-meteo.com/v1/archive`, fully public, no key, 10k req/day)
-- [ ] Build `app/services/etherscan_provider.py` — Etherscan V2 API (`https://api.etherscan.io/v2/api?chainid=1`, API key required). ERC-20 transfers + token supply for mint/burn cross-reference
-- [ ] Build `app/services/nominatim_provider.py` — Nominatim geocoding (`https://nominatim.openstreetmap.org/search`, User-Agent required, 1 req/sec rate limit)
+- [x] Build `app/services/data_provider.py` — abstract base class with `Live→Cache→Fixture` resolution pattern + `DataResult` model carrying `source` provenance field
+- [x] Build `app/services/cache.py` — async SQLite cache with TTL-based `get`/`set`/`invalidate`
+- [x] Build `app/services/fdic_provider.py` — FDIC BankFind API client (no auth needed). Derives WAM proxy and LTV proxy
+- [x] Build `app/services/weather_provider.py` — NOAA NWS alerts + Open-Meteo historical weather
+- [x] Build `app/services/etherscan_provider.py` — Etherscan V2 API for mint/burn cross-reference
+- [x] Build `app/services/nominatim_provider.py` — Nominatim geocoding (1 req/sec rate limit)
 - [x] Validate existing fixtures as fallback layer (`usdc_baseline.json`, `usdt_baseline.json`, `svb_march2023.json`)
-- [ ] Author `data/fixtures/dai_baseline.json` — DAI with mixed collateral, lower WAM, higher peg stability risk.
-- [ ] Author `data/fixtures/frax_baseline.json` — FRAX algorithmic component, moderate stress.
-- [ ] Author `data/fixtures/busd_baseline.json` — BUSD with Paxos (regulatory action scenario).
-- [ ] Author `data/fixtures/pyusd_baseline.json` — PayPal USDC-like, newer issuer, moderate transparency.
-- [ ] Author `data/fixtures/hurricane_ian_sept2022.json` — Ian scenario: Cat 4, Gulf coast landfall, FL bank LTV exposure, ops risk to Atlanta data corridor.
-- [ ] Author `data/fixtures/hurricane_nova_scenario.json` — Synthetic Cat 4 hitting Northern Virginia — triggers AWS us-east-1 ops risk for USDC/Circle.
-- [ ] Build `backend/scripts/warm_cache.py` — one-shot script to pre-populate SQLite cache from all live APIs on startup
-- [ ] Add `data_source` provenance field (`"live" | "cache" | "fixture"`) to all API response models
+- [ ] Author `data/fixtures/dai_baseline.json` — DAI with mixed collateral
+- [ ] Author additional stablecoin fixtures (FRAX, BUSD, PYUSD)
+- [x] Build `backend/scripts/warm_cache.py` — one-shot script to pre-populate SQLite cache
+- [x] Add `data_source` provenance field to all API response models
 - [ ] Tag `v0.1-foundation`
 
 ---
@@ -74,162 +71,75 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 #### Claude Extraction Pipeline
 - [ ] Write `app/services/extractor.py` — async function `extract_xbrl(feed_url: str) -> ReserveData`
-- [ ] Build Claude API prompt chain for OCC XBRL parsing: system prompt instructs extraction of bank names, deposit %, asset classes, WAM per tranche, jurisdictions into structured JSON
-- [ ] Build PDF fallback parser: `extract_pdf(pdf_bytes: bytes) -> ReserveData` — uses Claude vision/text on PDF content when XBRL not available
-- [ ] Write prompt template `app/prompts/xbrl_extraction.txt` — few-shot examples with USDC XBRL fixture
-- [ ] Write prompt template `app/prompts/pdf_extraction.txt` — few-shot examples with USDT PDF fixture
-- [ ] Implement extraction retry logic: if Claude response fails JSON validation, retry with error context appended (max 3 attempts)
-- [ ] Cache extraction results in SQLite `api_cache` table keyed on source URL + hash
+- [ ] Build Claude API prompt chain for OCC XBRL parsing
+- [ ] Build PDF fallback parser for non-GENIUS-Act-compliant stablecoins
+- [ ] Implement extraction retry logic (max 3 attempts)
+- [ ] Cache extraction results in SQLite
 
 #### On-Chain Cross-Reference
-- [ ] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData` using Etherscan V2 API (`https://api.etherscan.io/v2/api?chainid=1`)
-- [ ] USDC contract address hardcoded: `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`
-- [ ] USDT contract address: `0xdAC17F958D2ee523a2206206994597C13D831ec7`
-- [ ] Parse Transfer events from Etherscan to compute 7-day net burn/mint volume in USD
-- [ ] Write `cross_reference(reserve_data: ReserveData, mint_burn: MintBurnData) -> float` — returns divergence % between on-chain burn and custodian cash delta
-- [ ] Flag divergence > 5% as transparency anomaly (contributes to Reserve Transparency dimension score)
+- [ ] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData`
+- [ ] Parse Transfer events from Etherscan to compute 7-day net burn/mint volume
+- [ ] Cross-reference divergence calculator (flag >5% as transparency anomaly)
 
 #### Endpoints
-- [ ] `POST /api/extract` — accepts `{ "source_url": str, "source_type": "xbrl" | "pdf" }`, returns structured ReserveData JSON with WAM
-- [ ] `GET /api/stablecoins` — returns list of all tracked stablecoins with latest reserve data (loaded from fixtures if extraction not run)
+- [ ] `POST /api/extract` — accepts attestation source, returns structured ReserveData JSON
+- [ ] `GET /api/stablecoins` — returns list of all tracked stablecoins with latest reserve data
 
 ---
 
 ### feat/knowledge-graph
 
 #### Graph Construction
-- [ ] Write `app/services/graph.py` — `build_graph(reserve_data_list: list[ReserveData]) -> nx.DiGraph`
-- [ ] Node types and attributes:
-  - `Stablecoin`: name, issuer, total_reserves, stress_score
-  - `Bank`: name, city, state, lat, lng, fdic_id, wam_days, ltv_ratio, liquidity_coverage, fdic_watch_list
-  - `DataCenterCorridor`: name, aws_region, azure_region, lat_bbox, lng_bbox (e.g., us-east-1 = 38.8–39.1°N, 77.0–77.5°W)
-  - `City`: name, state, lat, lng
-  - `Jurisdiction`: name, country, regulatory_body
-- [ ] Edge types: `holds_reserves_at` (Stablecoin→Bank, attrs: percentage, asset_class, maturity_days), `processes_ops_via` (Bank→DataCenterCorridor), `located_in` (Bank→City), `governed_by` (City→Jurisdiction)
-- [ ] Hardcode data center corridor bounding boxes:
-  - `us-east-1` (Northern Virginia): 38.6–39.4°N, 77.0–78.1°W
-  - `us-east-2` (Ohio): 39.9–42.3°N, 80.5–84.8°W
-  - `us-west-2` (Oregon): 43.9–46.3°N, 116.5–124.6°W
-  - `us-central` (Iowa/Chicago): 40.0–43.0°N, 87.5–96.0°W
-  - `eu-west-1` (Ireland): 51.3–55.4°N, 6.0°W–0.0°
-- [ ] Assign data center corridors to banks: BNY Mellon NY → us-east-1, State Street Boston → us-east-1, JPMorgan Chicago → us-central, etc.
-
-#### Geocoding
-- [ ] Write `app/services/geocoder.py` — `geocode_bank(bank_name: str, city: str, state: str) -> tuple[float, float]` using Nominatim (OSM)
-- [ ] Rate limit: 1 request/second (Nominatim ToS)
-- [ ] Cache geocoding results in SQLite to avoid repeated lookups
-- [ ] Bulk geocode all fixture bank nodes on startup
+- [x] Write `app/services/knowledge_graph.py` — `KnowledgeGraphService` with `build_from_reserves()`
+- [x] Node types: Stablecoin, Bank, DataCenterCorridor, State
+- [x] Edge types: `holds_reserves_at`, `processes_ops_via`, `located_in`
+- [x] Hardcode data center corridor definitions (us-east-1, us-east-2, us-west-2, us-central, eu-west-1)
 
 #### Graph Query Functions
-- [ ] `get_exposed_stablecoins(region: str) -> list[str]` — returns stablecoins with any bank or data center in region
-- [ ] `get_duration_risk(stablecoin: str) -> float` — weighted average maturity across all counterparties
-- [ ] `get_ops_risk(storm_lat: float, storm_lng: float, radius_km: float) -> list[DataCenterCorridor]` — returns corridors inside storm radius
-- [ ] `get_concentration_hhi(stablecoin: str) -> float` — Herfindahl-Hirschman Index of geographic bank concentration
-- [ ] `get_bank_subgraph(stablecoin: str) -> dict` — returns serializable subgraph of all banks for a stablecoin
+- [x] `get_exposed_stablecoins(state)` — returns stablecoins with counterparties in state
+- [x] `get_duration_risk(symbol)` — weighted average maturity across counterparties
+- [x] `get_concentration_hhi(symbol)` — Herfindahl-Hirschman Index
+- [x] `get_ops_risk_by_state(state)` — find affected data center corridors
+- [x] `get_corridors_in_radius(lat, lng, radius)` — corridors within storm radius
+- [x] `serialize()` — JSON-serializable graph for frontend
+
+#### Stablecoin Registry
+- [x] Write `app/services/registry.py` — single source of truth for tracked stablecoins
+- [x] USDC and USDT configs with contract addresses, FDIC certs, fixture paths
+- [x] Helper functions: `get_all_symbols()`, `get_reserve_data()`, `get_fdic_certs_for()`
 
 #### Endpoints
-- [ ] `GET /api/graph` — returns full serialized graph as `{ "nodes": [...], "edges": [...] }` for frontend Leaflet rendering
-- [ ] `GET /api/graph/stablecoin/{name}` — returns subgraph for a specific stablecoin
-
----
-
-### feat/weather-pipeline
-
-#### NOAA Integration
-- [ ] Write `app/services/weather.py` — `get_active_alerts(state: str | None = None) -> list[WeatherAlert]` using NOAA API v3 (`https://api.weather.gov/alerts/active`)
-- [ ] Parse NHC hurricane track: `get_nhc_active_tracks() -> list[HurricaneTrack]` — fetch from NHC GeoJSON feed, parse cone of uncertainty polygon + forecast path
-- [ ] `HurricaneTrack` model: id, name, category, forecast_points (list of lat/lng/timestamp), cone_polygon, intensity_kt, pressure_mb
-
-#### OpenMeteo Historical
-- [ ] Write `get_historical_weather(lat: float, lng: float, start: str, end: str) -> WeatherHistory` using Open-Meteo API (free, no key needed)
-- [ ] Used for SVB (March 2023 Bay Area conditions) and Hurricane Ian (Sept 2022 Gulf conditions) backtests
-
-#### FDIC Call Report Mining
-- [ ] Write `app/services/fdic.py` — `get_bank_financials(fdic_cert: int) -> BankFinancials` using FDIC BankFind API (`https://api.fdic.gov/financials`, no auth required)
-- [ ] Fields available: ASSET, DEP, EQ, SC, NIMY, ROA. Note: WAM and LTV are NOT directly available — derive WAM proxy from `SC/ASSET × avg_maturity` and LTV proxy from `(ASSET-EQ)/ASSET` (leverage ratio)
-- [ ] Write `mine_ltv_from_call_report(fdic_cert: int) -> float` — calls FDIC API for structured fields, uses Claude to derive LTV estimate from available financial ratios
-- [ ] Write `app/prompts/fdic_ltv_extraction.txt` — prompt for Claude to extract LTV ratio from Call Report text
-- [ ] Attach LTV ratios to bank nodes in knowledge graph
-
-#### Storm Overlay Logic
-- [ ] Write `compute_ltv_stress(bank: BankNode, storm: HurricaneTrack) -> float`:
-  - `distance_km` = geodesic distance from bank lat/lng to storm center
-  - `impact_factor` = `max(0, 1 - distance_km / 500)` (decay over 500km)
-  - `intensity_factor` = storm category / 5
-  - Returns `bank.ltv_ratio × impact_factor × intensity_factor`
-- [ ] Write `check_ops_risk(storm: HurricaneTrack, corridors: list[DataCenterCorridor]) -> list[OpsRiskResult]`:
-  - For each forecast point in storm track, check if point falls inside corridor bounding box
-  - Return list of `{ corridor, hours_to_impact, confidence }`
-
-#### Endpoints
-- [ ] `GET /api/weather/active` — returns active NOAA alerts + NHC hurricane tracks with ops impact assessment
-- [ ] `POST /api/weather/simulate` — accepts `{ "hurricane": { "lat": float, "lng": float, "category": int }, "stablecoin": str }`, returns `{ "affected_banks": [...], "affected_corridors": [...], "ltv_stress_scores": {...}, "ops_risk_flag": bool }`
+- [x] `GET /api/graph` — returns full serialized graph for frontend Leaflet rendering
 
 ---
 
 ### feat/scoring-engine
 
 #### Dimension Calculators
-- [ ] Write `app/services/scoring.py` — one function per dimension, all return 0–100 float
+- [x] Write `app/services/scoring_engine.py` — `ScoringEngine` class with 6 dimension methods
 
-- [ ] **Dimension 1 — Duration Risk (30% weight):**
-  - `score_duration(wam_days: float) -> float`
-  - `wam_days = 0` → score 0 (no risk). `wam_days = 365` → score 100 (maximum risk)
-  - Linear: `min(100, wam_days / 365 * 100)`
-
-- [ ] **Dimension 2 — Reserve Transparency (20% weight):**
-  - `score_transparency(source_type: str, freshness_days: int, divergence_pct: float) -> float`
-  - XBRL < 7 days old + divergence < 1% → score 0
-  - PDF > 30 days old + divergence > 5% → score 100
-  - Weighted formula across the three sub-factors
-
-- [ ] **Dimension 3 — Geographic Concentration (15% weight):**
-  - `score_concentration(hhi: float, ops_risk: bool) -> float`
-  - HHI ranges 0–10000 (standard). Normalize to 0–100
-  - `+20` flat bonus if ops_risk flag is True (data center corridor overlap)
-
-- [ ] **Dimension 4 — Weather Tail-Risk (15% weight):**
-  - `score_weather(ltv_stress_scores: dict[str, float], concentration: float) -> float`
-  - Average ltv_stress across all affected banks weighted by reserve percentage
-  - Multiply by concentration HHI factor: `× (1 + hhi / 20000)`
-
-- [ ] **Dimension 5 — Counterparty Health (15% weight):**
-  - `score_counterparty(banks: list[BankNode], llm_scores: dict[str, float]) -> float`
-  - Average FDIC health proxies (LTV, liquidity coverage) across banks weighted by reserve %
-  - Blend with LLM jury score (50/50)
-  - Flag if Claude vs Gemini delta > 15 points — surface as "Models disagree" warning
-
-- [ ] **Dimension 6 — Peg Stability (5% weight):**
-  - `score_peg(depeg_events_90d: int, current_spread_bps: float, mint_burn_velocity: float) -> float`
-  - `depeg_events_90d > 0` → base score 40+
-  - `current_spread_bps > 10` → score 60+
-  - `mint_burn_velocity > 2× 30d avg` → score 70+
+- [x] **Dimension 1 — Duration Risk (30% weight):** `score = min(100, wam_days / 365 * 100)`
+- [x] **Dimension 2 — Reserve Transparency (20% weight):** source type + staleness + divergence + opacity
+- [x] **Dimension 3 — Geographic Concentration (15% weight):** HHI + corridor concentration + ops risk
+- [x] **Dimension 4 — Weather Tail-Risk (15% weight):** live NOAA alerts × LTV × state weight
+- [x] **Dimension 5 — Counterparty Health (15% weight):** FDIC data + LLM jury (optional)
+- [x] **Dimension 6 — Peg Stability (5% weight):** on-chain divergence + burn velocity
 
 #### Composite Scoring
-
-> **Note:** The pitch slides show a simplified multiplicative formula (`Duration × Weather × Concentration`) for narrative clarity. The actual implementation uses a weighted sum (`Σ(weight_i × dimension_i)`) across all 6 dimensions. Both are valid framings — the multiplicative version conveys the causal chain (duration is the root, weather is the multiplier), while the weighted sum is the precise calculation. If a judge asks, explain the weighted sum is the real engine.
-
-- [ ] Write `compute_stress_score(stablecoin: str, scenario: ScenarioParams | None = None) -> StressScoreResult`:
-  - Run all 6 dimension functions
-  - Composite: `Σ(weight_i × dimension_i)` per weights table
-  - Map composite to latency + coverage:
-    - 0–25: latency `<4h`, coverage `100%+`
-    - 26–50: latency `4–24h`, coverage `95–100%`
-    - 51–75: latency `24–72h`, coverage `85–95%`
-    - 76–100: latency `72h+`, coverage `<85%`
+- [x] `compute_stress_score(symbol)` — runs all 6 dimensions, weighted sum composite
+- [x] Score mapping: 0-25 Low, 26-50 Moderate, 51-75 Elevated, 76-100 Critical
+- [x] `compute_all_scores()` — batch scoring for all tracked stablecoins
 
 #### LLM Jury
-- [ ] Write `app/services/llm_jury.py` — `get_jury_score(context: str) -> JuryResult`
-- [ ] Send identical prompt to Claude (anthropic SDK) and Gemini (google-genai SDK) concurrently using `asyncio.gather`
-- [ ] Prompt: "Given the following reserve data and market context, score the counterparty health risk from 0–100 where 0 = no risk and 100 = imminent failure. Respond with only a JSON object: { score: int, rationale: str }"
-- [ ] Parse both responses, compute delta
-- [ ] If delta ≤ 15: return `{ score: avg, consensus: true, claude_score, gemini_score, delta }`
-- [ ] If delta > 15: return `{ score: avg, consensus: false, claude_score, gemini_score, delta, warning: "Models disagree — review manually" }`
+- [x] Write `app/services/llm_jury.py` — `LLMJuryService`
+- [x] Claude + Gemini consensus scoring with `asyncio.gather`
+- [x] Delta detection (flag if >15 points divergence)
+- [x] Narrative generation
+- [x] Graceful fallback when API keys not set
 
 #### Endpoints
-- [ ] `GET /api/stress-scores` — returns all stablecoin stress scores with all 6 dimension breakdowns
-- [ ] `POST /api/stress-scores/simulate` — accepts `ScenarioParams { rate_hike_bps: int, hurricane: HurricaneParams | null, bank_failure: str | null, stablecoin: str }`, returns `StressScoreResult` with scenario-adjusted dimensions
-- [ ] `GET /api/stress-scores/{stablecoin}` — returns detailed stress score for one stablecoin
+- [x] `GET /api/stress-scores` — returns all stablecoin stress scores with dimension breakdowns
+- [x] `GET /api/stress-scores/{stablecoin}` — returns detailed stress score for one stablecoin
 
 - [ ] Tag `v0.2-pipeline`
 
@@ -237,125 +147,83 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 ### feat/mcp-server — Core Delivery Channel
 
-> **This is a core delivery channel, equal to REST API — not an afterthought.** Like 21st.dev exposes UI components as MCP tool calls for AI agents, Katabatic exposes risk scores as MCP tool calls. AI trading bots and agent frameworks query `get_stress_scores` or `simulate_scenario` before executing stablecoin positions.
+> **This is a core delivery channel, equal to REST API.** AI trading bots and agent frameworks query risk scores as MCP tool calls before executing stablecoin positions.
 
 #### MCP Server Implementation
 - [ ] Add `fastmcp` SDK to `requirements.txt`
 - [ ] Write `backend/mcp_server.py` — standalone MCP server module
-- [ ] Implement tool: `get_stress_scores` — returns all stablecoin stress scores (delegates to scoring service)
-- [ ] Implement tool: `get_stablecoin_detail(stablecoin)` — returns WAM, dimensions, narrative for one stablecoin
-- [ ] Implement tool: `simulate_scenario(stablecoin, rate_hike_bps, hurricane_lat, hurricane_lng, hurricane_category, bank_failure)` — what-if re-scoring
-- [ ] Implement tool: `get_active_alerts` — returns weather events + mint/burn anomalies + FDIC triggers
+- [ ] Implement tool: `get_stress_scores` — returns all stablecoin stress scores
+- [ ] Implement tool: `get_stablecoin_detail(stablecoin)` — returns WAM, dimensions, narrative
+- [ ] Implement tool: `simulate_scenario(stablecoin, ...)` — scenario-based re-scoring
+- [ ] Implement tool: `get_active_alerts` — returns weather events + anomalies
 - [ ] Implement tool: `get_score_history(stablecoin)` — returns historical scores with IPFS CIDs
 - [ ] Support stdio transport for local AI agent integration
 - [ ] Support SSE transport for remote AI agent access
-- [ ] All tool outputs use standard `{ "data": ..., "error": null, "timestamp": "...", "resolution_source": "live|cache|fixture" }` envelope
-- [ ] Write `backend/tests/test_mcp_server.py` — unit tests for all 5 tools
-- [ ] Add MCP server startup instructions to `backend/README.md`
+- [ ] All tool outputs use standard response envelope
+- [ ] Write `backend/tests/test_mcp_server.py` — unit tests for all tools
 
 ---
 
-## Phase 3: Dashboard & What-If Simulator (Hours 12–20) · Sat Afternoon
+## Phase 3: Data-Driven Risk Modeling Dashboard (Hours 12–20) · Sat Afternoon
 
-> **Note:** The dashboard is a **demo vehicle** to showcase the API/MCP data product to judges — not the product itself. Prioritize functional proof-of-concept over UI polish. The real product is the REST API + MCP server built in Phase 2.
+> **The dashboard is a data-driven modeling sandbox** — it surfaces real-world data (live NOAA weather, FDIC bank health, on-chain flows) and shows how current events will impact stablecoin reserve liquidity. Not arbitrary user-defined scenarios, but projections grounded in live data.
 
 ### feat/dashboard
 
 #### Stress Score Table (Main Dashboard)
-- [ ] Create `src/pages/Dashboard.tsx` — main page component
-- [ ] Create `src/components/StressScoreTable.tsx`:
-  - Columns: Stablecoin, Score (colored pill), Latency, Coverage, WAM, Trend (sparkline)
-  - Color coding: green 0–25, yellow 26–50, orange 51–75, red 76–100
-  - Sortable by score column
-  - Clicking row navigates to `/stablecoin/:id`
-- [ ] Create `src/components/ScoreGauge.tsx` — semicircular gauge component (Recharts RadialBar) showing 0–100 score with color gradient
-- [ ] Create `src/components/AlertBanner.tsx`:
-  - Fetches `GET /api/weather/active` on mount
-  - Shows dismissible alert cards for active weather events, mint/burn anomalies, FDIC watch list triggers
-  - Auto-refreshes every 5 minutes
+- [x] Create `StressScoreTable.tsx` — table with score bar, level badge, latency, coverage, source
+- [x] Color coding: green 0–25, orange 26–75, red 76–100
+- [x] Clickable rows navigate to `/stablecoin/:symbol`
+- [x] Auto-refreshes via `usePolling` hook (60s interval)
+
+#### Alert Banner
+- [x] Create `AlertBanner.tsx` — shows active NOAA weather alerts with ops impact
+- [x] Fetches from `GET /api/weather/active` every 5 minutes
+- [x] Highlights severe alerts and affected data center corridors
 
 #### Stablecoin Detail View
-- [ ] Create `src/pages/StablecoinDetail.tsx` — fetches `GET /api/stress-scores/{name}`
-- [ ] Create `src/components/WAMChart.tsx` — Recharts BarChart showing WAM in days per counterparty bank, color-coded by maturity bucket (<30d green, 30–90d yellow, 90–365d orange, 365d+ red)
-- [ ] Create `src/components/DimensionBreakdown.tsx` — Recharts RadarChart showing all 6 dimension scores (0–100) on a hexagonal radar, with dimension labels
-- [ ] Create `src/components/MintBurnSparkline.tsx` — Recharts AreaChart showing 7-day mint/burn volume with divergence annotation line
-- [ ] Create `src/components/ConsensusPanel.tsx` — shows "Claude: 68 | Gemini: 71 | Delta: 3 → CONSENSUS" or "Models disagree" warning
-- [ ] Create `src/components/CounterpartyList.tsx` — table of banks with: name, city, %, WAM, LTV, FDIC status, geographic stress contribution
+- [x] Create `StressScoreDetail.tsx` — full detail for a single stablecoin
+- [x] Hero score card with latency and coverage
+- [x] 6-dimension breakdown chart (Recharts BarChart)
+- [x] Model consensus panel (Claude vs Gemini)
+- [x] Causal narrative section
+- [x] Data source badge on every data point
+
+#### Reserve Network Map
+- [x] Create `ReserveMap.tsx` — Leaflet map (view-only, data-driven)
+- [x] Bank markers: circle markers sized by reserve %, colored by health
+- [x] Data center corridor overlays: shaded rectangles with labels
+- [x] Popup details on hover: bank name, state, LTV, maturity, reserves
+
+#### Layout & Navigation
+- [x] Create `Header.tsx` with nav links + live status indicator
+- [x] Create `DashboardLayout.tsx` wrapping Header + Outlet
+- [x] Routes: `/` (dashboard), `/stablecoin/:symbol` (detail), `/map` (full map)
 
 #### UI Polish
-- [ ] Add Katabatic logo/wordmark to sidebar (SVG, purple `#6c5ce7` — reuse from `slides-app/src/components/katabatic-logo.tsx`)
-- [ ] Implement dark/light mode toggle (default: light `#fafafa` bg, dark: `#0c0a14` bg)
-- [ ] Loading skeleton components for all data-fetching states (use `src/components/Skeleton.tsx`)
+- [ ] Loading skeleton components for all data-fetching states
 - [ ] Empty state component for no-data scenarios
-- [ ] Error boundary with friendly error message and retry button
-- [ ] Global font: Sora (already imported in slides-app; use same Google Fonts import, weights 300–700)
-- [ ] Never use "rating" or "grade" in any UI copy — always "Liquidity Stress Score" or "stress level"
-
----
-
-### feat/what-if-simulator
-
-#### Leaflet Map
-- [ ] Create `src/pages/Simulator.tsx` — what-if simulator page
-- [ ] Create `src/components/StressMap.tsx` — Leaflet map base layer (OpenStreetMap tiles)
-- [ ] Map layer: bank markers — circle markers sized by reserve % held, colored by counterparty health score
-- [ ] Map layer: data center corridor overlays — semi-transparent shaded rectangles for each corridor (us-east-1, us-east-2, etc.) with labels
-- [ ] Map layer: hurricane cone — render cone of uncertainty as a polygon from NHC data, with track line showing forecast path
-- [ ] Map layer: storm impact radius — circle overlay when simulating, showing 500km impact decay zone
-- [ ] Implement map legend component in bottom-left corner
-
-#### Hurricane Drop Interaction
-- [ ] On map click: open a popover "Drop hurricane here? Category: [1–5 slider]" with confirm button
-- [ ] On confirm: POST to `/api/stress-scores/simulate` with hurricane lat/lng/category + selected stablecoin
-- [ ] Animate affected bank markers turning red (transition over 500ms)
-- [ ] Highlight affected data center corridors with red border + flashing animation
-- [ ] Update stress score display in right panel in real-time
-- [ ] Show output panel: "Under this scenario: Redemption latency: 72h | Liquidity coverage: 88%"
-
-#### Scenario Control Panel
-- [ ] Create `src/components/ScenarioPanel.tsx` — right-side panel with all controls
-- [ ] Rate hike slider: 0–200bps, step 25bps. On change: debounce 300ms → POST simulate → update scores
-- [ ] Stablecoin selector: dropdown to pick which stablecoin to stress-test
-- [ ] Bank failure toggle: dropdown of all banks in graph → toggle failure → recompute without that bank's liquidity contribution
-- [ ] Reset button: clears all scenario overrides, reloads baseline scores
-- [ ] "Scenario Summary" text area at bottom: always shows human-readable description of current scenario ("Simulating Cat 3 hurricane at 27.8°N 82.6°W + 50bps rate hike on USDC portfolio")
-
-#### Output Panel
-- [ ] Create `src/components/ScenarioOutput.tsx`:
-  - Large score number with color
-  - Latency badge: "Redemption latency: Xh"
-  - Coverage badge: "Liquidity coverage: Y%"
-  - Dimension delta table: shows how each of the 6 dimensions changed from baseline (+ or − arrows)
-  - Confidence indicator: "High confidence" if models agree, "Review recommended" if delta > 15
+- [ ] Error boundary with retry button
+- [ ] Never use "rating" or "grade" in any UI copy
 
 ---
 
 ### feat/narratives
 
 #### Multi-Model Narrative Generation
-- [ ] Write `app/services/narratives.py` — `generate_narrative(stress_context: StressContext) -> NarrativeResult`
-- [ ] Build narrative prompt `app/prompts/narrative_generation.txt`:
-  - Include: stablecoin name, stress score, top 3 contributing dimensions, affected banks with LTV, affected data center corridors, scenario params
-  - Instruct: "Generate a 3–5 sentence causal explanation of the stress score. Focus on the chain of causation: duration mismatch → weather multiplier → operational risk. Be specific about bank names, percentages, and data center corridors."
-- [ ] Call Claude and Gemini concurrently with identical prompt
-- [ ] Compare narratives: extract key claims from each (use a short Claude call: "List the top 3 causal claims in this narrative as JSON array of strings")
-- [ ] Compute claim overlap: if > 70% claims match → consensus = True
-- [ ] `NarrativeResult`: `{ narrative_claude: str, narrative_gemini: str, consensus_narrative: str, consensus: bool, agreement_score: float }`
-- [ ] Consensus narrative: use Claude narrative if consensus, else display both side-by-side
+- [ ] Write `app/services/narratives.py` — `generate_narrative(stress_context) -> NarrativeResult`
+- [ ] Build narrative prompt with causal chain focus
+- [ ] Call Claude and Gemini concurrently, compare claim overlap
+- [ ] Consensus narrative if >70% claims match
 
 #### Endpoint
-- [ ] `POST /api/narratives` — accepts `StressContext` (stress score + all dimensions + scenario), returns `NarrativeResult`
+- [ ] `POST /api/narratives` — accepts stress context, returns narrative + consensus
 
 #### Frontend Integration
-- [ ] Create `src/components/NarrativeCard.tsx`:
-  - Shows consensus narrative text in a styled card
-  - "Consensus" badge (green checkmark) if `consensus: true`, else "Model Divergence" badge (yellow warning)
-  - Agreement score shown as "X% agreement"
-  - Expandable to show both model narratives side-by-side for comparison
-- [ ] Integrate NarrativeCard into StablecoinDetail page below DimensionBreakdown
-- [ ] Integrate NarrativeCard into ScenarioOutput panel in Simulator
+- [ ] Create `NarrativeCard.tsx` with consensus badge
+- [ ] Integrate into StablecoinDetail page
 
-- [ ] Tag `v0.3-simulator`
+- [ ] Tag `v0.3-dashboard`
 
 ---
 
@@ -364,109 +232,52 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 ### feat/svb-backtest
 
 #### SVB Data & Timeline
-- [ ] Create `data/fixtures/svb_timeline.json` — day-by-day data from Feb 1 – Mar 17 2023:
-  - `date`, `wam_days` (starts at ~2,040, stays high), `fed_funds_rate`, `unrealized_losses_bn`, `stress_score_computed`
-  - Key dates: Mar 8 (stock drop), Mar 9 (bank run begins), Mar 10 (FDIC seizure)
-  - Annotation events: `{ date: "2023-03-08", label: "SVB stock drops 60%", type: "trigger" }`
+- [ ] Create `data/fixtures/svb_timeline.json` — day-by-day Feb 1 – Mar 17, 2023
 - [ ] Write `app/services/backtests/svb.py` — `run_svb_backtest() -> BacktestResult`
-  - Iterate timeline JSON, compute stress score for each day using scoring engine with historical params
-  - Identify the day stress score first crossed 75 ("Critical")
-  - Return full timeline with scores + annotations
-
-#### Hurricane Ian Backtest
-- [ ] Create `data/fixtures/ian_timeline.json` — Sept 24–30, 2022 timeline:
-  - Hurricane Ian track coordinates (from NHC historical data)
-  - FL bank LTV ratios from FDIC Call Reports (Q2 2022)
-  - Day-by-day stress score for USDC under Ian scenario
-- [ ] Write `app/services/backtests/ian.py` — `run_ian_backtest() -> BacktestResult`
+- [ ] Identify day stress score first crossed 75 ("Critical")
 
 #### Endpoints
 - [ ] `GET /api/backtests/svb` — returns SVB timeline + stress scores + annotations
-- [ ] `GET /api/backtests/ian` — returns Hurricane Ian timeline + stress scores
 
-#### Frontend — Backtest Pages
-- [ ] Create `src/pages/Backtests.tsx` — tabbed page with SVB and Hurricane Ian tabs
-- [ ] Create `src/components/BacktestTimeline.tsx`:
-  - Recharts LineChart with stress score on Y-axis, date on X-axis
-  - Reference lines at score = 50 (Moderate), score = 75 (Critical)
-  - ReferenceDot annotations for key events (SVB stock drop, FDIC seizure, depeg)
-  - Color fill under curve: green < 50, yellow 50–75, red > 75
-- [ ] Create `src/components/TimelineScrubber.tsx`:
-  - Slider over the date range
-  - On scrub: updates a "current date" state, filters all chart data to that date
-  - Shows summary card on right: "On Mar 9, 2023: WAM = 2,040 days. Score = 78 (Critical). Rate hike catalyst."
-- [ ] SVB annotated insights panel:
-  - "WAM was 2,040 days (~5.6 years) from Feb–Mar 2023 — long-dated MBS and agency securities"
-  - "Duration mismatch score was already at 100/100 before the bank run"
-  - "Rate hike (+475bps over 12 months) was the catalyst, not the cause"
-  - "Stress score crossed 75 (Critical) on March 8 — 48 hours before FDIC seizure"
-- [ ] Hurricane Ian annotated insights panel:
-  - FL bank LTV ratios (0.71 avg) amplified storm impact
-  - Show which USDC counterparties had FL exposure
-  - Show how far storm was from us-east-1 corridor (no ops risk in Ian case — ops risk demo uses synthetic scenario)
+#### Frontend — Backtest Timeline
+- [ ] Create `BacktestTimeline.tsx` — Recharts LineChart with annotations
+- [ ] Create `TimelineScrubber.tsx` — date slider with summary card
 
 ---
 
 ### feat/ipfs-pinning — Core Infrastructure (Pinata API)
 
-> **This is core infrastructure, not polish.** Like Pinata is an API product for IPFS pinning, Katabatic pins every score to IPFS for verifiable provenance. Every scoring run produces an immutable CID — this is what makes scores oracle-grade.
-
 **Backend — IPFS Pinning**
-- [ ] Install `pinata-sdk` or use Pinata REST API via `httpx` in `requirements.txt`
-- [ ] Write `app/services/ipfs.py` — `pin_score_to_ipfs(score_data: dict) -> PinResult` using Pinata API
-  - Accepts: `{ stablecoin, stress_score, latency_hours, coverage_ratio, claude_score, gemini_score, consensus, narrative, timestamp }`
-  - Pins JSON blob to IPFS via `https://api.pinata.cloud/pinning/pinJSONToIPFS`
-  - Returns: `{ cid: str, ipfs_url: str, gateway_url: str, timestamp: str }`
-- [ ] Endpoint: `POST /api/publish-score` — accepts stress score context, pins to Pinata, returns CID + gateway URL
-- [ ] Cache CIDs in SQLite `score_pins` table: `(stablecoin, score, cid, timestamp)`
-- [ ] Endpoint: `GET /api/score-history/{stablecoin}` — returns historical pinned scores with CIDs
-- [ ] Auto-pin after every scoring run (not just on-demand) — scores are always verifiable
-- [ ] Graceful degradation: if `PINATA_API_KEY` missing → skip pinning, return mock CID with warning
+- [ ] Write `app/services/ipfs.py` — `pin_score_to_ipfs(score_data) -> PinResult`
+- [ ] Endpoint: `POST /api/publish-score` — pins to Pinata, returns CID + gateway URL
+- [ ] Endpoint: `GET /api/score-history/{stablecoin}` — returns historical pinned scores
+- [ ] Auto-pin after every scoring run
+- [ ] Graceful degradation if `PINATA_API_KEY` missing
 
 **Frontend — IPFS Verification Display**
-- [ ] Create `src/components/TrustBadge.tsx`:
-  - Shows "Model Consensus: Claude 68 | Gemini 71 | Delta: 3 → SIGNAL CONFIRMED" when consensus = true
-  - Shows IPFS CID: `ipfs://Qm...` as clickable link to Pinata gateway
-  - Tooltip: "Score pinned to IPFS. Click to verify. In production: computed inside a TEE and published to Chainlink oracle"
-  - "IPFS Verified · TEE-Ready" label with lock icon
-- [ ] Integrate TrustBadge into: StablecoinDetail page, ScenarioOutput panel, NarrativeCard
-- [ ] After each scoring run in Simulator, auto-call `POST /api/publish-score` and display returned CID
+- [ ] Create `TrustBadge.tsx` — consensus badge + IPFS CID link + "TEE-Ready" label
 
 ---
 
 ### feat/chainlink-mock — Oracle-Ready Output
 
-> **Positions scores as Chainlink-grade data.** Mock the oracle integration to show scores can flow on-chain.
-
-- [ ] Write `app/services/oracle.py` — `format_for_oracle(score: StressScoreResult, cid: str) -> OraclePayload`
-  - Output: `{ score, latency_hours, coverage_ratio, cid, timestamp, signature_placeholder }`
-  - Format compatible with Chainlink External Adapter spec
-- [ ] Endpoint: `GET /api/oracle/{stablecoin}` — returns oracle-formatted score with IPFS CID
-- [ ] Frontend: "Chainlink Ready" badge next to IPFS CID showing the oracle payload is available
-- [ ] Demo: show the oracle endpoint returning the same score that's pinned to IPFS — proving the data pipeline is end-to-end verifiable
+- [ ] Write `app/services/oracle.py` — Chainlink External Adapter compatible output
+- [ ] Endpoint: `GET /api/oracle/{stablecoin}` — oracle-formatted score with IPFS CID
 
 ---
 
 ### feat/demo-polish
 
-#### Graceful Degradation (replaces "Demo Mode")
-
-> **No separate demo mode.** The 3-tier data resolution (Live→Cache→Fixture) IS the graceful degradation. UI shows a provenance badge on every data point: "Live" (green), "Cached" (yellow), "Fixture" (gray). If live APIs are down, scores still compute from cache/fixtures — judges see the same product, with a badge showing data source.
-
-- [ ] Add data source badge component — shows "LIVE", "CACHED", or "FIXTURE" pill next to every score
-- [ ] Implement automatic fallback: if live API fails → try cache → try fixture (no manual toggle needed)
-- [ ] Pre-wire 3 demo scenarios that work regardless of data source:
-  - **Scenario A** (primary): Cat 4 hurricane at 27.8°N 82.6°W (Gulf Coast / Tampa Bay) → FL bank LTV stress + Northern Virginia data center corridor ops risk as storm tracks north → score jumps to 68
-  - **Scenario B**: SVB backtest replay — score crosses 75 on Mar 8 2023
-  - **Scenario C**: 100bps rate hike → WAM sensitivity for all 6 stablecoins → sorted by impact
+#### Graceful Degradation
+- [x] Data source badge component (Live/Cached/Fixture)
+- [x] Automatic 3-tier fallback (Live→Cache→Fixture)
 
 #### End-to-End Wiring
-- [ ] Wire Scenario A end-to-end: click map → hurricane drop → bank markers turn red → corridor highlights → score updates → narrative generates → score pinned to IPFS → trust badge shows "CONFIRMED · ipfs://Qm..."
-- [ ] Wire Scenario B end-to-end: navigate to Backtests → SVB tab → scrub to Mar 8 → score crosses red line → annotation appears
-- [ ] Wire Scenario C end-to-end: open Simulator → rate hike slider to 100bps → all stablecoin scores update → detail view shows WAM sensitivity chart
-- [ ] Test all 3 paths on local dev before deploy
+- [ ] Wire dashboard end-to-end: live NOAA → scoring engine → scores update → dashboard reflects
+- [ ] Wire detail view: click stablecoin → all 6 dimensions rendered → narrative if LLM keys set
+- [ ] Wire map: graph data → bank markers + corridor overlays rendered correctly
+- [ ] Test all paths on local dev before deploy
 - [ ] Add loading states and error handling for all async operations
-- [ ] Empty state components for: no active weather alerts, no stablecoin selected, no scenario run yet
 
 - [ ] Tag `v0.4-backtests`
 
@@ -475,54 +286,44 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 ## Phase 5: Ship (Hours 26–36) · Sun Morning
 
 ### Deployment
-- [ ] Configure Vercel project for `/frontend` — set `VITE_API_BASE_URL` and `VITE_DEMO_MODE` env vars
+- [ ] Configure Vercel project for `/frontend` — set `VITE_API_URL` env var
 - [ ] Configure Railway/Render project for `/backend` — set all API keys as env vars
 - [ ] Update frontend `.env.production` with deployed backend URL
 - [ ] Configure CORS in backend to allow Vercel frontend origin
-- [ ] Run full deploy: `vercel --prod` (frontend) + Railway deploy (backend)
-- [ ] Smoke test all 3 demo scenarios on deployed URLs
+- [ ] Run full deploy
+- [ ] Smoke test on deployed URLs
 - [ ] Verify `/health` endpoint returns 200 on deployed backend
 
 ### Final Polish
-- [ ] Code freeze at Hour 30 — no new features after this
+- [ ] Code freeze at Hour 30
 - [ ] Run `black .` on all Python files
 - [ ] Run `eslint` and `tsc --noEmit` on frontend — fix all errors
-- [ ] Remove all `console.log` debug statements from frontend
-- [ ] Remove all `print()` debug statements from backend
+- [ ] Remove all `console.log` and `print()` debug statements
 - [ ] Verify all API keys are in `.env` and not committed to git
-- [ ] Check `.gitignore` covers all `.env` files
 
 ### Demo Prep
-- [ ] Rehearse 10-slide presentation 5× (target: < 4 minutes total including 60s live demo)
-- [ ] Record screen capture backup of full demo (OBS or QuickTime)
-- [ ] Prepare fallback: browser tab pre-loaded with demo mode on, all 3 scenarios pre-run and cached
-- [ ] Print cheat sheet: bullet points for each of the 5 demo beats
+- [ ] Rehearse 10-slide presentation 5× (target: < 4 minutes total)
+- [ ] Record screen capture backup of full demo
+- [ ] Prepare fallback: browser tab pre-loaded with cached data
 
 ### Final Git
 - [ ] Merge `dev` → `main`
 - [ ] Tag `v1.0-demo`
-- [ ] Confirm GitHub repo is public (or accessible to judges)
+- [ ] Confirm GitHub repo is accessible to judges
 
 ---
 
 ## Cross-Cutting Concerns (Do Throughout)
 
 ### Testing
-- [ ] Write `backend/tests/test_scoring.py` — unit tests for all 6 dimension calculators with known inputs/outputs
+- [ ] Write `backend/tests/test_scoring.py` — unit tests for all 6 dimension calculators
 - [ ] Write `backend/tests/test_graph.py` — unit tests for graph query functions
-- [ ] Write `backend/tests/test_cross_reference.py` — unit test for mint/burn divergence calculator
 - [ ] Write `frontend/src/__tests__/StressScoreTable.test.tsx` — render test with fixture data
-- [ ] All tests pass in CI before merge to `dev`
 
 ### API Key Validation
-- [ ] On backend startup: validate all required env vars are set, log warning if any missing
-- [ ] Graceful degradation: if NOAA API unreachable → use cached weather data or skip, log warning, continue with baseline scores (NOAA requires no API key — only User-Agent header)
-- [ ] Graceful degradation: if Etherscan key missing → skip on-chain cross-reference, set divergence_pct = null
-
-### Documentation
-- [ ] `backend/README.md` — setup instructions, env vars table, how to run locally
-- [ ] `frontend/README.md` — setup instructions, env vars, how to run locally
-- [ ] `README.md` (root) — project overview, links to both READMEs, deployed URLs, demo video link
+- [x] On backend startup: validate all required env vars are set, log warning if any missing
+- [x] Graceful degradation: if NOAA API unreachable → skip, continue with baseline scores
+- [x] Graceful degradation: if Etherscan key missing → skip on-chain cross-reference
 
 ---
 
@@ -530,14 +331,14 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 - [ ] `ANTHROPIC_API_KEY` — obtained and set in `.env` (required for LLM jury + narratives)
 - [ ] `GEMINI_API_KEY` — obtained and set in `.env` (required for multi-model consensus)
-- [ ] `ETHERSCAN_API_KEY` — obtained from etherscan.io (free tier, required for Etherscan V2 mint/burn cross-reference)
-- [ ] `PINATA_API_KEY` — obtained from pinata.cloud (free tier, required for IPFS score pinning)
+- [ ] `ETHERSCAN_API_KEY` — obtained from etherscan.io (required for on-chain cross-reference)
+- [ ] `PINATA_API_KEY` — obtained from pinata.cloud (required for IPFS score pinning)
 - [ ] `PINATA_SECRET_API_KEY` — obtained from pinata.cloud
 
 > **No API key needed for:** NOAA NWS (User-Agent header only), Open-Meteo (fully public), FDIC BankFind (fully public), Nominatim (User-Agent only)
 
-**Frontend config (not API keys):**
-- [ ] `VITE_API_BASE_URL` — set to backend URL (local: `http://localhost:8000`, prod: Railway URL)
+**Frontend config:**
+- [ ] `VITE_API_URL` — set to backend URL (local: `http://localhost:8000`, prod: Railway URL)
 
 ---
 
@@ -545,10 +346,10 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 | Phase | Status | Notes |
 |-------|--------|-------|
-| Phase 1: Foundation | `[ ]` | |
-| Phase 2: Pipeline & Knowledge Graph | `[ ]` | |
-| Phase 3: Dashboard & Simulator | `[ ]` | |
+| Phase 1: Foundation | `[x]` | Scaffold, providers, fixtures, models done |
+| Phase 2: Pipeline & Knowledge Graph | `[~]` | Scoring engine, graph, registry, routers done. MCP + extraction pending. |
+| Phase 3: Data-Driven Risk Modeling Dashboard | `[~]` | Core components built. Polish + narratives pending. |
 | Phase 4: Backtests & Trust Layer | `[ ]` | |
 | Phase 5: Ship | `[ ]` | |
 
-**Last updated:** 2026-03-11 (live pipeline migration applied)
+**Last updated:** 2026-03-12 (pivot to data-driven risk modeling sandbox + live monitoring)

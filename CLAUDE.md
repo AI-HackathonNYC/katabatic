@@ -47,7 +47,7 @@ Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a cre
 **Delivery modes:**
 - REST API (score on demand, <2s re-score)
 - Webhook/streaming (real-time score updates on new data)
-- What-If simulator UI (demo-facing; shows the data product in action)
+- Data-driven risk modeling dashboard (live data → projected impact on reserve liquidity)
 - Oracle mock (Chainlink-ready; scores pinned to IPFS via Pinata with verifiable CID)
 - MCP server (AI-agent-native; risk scores as MCP tool calls for trading bots and agent frameworks)
 
@@ -73,7 +73,7 @@ Stress Score = Base Duration Risk × Weather Multiplier × Concentration Factor
 This is why the SVB backtest works: SVB had extreme duration mismatch → weather/rate hike was just the catalyst for a run on an already-fragile balance sheet.
 
 ### Hole 4: "Rating Agency" Framing (NRSRO liability)
-**Fix:** "Risk-as-a-Service Simulator." UI output is a What-If dashboard, not a grade. Sell to DAO treasuries who input scenarios and get operational outputs (latency, coverage ratio), not grades they could be sued over.
+**Fix:** "Risk-as-a-Service." UI output is a data-driven risk modeling dashboard, not a grade. Sell to DAO treasuries who see real-world data and projected operational outputs (latency, coverage ratio), not grades they could be sued over.
 
 ### Hole 5: Single-Source Trust Problem
 **Fix:** Multi-model LLM consensus (Claude + Gemini) run inside a TEE (Trusted Execution Environment). If all three models agree a stress threshold is crossed, the signal is pushed to a Chainlink oracle — making it grade-A data for DeFi protocols to automatically rebalance. **Score snapshots are pinned to IPFS via Pinata after each scoring run**, producing a content-addressable CID that serves as an immutable, verifiable proof of the score at a given timestamp. Downstream consumers (DAOs, DeFi protocols, Chainlink oracles) can independently verify the score was not tampered with by resolving the CID. *For the hackathon: demo with Claude + one other model as a "jury"; pin consensus scores to IPFS via Pinata API; display the IPFS CID alongside the mock TEE/Chainlink proof.*
@@ -87,7 +87,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Pitch Deck** | React 19 + Vite 7 + TypeScript 5.9 | 10-slide presentation SPA (`/slides-app`) |
 | **Slide Animations** | Framer Motion 12 | Transitions, staggered reveals, animated counters |
 | **Slide UI** | CVA + clsx + tailwind-merge + Lucide React | Component variants, conditional styling, icons |
-| **Frontend (Dashboard)** | React 19 + Vite | Dashboard SPA (`/frontend`) — demo vehicle for the API |
+| **Frontend (Dashboard)** | React 19 + Vite | Data-driven risk modeling dashboard (`/frontend`) |
 | **Charts** | Recharts | Stress score timelines, WAM breakdowns (dashboard) |
 | **Maps** | Leaflet + React-Leaflet (OpenStreetMap) | Geographic exposure map, hurricane overlay, data center corridors |
 | **Styling** | Tailwind CSS 4 | Utility-first styling across slides + dashboard |
@@ -185,9 +185,9 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 │  Output: Liquidity Stress Score (0–100) + redemption latency     │
 │  MCP Server: 5 tools for AI agent consumption (stdio + SSE)      │
 ├─────────────────────────────────────────────────────────────────┤
-│  Layer 4: WHAT-IF DASHBOARD                                      │
-│  Interactive map: bank markers + data center corridors           │
-│  Hurricane drop + rate hike + bank failure sliders               │
+│  Layer 4: DATA-DRIVEN RISK MODELING DASHBOARD                     │
+│  Live map: bank markers + data center corridors + weather overlay│
+│  Real-time stress scores from NOAA/FDIC/Etherscan data feeds     │
 │  Output: "Redemption latency: 72h. Liquidity coverage: 88%"      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 5: TRUST + VERIFICATION LAYER                             │
@@ -304,7 +304,7 @@ main                               ← Production-ready, deploy target
 │   ├── feat/weather-pipeline      ← NOAA/NHC ingestion + FDIC Call Report LTV mining
 │   ├── feat/scoring-engine        ← WAM engine + weather multiplier + LLM jury
 │   ├── feat/dashboard             ← React shell, stress score table, WAM charts
-│   ├── feat/what-if-simulator     ← Leaflet map, hurricane drop, rate/failure sliders
+│   ├── feat/reserve-map           ← Leaflet map, bank markers, corridor overlays
 │   ├── feat/narratives            ← Multi-model causal explanation generation
 │   ├── feat/mcp-server            ← MCP server: AI-agent-native score delivery
 │   ├── feat/svb-backtest          ← SVB March 2023 duration mismatch replay
@@ -425,24 +425,22 @@ main                               ← Production-ready, deploy target
 
 - [ ] Tag `v0.2-pipeline`
 
-### Phase 3: Dashboard & What-If Simulator (Sat Afternoon · Hours 12–20)
+### Phase 3: Data-Driven Risk Modeling Dashboard (Sat Afternoon · Hours 12–20)
 
 **feat/dashboard (Frontend role)**
-- [ ] Stress score table: all stablecoins with Liquidity Stress Score + redemption latency + coverage ratio
-- [ ] Detail view: click a stablecoin → WAM chart, 6-dimension breakdown (Recharts), mint/burn divergence sparkline
-- [ ] Alert banner: active weather events, mint/burn anomalies, FDIC watch list triggers
-- [ ] Responsive layout matching Katabatic design language (purple accent `#6c5ce7`, light bg `#fafafa`, alt `#f3f2f7` — see Design System section)
-- [ ] Framing copy: "Liquidity Stress Score" not "Rating" throughout all UI
+- [x] Stress score table: all stablecoins with Liquidity Stress Score + redemption latency + coverage ratio
+- [x] Detail view: click a stablecoin → 6-dimension breakdown (Recharts), model consensus, causal narrative
+- [x] Alert banner: active weather events with ops impact assessment
+- [x] Data-driven risk modeling: dashboard surfaces real-world data and shows projected impact on reserve liquidity
+- [x] Framing copy: "Liquidity Stress Score" not "Rating" throughout all UI
 
-**feat/what-if-simulator (Frontend + Graph/Weather roles)**
-- [ ] Leaflet map layers:
-  - Custodian bank markers (colored by stress contribution)
+**feat/reserve-map (Frontend + Graph roles)**
+- [x] Leaflet map layers:
+  - Custodian bank markers (colored by health, sized by reserve %)
   - Data center corridor overlays (shaded regions for AWS/Azure zones)
-  - Hurricane cone of uncertainty
-- [ ] **Hurricane drop interaction**: click map → POST to `/api/stress-scores/simulate` → highlight affected banks + data centers → show updated stress score + "Redemption latency: 72h" in real-time
-- [ ] Rate hike slider (0–200bps): adjusts WAM score → see duration risk change
-- [ ] Bank failure toggle: simulate a specific bank failing → propagate through graph → show coverage ratio drop
-- [ ] Output panel: always shows "Under this scenario: Latency Xh | Coverage Y%"
+  - Weather alert shading for affected states
+- [x] View-only map — data-driven, reflecting live state from scoring engine
+- [x] Popup details: bank name, state, LTV, maturity, reserves held
 
 **feat/narratives (LLM/Extraction role)**
 - [ ] Multi-model narrative generation:
@@ -453,7 +451,7 @@ main                               ← Production-ready, deploy target
 - [ ] Endpoint: `POST /api/narratives` — accepts stress context, returns consensus narrative + model agreement score
 - [ ] Display in dashboard detail view with consensus badge
 
-- [ ] Tag `v0.3-simulator`
+- [ ] Tag `v0.3-dashboard`
 
 ### Phase 4: Backtests & Trust Layer (Sat Night · Hours 20–26)
 
@@ -511,11 +509,11 @@ main                               ← Production-ready, deploy target
 | 09 | **Go to Market** | 15s | "API-first infrastructure. Not a consulting fee." (3 tiers + logo conveyor) |
 | 10 | **The Close** | 20s | "Weather proves the engine." (72h latency, 88% coverage hero metrics + Katabatic logo) |
 
-### Live Demo Scenarios (Slide 7, ~60 seconds)
+### Live Demo (Slide 7, ~60 seconds)
 
-1. **Hurricane** — Drop on map → stress spike + 72h latency + affected data center corridors
-2. **SVB backtest** — WAM chart showing 2,040-day duration, stress crossing critical 48h before depeg
-3. **Rate hike** — 100bps slider → show which stablecoins are most exposed by WAM sensitivity
+1. **Live Dashboard** — Show real-time stress scores updating from live NOAA/FDIC/Etherscan data
+2. **Detail View** — Click USDC → 6-dimension breakdown, model consensus badge, causal narrative
+3. **Reserve Map** — Bank markers colored by health, data center corridor overlays, active weather alerts
 
 ---
 

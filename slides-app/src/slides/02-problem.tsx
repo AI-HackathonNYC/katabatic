@@ -124,7 +124,7 @@ export function SlideProblem(_props: { subStep?: number }) {
           </div>
         </div>
         <div className="shrink-0 text-right border-l border-black/7 pl-4">
-          <div className="text-[0.78rem] font-semibold text-accent">Katabatic</div>
+          <div className="text-[0.78rem] font-semibold text-accent">Helicity</div>
           <div className="text-[0.78rem] text-text-tertiary">flags critical</div>
           <div className="text-[0.78rem] text-text-primary font-semibold">48h prior</div>
         </div>

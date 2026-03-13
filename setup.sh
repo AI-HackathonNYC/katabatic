@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Katabatic Dev Setup ==="
+echo "=== Helicity Dev Setup ==="
 echo ""
 
 # --- Check prerequisites ---

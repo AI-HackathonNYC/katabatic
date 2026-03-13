@@ -22,7 +22,7 @@ export function Header({ lastUpdated }: Props) {
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
             <h1 className="text-lg font-bold tracking-tight">
-              <span className="text-[#6c5ce7]">katabatic</span>
+              <span className="text-[#6c5ce7]">helicity</span>
             </h1>
           </Link>
           <nav className="flex gap-1">

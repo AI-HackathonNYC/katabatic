@@ -14,7 +14,7 @@ from app.services.data_provider import DataProvider
 NOAA_ALERTS_URL = "https://api.weather.gov/alerts/active"
 OPENMETEO_ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
 
-HEADERS = {"User-Agent": "Katabatic/1.0 (stablecoin-risk-engine; contact@katabatic.dev)"}
+HEADERS = {"User-Agent": "Helicity/1.0 (stablecoin-risk-engine; contact@helicity.dev)"}
 
 
 class WeatherProvider(DataProvider):

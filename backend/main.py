@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-app = FastAPI(title="Katabatic API", version="0.1.0")
+app = FastAPI(title="Helicity API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -90,10 +90,10 @@ async def startup():
 
     scoring_engine = ScoringEngine(cache, graph_service, llm_jury)
     print("  Scoring engine ready")
-    print("Katabatic API started successfully.")
+    print("Helicity API started successfully.")
 
 
 @app.on_event("shutdown")
 async def shutdown():
     await cache.close()
-    print("Katabatic API shut down.")
+    print("Helicity API shut down.")

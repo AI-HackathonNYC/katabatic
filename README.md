@@ -1,4 +1,4 @@
-# Katabatic
+# Helicity
 
 **The system of record for stablecoin reserve risk.**
 

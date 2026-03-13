@@ -34,7 +34,7 @@ export function HelicityLogo({ size = "lg", dark = false }: { size?: "sm" | "md"
   const s = sizeConfig[size]
 
   return (
-    <div className={`relative flex items-end justify-center ${s.gap} ${s.mb}`} style={{ display: "inline-flex", margin: size === "sm" ? "0 0.1em" : undefined, verticalAlign: "baseline" }}>
+    <div className={`relative flex items-center justify-center ${s.gap} ${s.mb}`} style={{ display: "inline-flex", margin: size === "sm" ? "0 0.1em" : undefined, verticalAlign: "baseline" }}>
       {/* Wind mark — stroke-draw animation */}
       <motion.svg
         key={`mark-${revealKey}`}

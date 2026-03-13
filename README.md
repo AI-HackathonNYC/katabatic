@@ -118,7 +118,7 @@ If both health check and frontend dev server start without errors, you're good t
 
 - Adi Prathapa
 - Aritro Ganguly
-- Connor
-- Krish
-- Suchit
-- Vikram
+- Connor Mark 
+- Krish Jana
+- Suchit Basineni
+- Vikram Davey

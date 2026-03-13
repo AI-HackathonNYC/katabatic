@@ -9,7 +9,6 @@ import { SlideDimensions } from "@/slides/04-dimensions"
 import { SlideWhyNow } from "@/slides/05-why-now"
 import { SlidePositioning } from "@/slides/06-positioning"
 import { SlideDemo } from "@/slides/07-demo"
-import { SlideVision } from "@/slides/08-vision"
 import { SlideBusiness } from "@/slides/09-business"
 import { SlideClose } from "@/slides/10-close"
 
@@ -21,15 +20,14 @@ const SLIDES = [
   SlideWhyNow,
   SlidePositioning,
   SlideDemo,
-  SlideVision,
   SlideBusiness,
   SlideClose,
 ]
 
 // How many sub-steps each slide has (1 = normal slide, >1 = has internal steps)
-const SUB_STEPS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+const SUB_STEPS = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-const PACES = [15, 25, 20, 25, 25, 25, 25, 20, 15, 20]
+const PACES = [15, 25, 20, 25, 25, 25, 25, 15, 20]
 
 export function SlideDeck() {
   const [current, setCurrent] = useState(0)

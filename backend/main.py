@@ -65,50 +65,60 @@ async def health():
 
 @app.on_event("startup")
 async def startup():
-    # Validate API keys
-    keys = {
-        "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
-        "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
-        "ETHERSCAN_API_KEY": os.getenv("ETHERSCAN_API_KEY"),
-        "PINATA_API_KEY": os.getenv("PINATA_API_KEY"),
-        "PINATA_SECRET_API_KEY": os.getenv("PINATA_SECRET_API_KEY"),
-        "UNSILOED_API_KEY": os.getenv("UNSILOED_API_KEY"),
-    }
-    for name, val in keys.items():
-        if not val:
-            print(f"  WARNING: {name} not set — related features will be disabled")
-        else:
-            print(f"  OK: {name} is set")
+    import traceback
 
-    # Initialize cache
-    await cache.initialize()
-    print("  Cache initialized")
+    try:
+        # Validate API keys
+        keys = {
+            "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
+            "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
+            "ETHERSCAN_API_KEY": os.getenv("ETHERSCAN_API_KEY"),
+            "PINATA_API_KEY": os.getenv("PINATA_API_KEY"),
+            "PINATA_SECRET_API_KEY": os.getenv("PINATA_SECRET_API_KEY"),
+            "UNSILOED_API_KEY": os.getenv("UNSILOED_API_KEY"),
+        }
+        for name, val in keys.items():
+            if not val:
+                print(f"  WARNING: {name} not set — related features will be disabled")
+            else:
+                print(f"  OK: {name} is set")
 
-    # Initialize webhook database
-    from app.services.webhooks import initialize_db as init_webhooks_db
-    await init_webhooks_db()
-    print("  Webhook database initialized")
+        # Initialize cache
+        await cache.initialize()
+        print("  Cache initialized")
 
-    # Build knowledge graph from registry fixtures
-    from app.services.registry import get_all_symbols, get_reserve_data
-
-    reserves = {}
-    for symbol in get_all_symbols():
+        # Initialize webhook database
         try:
-            reserves[symbol] = get_reserve_data(symbol)
-        except (ValueError, FileNotFoundError) as e:
-            print(f"  WARNING: Could not load {symbol}: {e}")
+            from app.services.webhooks import initialize_db as init_webhooks_db
+            await init_webhooks_db()
+            print("  Webhook database initialized")
+        except Exception as e:
+            print(f"  WARNING: Webhook DB init failed: {e}")
 
-    graph_service.build_from_reserves(reserves)
-    print(f"  Knowledge graph built: {graph_service.graph.number_of_nodes()} nodes, {graph_service.graph.number_of_edges()} edges")
+        # Build knowledge graph from registry fixtures
+        from app.services.registry import get_all_symbols, get_reserve_data
 
-    # Initialize scoring engine
-    global scoring_engine
-    from app.services.scoring_engine import ScoringEngine
+        reserves = {}
+        for symbol in get_all_symbols():
+            try:
+                reserves[symbol] = get_reserve_data(symbol)
+            except (ValueError, FileNotFoundError) as e:
+                print(f"  WARNING: Could not load {symbol}: {e}")
 
-    scoring_engine = ScoringEngine(cache, graph_service, llm_jury, narrative_service)
-    print("  Scoring engine ready")
-    print("Helicity API started successfully.")
+        graph_service.build_from_reserves(reserves)
+        print(f"  Knowledge graph built: {graph_service.graph.number_of_nodes()} nodes, {graph_service.graph.number_of_edges()} edges")
+
+        # Initialize scoring engine
+        global scoring_engine
+        from app.services.scoring_engine import ScoringEngine
+
+        scoring_engine = ScoringEngine(cache, graph_service, llm_jury, narrative_service)
+        print("  Scoring engine ready")
+        print("Helicity API started successfully.")
+    except Exception as e:
+        print(f"  ERROR during startup: {e}")
+        traceback.print_exc()
+        print("  Helicity API started in DEGRADED mode — /health will still respond.")
 
 
 @app.on_event("shutdown")

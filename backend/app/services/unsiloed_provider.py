@@ -134,3 +134,76 @@ class UnsIloedClient:
             "extract_text": True,
         }
         return await self._call_api(_EXTRACT_PATH, payload)
+
+    # ------------------------------------------------------------------
+    # Structured JSON converter
+    # ------------------------------------------------------------------
+
+    def to_structured_json(self, api_response: dict[str, Any]) -> str:
+        """Convert the raw Unsiloed API response into a structured text summary
+        ready for Claude to interpret as reserve risk signals.
+
+        Flattens extracted tables and text into a prompt-friendly format
+        so Claude can focus on semantic interpretation rather than visual parsing.
+
+        Args:
+            api_response: raw dict returned by extract_pdf_tables().
+
+        Returns:
+            A formatted string combining table data and full text, suitable
+            for inclusion in a Claude prompt.
+        """
+        parts: list[str] = []
+
+        # Full text content (document body)
+        text = api_response.get("text") or ""
+        if text.strip():
+            parts.append("=== DOCUMENT TEXT ===")
+            parts.append(text.strip())
+
+        # Extracted tables — flatten to markdown-style rows
+        tables = api_response.get("tables") or []
+        for idx, table in enumerate(tables, start=1):
+            parts.append(f"\n=== TABLE {idx} ===")
+            headers = table.get("headers") or []
+            rows = table.get("rows") or []
+            if headers:
+                parts.append(" | ".join(str(h) for h in headers))
+                parts.append("-" * max(40, len(" | ".join(str(h) for h in headers))))
+            for row in rows:
+                if isinstance(row, list):
+                    parts.append(" | ".join(str(cell) for cell in row))
+                elif isinstance(row, dict):
+                    parts.append(" | ".join(f"{k}: {v}" for k, v in row.items()))
+
+        # Document-level metadata
+        metadata = api_response.get("metadata") or {}
+        if metadata:
+            parts.append("\n=== METADATA ===")
+            for key, val in metadata.items():
+                parts.append(f"{key}: {val}")
+
+        return "\n".join(parts) if parts else text
+
+    # ------------------------------------------------------------------
+    # Safe extraction with graceful fallback
+    # ------------------------------------------------------------------
+
+    async def safe_extract(
+        self, pdf_bytes: bytes, fallback_text: Optional[str] = None
+    ) -> tuple[str, str]:
+        """Attempt Unsiloed extraction; fall back to plain text on any failure.
+
+        Returns:
+            (extracted_content, source) where source is "unsiloed" or "fallback".
+        """
+        if not self.available:
+            return (fallback_text or "", "fallback")
+
+        try:
+            raw = await self.extract_pdf_tables(pdf_bytes)
+            structured = self.to_structured_json(raw)
+            return (structured, "unsiloed")
+        except Exception as exc:
+            print(f"  WARNING: Unsiloed extraction failed ({exc}), falling back to plain text")
+            return (fallback_text or "", "fallback")

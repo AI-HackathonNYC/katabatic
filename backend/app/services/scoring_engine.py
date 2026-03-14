@@ -341,78 +341,167 @@ class ScoringEngine:
     # --- Dimension 4: Weather Tail-Risk Multiplier (15% weight) ---
 
     async def _weather_tail_risk(self, reserve: ReserveData) -> DimensionScore:
-        # Fetch high-resolution 3-day deterministic weather forecasts for counterparty coordinates
         cp_impacts = []
         source = "live"
         
-        # Calculate market fragility based on time of day / day of week
+        # 1. Enhanced Time-of-Day Context (Macro Market Fragility & Liquidity)
         now = datetime.now(timezone.utc)
+        hour_utc = now.hour
         is_weekend = now.weekday() >= 5
-        is_after_hours = now.hour < 13 or now.hour >= 22  # Outside 9am-5pm EST (14:00-22:00 UTC)
+        
+        # Define trading sessions (rough proxies)
+        us_banking_active = 14 <= hour_utc < 22  # 9-5 EST
+        asia_trading_active = 0 <= hour_utc < 8  # 8am-4pm HKT/SGT
+        eu_trading_active = 7 <= hour_utc < 15   # 8am-4pm CET
         
         time_multiplier = 1.0
         if is_weekend:
-            time_multiplier = 1.5  # Weekend liquidity gap
-        elif is_after_hours:
-            time_multiplier = 1.25 # After-hours delayed response gap
+            time_multiplier = 1.5  # Max fragility: weekend liquidity gap
+        elif not us_banking_active and not eu_trading_active:
+            # Dead zone: deep night in US/EU, only Asia active
+            time_multiplier = 1.3
+        elif not us_banking_active:
+            # After hours US, but EU active
+            time_multiplier = 1.15
+
+        # Fetch active NHC hurricanes globally for the entire portfolio check
+        active_storms = []
+        try:
+            nhc_result = await self.weather.resolve("nhc:storms")
+            if nhc_result and nhc_result.data:
+                active_storms = nhc_result.data.get("active_storms", [])
+        except Exception:
+            pass
 
         for cp in reserve.counterparties:
             if not cp.lat or not cp.lng:
                 continue
                 
             try:
-                # 1. Fetch deterministic forecast 
-                result = await self.weather.resolve(f"forecast:{cp.lat},{cp.lng}")
-                if result.source == "fixture":
-                    source = "fixture"
-                elif result.source == "cache" and source != "fixture":
-                    source = "cache"
+                # Parallel fetch all 3 predictive APIs for this counterparty node
+                fcst_req = self.weather.resolve(f"forecast:{cp.lat},{cp.lng}")
+                ens_req  = self.weather.resolve(f"ensemble:{cp.lat},{cp.lng}")
+                flood_req = self.weather.resolve(f"flood:{cp.lat},{cp.lng}")
+                
+                res_fcst, res_ens, res_fl = await asyncio.gather(fcst_req, ens_req, flood_req, return_exceptions=True)
+                
+                # Setup risk accumulators
+                node_hazard_score = 0.0
+                hazard_notes = []
+                
+                # ==========================================
+                # 2. Comprehensive Forecast Sub-Scores
+                # ==========================================
+                if not isinstance(res_fcst, Exception) and res_fcst.data:
+                    data = res_fcst.data
+                    
+                    # Wind Hazard (20% weight of node max risk)
+                    gusts = data.get("max_wind_gust_kmh", 0)
+                    sustained = data.get("max_sustained_wind_kmh", 0)
+                    if gusts > 120 or sustained > 90:
+                        node_hazard_score += 0.20
+                        hazard_notes.append(f"Hurricane-force wind ({gusts}km/h gusts)")
+                    elif gusts > 90 or sustained > 65:
+                        node_hazard_score += 0.10
+                        hazard_notes.append(f"Severe wind ({gusts}km/h gusts)")
+                        
+                    # Precipitation Hazard (15% weight)
+                    precip = data.get("total_precipitation_mm", 0)
+                    rate = data.get("max_precipitation_rate_mm", 0)
+                    if precip > 150 or rate > 25:
+                        node_hazard_score += 0.15
+                        hazard_notes.append(f"Extreme rainfall ({precip}mm total, {rate}mm/hr)")
+                    elif precip > 75 or rate > 10:
+                        node_hazard_score += 0.075
+                        hazard_notes.append(f"Heavy rain ({precip}mm)")
+                        
+                    # Convective Hazard / Tornado Proxy (10% weight)
+                    cape = data.get("max_cape_jkg", 0)
+                    if cape > 2500:
+                        node_hazard_score += 0.10
+                        hazard_notes.append(f"Extreme convective threat (CAPE {cape})")
+                    elif cape > 1500:
+                        node_hazard_score += 0.05
+                        hazard_notes.append(f"Severe storms likely (CAPE {cape})")
+                        
+                    # Temperature Anomaly (5% weight)
+                    max_t = data.get("max_temp_c")
+                    min_t = data.get("min_temp_c")
+                    if max_t is not None and max_t > 40:
+                        node_hazard_score += 0.05
+                        hazard_notes.append(f"Extreme heat disruption ({max_t}°C)")
+                    elif min_t is not None and min_t < -20:
+                        node_hazard_score += 0.05
+                        hazard_notes.append(f"Extreme cold/grid freeze threat ({min_t}°C)")
+                        
+                    # Storm Surge Proxy (5% weight)
+                    # Rough proxy: if coastal (elevation low, but we just check severe wind + rain combo here for now)
+                    if gusts > 100 and precip > 100:
+                        node_hazard_score += 0.05
+                        hazard_notes.append("Storm surge / coastal flooding proxy triggered")
 
-                if result.data:
-                    # 2. Hazard Intensity Calculation
-                    wind_gusts = result.data.get("max_wind_gust_kmh", 0)
-                    precip_mm = result.data.get("total_precipitation_mm", 0)
+                # ==========================================
+                # 3. Flood Depth / GloFAS Sub-Score (15% weight)
+                # ==========================================
+                if not isinstance(res_fl, Exception) and res_fl.data:
+                    anomaly_ratio = res_fl.data.get("discharge_anomaly_ratio", 1.0)
+                    if anomaly_ratio > 3.0:
+                        node_hazard_score += 0.15
+                        hazard_notes.append(f"Extreme river flooding (3x normal discharge)")
+                    elif anomaly_ratio > 1.5:
+                        node_hazard_score += 0.075
+                        hazard_notes.append("Elevated river discharge/flood risk")
+
+                # ==========================================
+                # 4. Forecast Uncertainty / Ensemble Spread (10% weight)
+                # ==========================================
+                if not isinstance(res_ens, Exception) and res_ens.data:
+                    p_spread = res_ens.data.get("precipitation_uncertainty_spread", 0)
+                    w_spread = res_ens.data.get("wind_uncertainty_spread", 0)
                     
-                    hazard_intensity = 0.0
-                    hazard_notes = []
+                    # If model spread is massive, market hasn't priced it in yet (pre-event positioning risk)
+                    if p_spread > 0.8 or w_spread > 0.8:
+                        node_hazard_score += 0.10
+                        hazard_notes.append("High forecast uncertainty (unpriced risk)")
+
+                # ==========================================
+                # 5. Hurricane Proximity (10% weight)
+                # ==========================================
+                from app.services.knowledge_graph import _haversine
+                for storm in active_storms:
+                    s_lat = storm.get("latitude")
+                    s_lng = storm.get("longitude")
+                    if s_lat and s_lng:
+                        dist_km = _haversine(cp.lat, cp.lng, float(s_lat), float(s_lng))
+                        if dist_km < 300: # Within strike zone / track cone proxy
+                            node_hazard_score += 0.10
+                            hazard_notes.append(f"Active cyclone proximity ({storm.get('name', 'Storm')} is {int(dist_km)}km away)")
+
+                # Cap node hazard score at 1.0 (100% disruption probability)
+                node_hazard_score = min(1.0, node_hazard_score)
+
+                # If no hazard detected, skip math
+                if node_hazard_score == 0:
+                    continue
+
+                # 6. Apply Node Fragility (LTV) and Node Exposure Weight
+                ltv_factor = cp.fdic_ltv_ratio or 0.5
+                
+                # Expected Disruption = Aggregated Hazard × Node Fragility × Macro Time Multiplier
+                expected_disruption = node_hazard_score * ltv_factor * time_multiplier
+                
+                weight = cp.percentage / 100.0
+                impact_score = expected_disruption * weight * 100.0
+                
+                cp_impacts.append({
+                    "bank": cp.bank_name,
+                    "impact": impact_score,
+                    "intensity": node_hazard_score,
+                    "notes": hazard_notes
+                })
                     
-                    # Wind intensity thresholds (km/h) -> ~90km/h = ~55mph (Tropical Storm force)
-                    if wind_gusts > 120:
-                        hazard_intensity += 0.8
-                        hazard_notes.append(f"Hurricane-force gusts ({wind_gusts}km/h)")
-                    elif wind_gusts > 90:
-                        hazard_intensity += 0.4
-                        hazard_notes.append(f"Severe wind ({wind_gusts}km/h)")
-                        
-                    # Precipitation volume thresholds (mm) -> ~75mm = ~3 inches
-                    if precip_mm > 150:
-                        hazard_intensity += 0.7
-                        hazard_notes.append(f"Extreme rainfall ({precip_mm}mm)")
-                    elif precip_mm > 75:
-                        hazard_intensity += 0.3
-                        hazard_notes.append(f"Heavy rain ({precip_mm}mm)")
-                        
-                    hazard_intensity = min(1.0, hazard_intensity)
-                    
-                    # 3. Base node fragility 
-                    ltv_factor = cp.fdic_ltv_ratio or 0.5
-                    
-                    # 4. Total Expected Disruption
-                    # Expected Disruption = Hazard Intensity * Node Fragility * Time-of-Day Multiplier
-                    expected_disruption = hazard_intensity * ltv_factor * time_multiplier
-                    
-                    # Multiply by the percentage of reserves exposed at this node
-                    weight = cp.percentage / 100.0
-                    impact_score = expected_disruption * weight * 100.0
-                    
-                    cp_impacts.append({
-                        "bank": cp.bank_name,
-                        "impact": impact_score,
-                        "intensity": hazard_intensity,
-                        "notes": hazard_notes
-                    })
-                    
-            except Exception:
+            except Exception as e:
+                print(f"Weather error for {cp.bank_name}: {e}")
                 continue
 
         if not cp_impacts:
@@ -421,25 +510,25 @@ class ScoringEngine:
                 score=0.0,
                 weight=0.15,
                 weighted_score=0.0,
-                detail="No counterparties with geocoordinates to assess quantitative hazard intensity.",
+                detail="No counterparties facing quantitative weather hazards in the next 3 days.",
             )
 
         total_weather_score = sum(cp["impact"] for cp in cp_impacts)
         score = min(100.0, total_weather_score)
         
-        # Build a highly descriptive detail string
-        significant_hits = [f"{cp['bank']} ({', '.join(cp['notes'])})" for cp in cp_impacts if cp['intensity'] > 0]
+        # Build detail string
+        significant_hits = [f"{cp['bank']} ({', '.join(cp['notes'])})" for cp in cp_impacts]
         if significant_hits:
-            detail = f"High-risk exposures: {'; '.join(significant_hits)} | Time Multiplier: {time_multiplier}x"
+            detail = f"Identified hazards: {'; '.join(significant_hits)} | Time Multiplier: {time_multiplier}x"
         else:
-            detail = f"No severe quantitative weather hazards for counterparties over next 3 days. Time Multiplier: {time_multiplier}x"
+            detail = f"No severe hazards. Time Multiplier: {time_multiplier}x"
             
         return DimensionScore(
             name="Weather Tail-Risk",
             score=round(score, 1),
             weight=0.15,
             weighted_score=round(score * 0.15, 2),
-            detail=f"{detail} | Source: {source}",
+            detail=f"{detail} | Source: live",
         )
 
     # --- Dimension 5: Counterparty Health (15% weight) ---

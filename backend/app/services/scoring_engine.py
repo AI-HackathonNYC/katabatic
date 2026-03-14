@@ -408,39 +408,39 @@ class ScoringEngine:
                     sustained = data.get("max_sustained_wind_kmh", 0)
                     if gusts > 120 or sustained > 90:
                         node_hazard_score += 0.20
-                        hazard_notes.append(f"Hurricane-force wind ({gusts}km/h gusts)")
+                        hazard_notes.append("Hurricane-force wind")
                     elif gusts > 90 or sustained > 65:
                         node_hazard_score += 0.10
-                        hazard_notes.append(f"Severe wind ({gusts}km/h gusts)")
+                        hazard_notes.append("Severe wind")
                         
                     # Precipitation Hazard (15% weight)
                     precip = data.get("total_precipitation_mm", 0)
                     rate = data.get("max_precipitation_rate_mm", 0)
                     if precip > 150 or rate > 25:
                         node_hazard_score += 0.15
-                        hazard_notes.append(f"Extreme rainfall ({precip}mm total, {rate}mm/hr)")
+                        hazard_notes.append("Extreme rainfall")
                     elif precip > 75 or rate > 10:
                         node_hazard_score += 0.075
-                        hazard_notes.append(f"Heavy rain ({precip}mm)")
+                        hazard_notes.append("Heavy rain")
                         
                     # Convective Hazard / Tornado Proxy (10% weight)
                     cape = data.get("max_cape_jkg", 0)
                     if cape > 2500:
                         node_hazard_score += 0.10
-                        hazard_notes.append(f"Extreme convective threat (CAPE {cape})")
+                        hazard_notes.append("Extreme convective threat")
                     elif cape > 1500:
                         node_hazard_score += 0.05
-                        hazard_notes.append(f"Severe storms likely (CAPE {cape})")
+                        hazard_notes.append("Severe storms likely")
                         
                     # Temperature Anomaly (5% weight)
                     max_t = data.get("max_temp_c")
                     min_t = data.get("min_temp_c")
                     if max_t is not None and max_t > 40:
                         node_hazard_score += 0.05
-                        hazard_notes.append(f"Extreme heat disruption ({max_t}°C)")
+                        hazard_notes.append("Extreme heat disruption")
                     elif min_t is not None and min_t < -20:
                         node_hazard_score += 0.05
-                        hazard_notes.append(f"Extreme cold/grid freeze threat ({min_t}°C)")
+                        hazard_notes.append("Extreme cold/grid freeze threat")
                         
                     # Storm Surge Proxy (5% weight)
                     # Rough proxy: if coastal (elevation low, but we just check severe wind + rain combo here for now)
@@ -455,10 +455,10 @@ class ScoringEngine:
                     anomaly_ratio = res_fl.data.get("discharge_anomaly_ratio", 1.0)
                     if anomaly_ratio > 3.0:
                         node_hazard_score += 0.15
-                        hazard_notes.append(f"Extreme river flooding (3x normal discharge)")
+                        hazard_notes.append("Extreme river flooding")
                     elif anomaly_ratio > 1.5:
                         node_hazard_score += 0.075
-                        hazard_notes.append("Elevated river discharge/flood risk")
+                        hazard_notes.append("Elevated river flood risk")
 
                 # ==========================================
                 # 4. Forecast Uncertainty / Ensemble Spread (10% weight)
@@ -483,7 +483,8 @@ class ScoringEngine:
                         dist_km = _haversine(cp.lat, cp.lng, float(s_lat), float(s_lng))
                         if dist_km < 300: # Within strike zone / track cone proxy
                             node_hazard_score += 0.10
-                            hazard_notes.append(f"Active cyclone proximity ({storm.get('name', 'Storm')} is {int(dist_km)}km away)")
+                            storm_name = storm.get('name', 'Storm')
+                            hazard_notes.append(f"Active cyclone proximity ({storm_name})")
 
                 # Cap node hazard score at 1.0 (100% disruption probability)
                 node_hazard_score = min(1.0, node_hazard_score)

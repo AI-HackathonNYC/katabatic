@@ -180,3 +180,86 @@ def get_details(req_id: str, reserve: ReserveData, passed: bool) -> str:
         )
 
     return "Unknown requirement."
+
+
+# ---------------------------------------------------------------------------
+# Recommendation generator
+# ---------------------------------------------------------------------------
+
+_RECOMMENDATIONS: dict[str, str] = {
+    "xbrl_format": (
+        "Submit reserve reports via the OCC API feed in XBRL format. "
+        "PDF-only attestations do not satisfy GENIUS Act machine-readability requirements."
+    ),
+    "update_frequency": (
+        "Publish updated reserve reports at least once every 31 days. "
+        "Automate report generation to avoid lapses."
+    ),
+    "asset_disclosure": (
+        "Replace 'mixed' or undisclosed asset classes with specific categories: "
+        "t_bills, money_market, commercial_paper, sovereign_bonds, demand_deposits, or repo."
+    ),
+    "custodian_disclosure": (
+        "Name every custodian bank explicitly with their percentage of reserves held. "
+        "Remove 'Undisclosed' or 'Other' entries from the counterparty list."
+    ),
+    "maturity_disclosure": (
+        "Report weighted_avg_maturity_days computed from all counterparty tranches. "
+        "This is a mandatory field under GENIUS Act Section 4(b)."
+    ),
+    "liquidity_coverage": (
+        "Ensure at least 100% of outstanding token supply is backed by liquid assets "
+        "(T-bills, money market funds, demand deposits, or repo). "
+        "Reduce exposure to illiquid asset classes such as commercial paper."
+    ),
+    "audit_attestation": (
+        "Engage a registered accounting firm to provide quarterly attestation reports "
+        "certifying reserve composition, as required under GENIUS Act Section 7."
+    ),
+}
+
+
+# ---------------------------------------------------------------------------
+# Main compliance check function
+# ---------------------------------------------------------------------------
+
+async def check_compliance(reserve: ReserveData) -> ComplianceResult:
+    """Check a reserve report against all 7 GENIUS Act requirements.
+
+    Args:
+        reserve: structured ReserveData (from extraction pipeline or fixture).
+
+    Returns:
+        ComplianceResult with per-requirement checks, overall score, and
+        actionable recommendations for any failing requirements.
+    """
+    checks: list[ComplianceCheck] = []
+
+    for req_id, description in GENIUS_ACT_REQUIREMENTS.items():
+        passed = evaluate_requirement(req_id, reserve)
+        details = get_details(req_id, reserve, passed)
+        checks.append(
+            ComplianceCheck(
+                requirement=req_id,
+                description=description,
+                passed=passed,
+                details=details,
+            )
+        )
+
+    passed_count = sum(1 for c in checks if c.passed)
+    score = round(passed_count / len(checks) * 100, 1)
+    compliant = passed_count == len(checks)
+
+    recommendations = [
+        _RECOMMENDATIONS[c.requirement]
+        for c in checks
+        if not c.passed and c.requirement in _RECOMMENDATIONS
+    ]
+
+    return ComplianceResult(
+        score=score,
+        compliant=compliant,
+        checks=checks,
+        recommendations=recommendations,
+    )

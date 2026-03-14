@@ -105,6 +105,23 @@ class ScoringEngine:
                 fire_webhooks(symbol, previous_score, result.stress_score, result)
             )
 
+        # Publish update to all SSE subscribers (non-blocking best-effort)
+        try:
+            from app.routers.streaming import publish_score_update
+
+            await publish_score_update(
+                {
+                    "stablecoin": result.stablecoin,
+                    "score": result.stress_score,
+                    "level": result.stress_level,
+                    "latency_hours": result.redemption_latency_hours,
+                    "coverage_ratio": result.liquidity_coverage_ratio,
+                    "timestamp": result.source_timestamp,
+                }
+            )
+        except Exception:
+            pass  # Never let pub/sub failure break a scoring run
+
         return result
 
     async def compute_all_scores(self) -> list[StressScoreResult]:

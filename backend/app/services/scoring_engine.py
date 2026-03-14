@@ -527,22 +527,14 @@ class ScoringEngine:
         
         # Build a concise detail string so it fits on the frontend dashboard
         if cp_impacts:
-            # Group by hazard note to avoid repeating "High forecast uncertainty" 4 times
-            note_counts = {}
+            # Collect unique hazard notes
+            unique_notes = set()
             for cp in cp_impacts:
                 for note in cp['notes']:
-                    if note not in note_counts:
-                        note_counts[note] = []
-                    note_counts[note].append(cp['bank'])
+                    unique_notes.add(note)
             
-            summary_parts = []
-            for note, banks in note_counts.items():
-                if len(banks) > 2:
-                    summary_parts.append(f"{note} ({len(banks)} nodes)")
-                else:
-                    summary_parts.append(f"{note} ({', '.join(banks)})")
-            
-            detail_str = "; ".join(summary_parts)
+            # Requested format: hazard | hazard | time | source
+            detail_str = " | ".join(sorted(list(unique_notes)))
             detail = f"{detail_str} | Time: {time_multiplier}x"
         else:
             detail = f"No severe hazards | Time: {time_multiplier}x"

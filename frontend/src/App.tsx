@@ -10,6 +10,7 @@ import { ApiOnboardingPage } from './pages/ApiOnboardingPage'
 import { BacktestListPage } from './pages/BacktestListPage'
 import { BacktestDetailPage } from './pages/BacktestDetailPage'
 import { StressScoreDetail } from './components/StressScoreDetail'
+import { LandingPage } from './pages/LandingPage'
 import type { StressScore } from './lib/types'
 
 export default function App() {
@@ -18,8 +19,12 @@ export default function App() {
 
   return (
     <Routes>
+      {/* Public landing page — outside dashboard layout */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Dashboard app */}
       <Route element={<DashboardLayout lastUpdated={lastUpdated} />}>
-        <Route path="/" element={<DashboardPage scores={scores} loading={loading} />} />
+        <Route path="/dashboard" element={<DashboardPage scores={scores} loading={loading} />} />
         <Route path="/stablecoin/:symbol" element={<StressScoreDetail />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/backtests" element={<BacktestListPage />} />
@@ -30,3 +35,4 @@ export default function App() {
     </Routes>
   )
 }
+

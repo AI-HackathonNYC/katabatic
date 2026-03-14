@@ -6,7 +6,10 @@ from typing import Optional
 
 from app.models.reserve import ReserveData
 
-FIXTURES_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "fixtures"
+# Fixture resolution: try repo-root layout first (local dev), then container layout (Docker)
+_REPO_FIXTURES = Path(__file__).resolve().parent.parent.parent.parent / "data" / "fixtures"
+_LOCAL_FIXTURES = Path(__file__).resolve().parent.parent.parent / "data" / "fixtures"
+FIXTURES_DIR = _REPO_FIXTURES if _REPO_FIXTURES.exists() else _LOCAL_FIXTURES
 
 # Data center corridor definitions with approximate lat/lng centers
 DATA_CENTER_CORRIDORS = {

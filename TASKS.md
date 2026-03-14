@@ -256,8 +256,12 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 - [x] `GET /api/backtests/svb/summary` — returns key insight: "Flagged critical 48h before depeg"
 
 #### Frontend — Backtest Timeline
-- [ ] Create `BacktestTimeline.tsx` — Recharts LineChart with annotations
-- [ ] Create `TimelineScrubber.tsx` — date slider with summary card
+- [x] Create `BacktestTimeline.tsx` — Recharts AreaChart with annotations, critical date marker, event dots
+- [x] Create `TimelineScrubber.tsx` — date slider with summary card, 6-dimension breakdown, contextual metadata
+- [x] Create `BacktestListPage.tsx` — grid of available backtests with navigation
+- [x] Create `BacktestDetailPage.tsx` — container page with timeline + scrubber + key insight banner
+- [x] Add `/backtests` and `/backtests/:name` routes to App.tsx
+- [x] Add "Backtests" nav link to Header.tsx
 
 ### feat/hurricane-ian-backtest
 

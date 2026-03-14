@@ -7,6 +7,8 @@ import { DashboardPage } from './pages/DashboardPage'
 import { MapPage } from './pages/MapPage'
 import { DeveloperPortalPage } from './pages/DeveloperPortalPage'
 import { ApiOnboardingPage } from './pages/ApiOnboardingPage'
+import { BacktestListPage } from './pages/BacktestListPage'
+import { BacktestDetailPage } from './pages/BacktestDetailPage'
 import { StressScoreDetail } from './components/StressScoreDetail'
 import type { StressScore } from './lib/types'
 
@@ -20,6 +22,8 @@ export default function App() {
         <Route path="/" element={<DashboardPage scores={scores} loading={loading} />} />
         <Route path="/stablecoin/:symbol" element={<StressScoreDetail />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/backtests" element={<BacktestListPage />} />
+        <Route path="/backtests/:name" element={<BacktestDetailPage />} />
         <Route path="/developers" element={<DeveloperPortalPage />} />
         <Route path="/portal" element={<ApiOnboardingPage />} />
       </Route>

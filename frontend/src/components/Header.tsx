@@ -10,6 +10,7 @@ export function Header({ lastUpdated }: Props) {
   const navItems = [
     { path: '/', label: 'Dashboard' },
     { path: '/map', label: 'Map' },
+    { path: '/backtests', label: 'Backtests' },
     { path: '/developers', label: 'Developers' },
     { path: '/portal', label: 'API Portal' },
   ]

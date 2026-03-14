@@ -1,4 +1,9 @@
-"""Claude-based extraction service for OCC XBRL and PDF attestation reports."""
+"""Claude-based extraction service for OCC XBRL and PDF attestation reports.
+
+Two PDF extraction paths:
+  1. pdf          — Claude-only (plain text input)
+  2. pdf_vision   — Unsiloed AI tables → Claude risk interpretation (binary PDF input)
+"""
 
 import json
 import os
@@ -10,6 +15,7 @@ from typing import Optional
 import aiosqlite
 
 from app.models.reserve import ReserveData
+from app.services.unsiloed_provider import UnsIloedClient
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -111,9 +117,18 @@ class ExtractionService:
             return await self.extract_from_xbrl(content)
         elif source_type == "pdf":
             return await self.extract_from_pdf(content)
+        elif source_type == "pdf_vision":
+            # content is expected to be a base64-encoded PDF for the vision path
+            try:
+                import base64
+                pdf_bytes = base64.b64decode(content)
+            except Exception:
+                # If not valid base64, treat as plain text and fall back
+                return await self.extract_from_pdf(content)
+            return await self.extract_from_pdf_with_vision(pdf_bytes)
         else:
             raise ValueError(
-                f"Unknown source_type '{source_type}' — must be 'xbrl' or 'pdf'"
+                f"Unknown source_type '{source_type}' — must be 'xbrl', 'pdf', or 'pdf_vision'"
             )
 
     async def extract_from_xbrl(self, xbrl_content: str) -> ReserveData:
@@ -127,6 +142,53 @@ class ExtractionService:
         """Parse an attestation PDF into ReserveData using Claude."""
         prompt = PDF_PROMPT.format(schema=_RESERVE_SCHEMA, content=pdf_text)
         raw = await self._call_claude(prompt)
+        data = self._parse_json_from_response(raw)
+        return self._build_reserve_data(data, source_type="pdf_attestation")
+
+    async def extract_from_pdf_with_vision(self, pdf_bytes: bytes) -> ReserveData:
+        """Two-stage pipeline: Unsiloed AI table extraction → Claude risk interpretation.
+
+        Stage 1 — Unsiloed AI: converts raw PDF bytes into structured tables + text,
+                  handling complex visual layouts, embedded charts, and multi-column
+                  tables that confuse plain text extractors.
+        Stage 2 — Claude: interprets the structured output as reserve risk signals,
+                  extracting issuer, counterparties, WAM, and asset classes.
+
+        Falls back to Claude-only plain-text extraction if Unsiloed is unavailable
+        or returns an error.
+
+        Args:
+            pdf_bytes: raw bytes of the PDF attestation file.
+        """
+        unsiloed = UnsIloedClient()
+
+        # Stage 1: vision extraction
+        structured_text, source = await unsiloed.safe_extract(
+            pdf_bytes,
+            fallback_text="[PDF bytes could not be decoded — no plain text available]",
+        )
+        await unsiloed.close()
+
+        if source == "fallback" or not structured_text.strip():
+            # Unsiloed unavailable — decode bytes as UTF-8 text and use Claude-only path
+            try:
+                plain_text = pdf_bytes.decode("utf-8", errors="replace")
+            except Exception:
+                plain_text = ""
+            return await self.extract_from_pdf(plain_text)
+
+        # Stage 2: Claude interprets the Unsiloed-structured output
+        vision_prompt = (
+            "You are a financial data extraction specialist. The following content was "
+            "extracted from a stablecoin reserve attestation PDF by a vision AI that "
+            "parsed its tables and text. Interpret it as reserve risk signals.\n\n"
+            "Extract: issuer name, stablecoin ticker, report date, total reserves, "
+            "per-counterparty breakdown (bank name, city, state, %, asset class, "
+            "maturity days, FDIC LTV ratio if present), and weighted average maturity.\n\n"
+            f"Respond with ONLY valid JSON matching this schema:\n{_RESERVE_SCHEMA}\n\n"
+            f"Extracted Content:\n{structured_text}"
+        )
+        raw = await self._call_claude(vision_prompt)
         data = self._parse_json_from_response(raw)
         return self._build_reserve_data(data, source_type="pdf_attestation")
 

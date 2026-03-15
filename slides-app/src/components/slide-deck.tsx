@@ -25,7 +25,7 @@ const SLIDES = [
 ]
 
 // How many sub-steps each slide has (1 = normal slide, >1 = has internal steps)
-const SUB_STEPS = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+const SUB_STEPS = [1, 1, 1, 1, 1, 1, 1, 3, 1]
 
 const PACES = [15, 20, 25, 20, 20, 20, 20, 10, 20]
 

@@ -2,8 +2,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import type { BacktestEvent } from '../lib/types'
 
 function scoreColor(score: number): string {
-  if (score <= 25) return '#00b894'
-  if (score <= 75) return '#e17055'
+  if (score <= 25) return '#a29bfe'
+  if (score <= 75) return '#6c5ce7'
   return '#e84393'
 }
 

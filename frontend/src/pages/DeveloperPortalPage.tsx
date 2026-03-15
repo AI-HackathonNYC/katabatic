@@ -442,7 +442,7 @@ function ToolsTab() {
                           <td className="py-1.5 pr-4 text-[#888] text-xs">{p.type}</td>
                           <td className="py-1.5 pr-4 text-xs">
                             {p.required ? (
-                              <span className="text-[#e17055]">required</span>
+                              <span className="text-[#e84393]">required</span>
                             ) : (
                               <span className="text-[#888]">optional</span>
                             )}

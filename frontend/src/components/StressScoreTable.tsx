@@ -8,16 +8,15 @@ interface Props {
 }
 
 function scoreColor(score: number): string {
-  if (score <= 25) return '#00b894'
-  if (score <= 50) return '#e17055'
-  if (score <= 75) return '#e17055'
+  if (score <= 25) return '#a29bfe'
+  if (score <= 75) return '#6c5ce7'
   return '#e84393'
 }
 
 function levelColor(level: string): string {
-  if (level.includes('Low')) return 'text-[#00b894]'
-  if (level.includes('Moderate')) return 'text-[#e17055]'
-  if (level.includes('Elevated')) return 'text-[#e17055]'
+  if (level.includes('Low')) return 'text-[#a29bfe]'
+  if (level.includes('Moderate')) return 'text-[#6c5ce7]'
+  if (level.includes('Elevated')) return 'text-[#6c5ce7]'
   return 'text-[#e84393]'
 }
 
@@ -41,7 +40,7 @@ export function StressScoreTable({ scores, loading }: Props) {
       </h2>
       <table className="w-full">
         <thead>
-          <tr className="text-[10px] text-[#444] uppercase tracking-wider border-b border-white/[0.05]">
+          <tr className="text-[10px] text-[#555] uppercase tracking-wider border-b border-white/[0.05]">
             <th className="px-4 py-2.5 text-left font-medium">Stablecoin</th>
             <th className="px-4 py-2.5 text-left font-medium">Score</th>
             <th className="px-4 py-2.5 text-left font-medium">Level</th>

@@ -12,8 +12,8 @@ import {
 import type { BacktestEvent } from '../lib/types'
 
 function scoreColor(score: number): string {
-  if (score <= 25) return '#00b894'
-  if (score <= 75) return '#e17055'
+  if (score <= 25) return '#a29bfe'
+  if (score <= 75) return '#6c5ce7'
   return '#e84393'
 }
 
@@ -59,8 +59,8 @@ export function BacktestTimeline({ timeline, criticalDate, selectedIndex, onSele
           <defs>
             <linearGradient id="scoreGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#e84393" stopOpacity={0.3} />
-              <stop offset="50%" stopColor="#e17055" stopOpacity={0.2} />
-              <stop offset="100%" stopColor="#00b894" stopOpacity={0.1} />
+              <stop offset="50%" stopColor="#6c5ce7" stopOpacity={0.2} />
+              <stop offset="100%" stopColor="#a29bfe" stopOpacity={0.1} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -183,7 +183,7 @@ export function BacktestTimeline({ timeline, criticalDate, selectedIndex, onSele
           Selected date
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block w-2 h-2 rounded-full bg-[#e17055]" />
+          <span className="inline-block w-2 h-2 rounded-full bg-[#a29bfe]" />
           Annotated event
         </span>
       </div>

@@ -22,9 +22,9 @@ export function AlertBanner() {
   if (severeAlerts.length === 0 && data.ops_impact.length === 0) return null
 
   return (
-    <div className="border-l-2 border-[#e17055] pl-4 py-1">
+    <div className="border-l-2 border-[#e84393] pl-4 py-1">
       <div className="flex items-baseline gap-2 mb-1.5">
-        <span className="text-xs font-semibold text-[#e17055] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[#e84393] uppercase tracking-wider">
           Weather Alert
         </span>
         <span className="text-xs text-[#666]">{severeAlerts.length} active</span>
@@ -37,7 +37,7 @@ export function AlertBanner() {
           </p>
         ))}
         {data.ops_impact.length > 0 && (
-          <p className="text-xs text-[#e17055]/80 mt-1">
+          <p className="text-xs text-[#e84393]/80 mt-1">
             Ops impact: {data.ops_impact.map(o => `${o.corridor_name} (${o.bank})`).join(', ')}
           </p>
         )}

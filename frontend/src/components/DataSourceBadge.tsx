@@ -4,8 +4,8 @@ interface Props {
 
 export function DataSourceBadge({ source }: Props) {
   const styles: Record<string, string> = {
-    live: 'bg-[#00b894]/12 text-[#00b894]',
-    cache: 'bg-[#e17055]/12 text-[#e17055]',
+    live: 'bg-[#a29bfe]/12 text-[#a29bfe]',
+    cache: 'bg-[#6c5ce7]/12 text-[#6c5ce7]',
     fixture: 'bg-[#888]/12 text-[#888]',
   }
 

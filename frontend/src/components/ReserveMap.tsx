@@ -8,8 +8,8 @@ import type { GraphData } from '../lib/types'
 const CORRIDOR_COLORS: Record<string, string> = {
   'us-east-1': '#6c5ce7',
   'us-east-2': '#a29bfe',
-  'us-west-2': '#00b894',
-  'us-central': '#e17055',
+  'us-west-2': '#5b4cdb',
+  'us-central': '#7c6ff0',
   'eu-west-1': '#4834d4',
 }
 
@@ -22,9 +22,9 @@ const CORRIDOR_CENTERS: Record<string, { lat: number; lng: number }> = {
 }
 
 function scoreColor(ltv: number | null): string {
-  if (ltv === null) return '#00b894'
-  if (ltv < 0.6) return '#00b894'
-  if (ltv < 0.7) return '#e17055'
+  if (ltv === null) return '#a29bfe'
+  if (ltv < 0.6) return '#a29bfe'
+  if (ltv < 0.7) return '#6c5ce7'
   return '#e84393'
 }
 
@@ -120,7 +120,7 @@ export function ReserveMap({ height = 600 }: ReserveMapProps) {
       }
 
       const existing = bankByLocation[key]
-      if (!existing || (ltv !== null && ((existing.color === '#00b894' && color !== '#00b894') || (existing.color === '#e17055' && color === '#e84393')))) {
+      if (!existing || (ltv !== null && ((existing.color === '#a29bfe' && color !== '#a29bfe') || (existing.color === '#6c5ce7' && color === '#e84393')))) {
         // Keep the higher-risk marker; merge size to be the larger one
         if (existing) point.size = Math.max(existing.size, size)
         bankByLocation[key] = point
@@ -207,10 +207,10 @@ export function ReserveMap({ height = 600 }: ReserveMapProps) {
         </h2>
         <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider text-[#888]">
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#00b894]" /> Low Risk
+            <span className="w-2 h-2 rounded-full bg-[#a29bfe]" /> Low Risk
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#e17055]" /> Moderate
+            <span className="w-2 h-2 rounded-full bg-[#6c5ce7]" /> Moderate
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#e84393]" /> High

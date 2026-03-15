@@ -9,9 +9,8 @@ import { TrustBadge } from './TrustBadge'
 import type { StressScore } from '../lib/types'
 
 function scoreColor(score: number): string {
-  if (score <= 25) return '#00b894'
-  if (score <= 50) return '#e17055'
-  if (score <= 75) return '#e17055'
+  if (score <= 25) return '#a29bfe'
+  if (score <= 75) return '#6c5ce7'
   return '#e84393'
 }
 
@@ -61,7 +60,7 @@ export function StressScoreDetail() {
         <div className="flex items-start justify-between mb-8">
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-white">{score.stablecoin}</h2>
-            <p className="text-[10px] text-[#444] mt-1 uppercase tracking-wider">Liquidity Stress Score</p>
+            <p className="text-[10px] text-[#555] mt-1 uppercase tracking-wider">Liquidity Stress Score</p>
           </div>
           <DataSourceBadge source={score.resolution_source} />
         </div>
@@ -75,11 +74,11 @@ export function StressScoreDetail() {
           <div className="pb-2 border-l border-white/[0.06] pl-10 flex gap-10">
             <div>
               <div className="text-2xl font-semibold text-[#ccc]">{score.redemption_latency_hours}</div>
-              <p className="text-[10px] text-[#444] mt-1.5 uppercase tracking-wider">Latency</p>
+              <p className="text-[10px] text-[#555] mt-1.5 uppercase tracking-wider">Latency</p>
             </div>
             <div>
               <div className="text-2xl font-semibold text-[#ccc]">{score.liquidity_coverage_ratio}</div>
-              <p className="text-[10px] text-[#444] mt-1.5 uppercase tracking-wider">Coverage</p>
+              <p className="text-[10px] text-[#555] mt-1.5 uppercase tracking-wider">Coverage</p>
             </div>
           </div>
         </div>
@@ -93,7 +92,7 @@ export function StressScoreDetail() {
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={dimChartData} layout="vertical" margin={{ left: 140 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#555' }} />
+            <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#666' }} />
             <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#666' }} width={130} />
             <Tooltip
               cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }}
@@ -116,7 +115,7 @@ export function StressScoreDetail() {
         <div className="mt-5 space-y-2.5">
           {score.dimensions.map((d, i) => (
             <div key={i} className="flex items-baseline justify-between text-xs text-[#555]">
-              <span>{d.name} <span className="text-[#3a3a3a]">· {(d.weight * 100).toFixed(0)}%</span></span>
+              <span>{d.name} <span className="text-[#444]">· {(d.weight * 100).toFixed(0)}%</span></span>
               <span className="text-[#666] text-right max-w-xs">{d.detail}</span>
             </div>
           ))}

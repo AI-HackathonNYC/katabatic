@@ -5,8 +5,8 @@ import { fetchActiveScenarios } from '../lib/api'
 import type { DetectedScenario } from '../lib/types'
 
 function scoreColor(score: number): string {
-  if (score <= 25) return '#2ecc71'
-  if (score <= 75) return '#f39c12'
+  if (score <= 25) return '#a29bfe'
+  if (score <= 75) return '#6c5ce7'
   return '#e84393'
 }
 
@@ -35,8 +35,8 @@ function severityLabel(severity: number): string {
 
 function severityColor(severity: number): string {
   if (severity >= 4) return '#e84393'
-  if (severity >= 3) return '#e17055'
-  return '#00b894'
+  if (severity >= 3) return '#6c5ce7'
+  return '#a29bfe'
 }
 
 export function RiskModeling() {
@@ -52,12 +52,12 @@ export function RiskModeling() {
           <h2 className="text-xs font-semibold text-[#555] uppercase tracking-wider">
             System-Detected Risk Scenarios
           </h2>
-          <p className="text-xs text-[#444] mt-1">
+          <p className="text-xs text-[#555] mt-1">
             Live NOAA · FDIC · macro data feeds
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-[#444]">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00b894] animate-pulse" />
+        <div className="flex items-center gap-2 text-xs text-[#555]">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#6c5ce7] animate-pulse" />
           <span>Live</span>
         </div>
       </div>
@@ -100,7 +100,7 @@ export function RiskModeling() {
                         >
                           {severityLabel(scenario.severity)}
                         </span>
-                        <span className="text-[10px] text-[#444] uppercase tracking-wider">
+                        <span className="text-[10px] text-[#555] uppercase tracking-wider">
                           {scenario.source}
                         </span>
                       </div>
@@ -108,7 +108,7 @@ export function RiskModeling() {
                     </div>
                     {proj && (
                       <div className="text-right shrink-0">
-                        <div className={`text-base font-bold tabular-nums ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#00b894]'}`}>
+                        <div className={`text-base font-bold tabular-nums ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#a29bfe]'}`}>
                           {proj.delta > 0 ? '+' : ''}{proj.delta}
                         </div>
                       </div>
@@ -126,23 +126,23 @@ export function RiskModeling() {
                       {/* Score comparison — inline stats, no boxes */}
                       <div className="flex items-end gap-8 mb-5">
                         <div>
-                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-1">Current</p>
+                          <p className="text-[10px] text-[#555] uppercase tracking-wider mb-1">Current</p>
                           <p className="text-2xl font-bold tabular-nums" style={{ color: scoreColor(proj.baseline.stress_score) }}>
                             {proj.baseline.stress_score}
                           </p>
                           <p className="text-[10px] text-[#555] mt-0.5">{proj.baseline.stress_level}</p>
                         </div>
-                        <div className="text-[#333] text-lg pb-4">→</div>
+                        <div className="text-[#444] text-lg pb-4">→</div>
                         <div>
-                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-1">Projected</p>
+                          <p className="text-[10px] text-[#555] uppercase tracking-wider mb-1">Projected</p>
                           <p className="text-2xl font-bold tabular-nums" style={{ color: scoreColor(proj.projected.stress_score) }}>
                             {proj.projected.stress_score}
                           </p>
                           <p className="text-[10px] text-[#555] mt-0.5">{proj.projected.stress_level}</p>
                         </div>
-                        <div className="text-[#333] pb-4">|</div>
+                        <div className="text-[#444] pb-4">|</div>
                         <div>
-                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-1">Latency</p>
+                          <p className="text-[10px] text-[#555] uppercase tracking-wider mb-1">Latency</p>
                           <p className="text-sm text-[#888]">
                             {proj.baseline.redemption_latency_hours} → {proj.projected.redemption_latency_hours}
                           </p>
@@ -152,7 +152,7 @@ export function RiskModeling() {
                       {/* Dimension chart */}
                       {proj.dimensions && proj.dimensions.length > 0 && (
                         <div>
-                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-2">Per Dimension</p>
+                          <p className="text-[10px] text-[#555] uppercase tracking-wider mb-2">Per Dimension</p>
                           <ResponsiveContainer width="100%" height={170}>
                             <BarChart
                               data={proj.dimensions.map(d => ({
@@ -165,7 +165,7 @@ export function RiskModeling() {
                               margin={{ left: 120 }}
                             >
                               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#555' }} />
+                              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#666' }} />
                               <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#666' }} width={110} />
                               <Tooltip
                                 contentStyle={{ borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', fontSize: 11, backgroundColor: '#13111f', color: '#ddd' }}
@@ -180,7 +180,7 @@ export function RiskModeling() {
                               <Bar dataKey="baseline" fill="#a29bfe" fillOpacity={0.5} radius={[0, 3, 3, 0]} barSize={7} />
                               <Bar dataKey="projected" radius={[0, 3, 3, 0]} barSize={7}>
                                 {proj.dimensions.map((_d, i) => (
-                                  <Cell key={i} fill={proj.dimensions[i].delta > 5 ? '#e84393' : proj.dimensions[i].delta > 0 ? '#e17055' : '#00b894'} />
+                                  <Cell key={i} fill={proj.dimensions[i].delta > 5 ? '#e84393' : proj.dimensions[i].delta > 0 ? '#6c5ce7' : '#a29bfe'} />
                                 ))}
                               </Bar>
                             </BarChart>
@@ -191,7 +191,7 @@ export function RiskModeling() {
                       {/* Affected stablecoins */}
                       {scenario.affected_stablecoins.length > 0 && (
                         <div className="mt-3 flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] text-[#444] uppercase tracking-wider">Affects</span>
+                          <span className="text-[10px] text-[#555] uppercase tracking-wider">Affects</span>
                           {scenario.affected_stablecoins.map(s => (
                             <span key={s} className="text-xs font-medium text-[#a29bfe]">
                               {s}

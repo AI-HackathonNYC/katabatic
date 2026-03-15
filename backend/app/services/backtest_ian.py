@@ -10,7 +10,7 @@ from pathlib import Path
 from app.models.stress import BacktestEvent, BacktestResult, DimensionScore
 
 
-DATA_DIR = Path(__file__).resolve().parents[3] / "data"
+DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 IAN_TIMELINE = DATA_DIR / "backtests" / "hurricane_ian.json"
 
 

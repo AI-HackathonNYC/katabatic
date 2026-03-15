@@ -49,7 +49,7 @@ export function ApiOnboardingPage() {
           <div className="md:col-span-2 bg-white/[0.03] rounded-lg border border-white/[0.06] p-5">
             <div className="flex justify-between items-center mb-3">
               <span className="text-sm font-bold text-white">Active Production Key</span>
-              <span className="text-xs bg-[#00b894]/10 text-[#00b894] px-2 py-1 rounded font-medium">Active</span>
+              <span className="text-xs bg-[#a29bfe]/10 text-[#a29bfe] px-2 py-1 rounded font-medium">Active</span>
             </div>
             <div className="flex items-center gap-3">
               <code className="flex-1 bg-white/[0.04] border border-white/[0.06] rounded px-3 py-2.5 text-sm text-white font-mono">
@@ -71,7 +71,7 @@ export function ApiOnboardingPage() {
               </button>
             </div>
             <div className="mt-4 flex gap-3">
-              <button className="text-sm font-medium text-[#e17055] hover:underline">Roll Key</button>
+              <button className="text-sm font-medium text-[#e84393] hover:underline">Roll Key</button>
               <span className="text-white/20">|</span>
               <button className="text-sm font-medium text-[#aaa] hover:text-white hover:underline">Revoke</button>
             </div>
@@ -135,7 +135,7 @@ export function ApiOnboardingPage() {
             {activeLang === 'curl' && (
               <pre className="text-sm text-[#e2e8f0] font-mono leading-relaxed overflow-x-auto">
 <span className="text-[#a29bfe]">curl</span> -X GET https://api.helicity.network/v1/stress-scores \
-  -H <span className="text-[#00b894]">"Authorization: Bearer sk-kata-live-..."</span>
+  -H <span className="text-[#a29bfe]">"Authorization: Bearer sk-kata-live-..."</span>
               </pre>
             )}
             {activeLang === 'python' && (
@@ -143,20 +143,20 @@ export function ApiOnboardingPage() {
 <span className="text-[#e84393]">import</span> httpx
 
 headers = &#123;
-    <span className="text-[#00b894]">"Authorization"</span>: <span className="text-[#00b894]">"Bearer sk-kata-live-..."</span>
+    <span className="text-[#a29bfe]">"Authorization"</span>: <span className="text-[#a29bfe]">"Bearer sk-kata-live-..."</span>
 &#125;
 
 <span className="text-[#e84393]">with</span> httpx.Client() <span className="text-[#e84393]">as</span> client:
-    response = client.get(<span className="text-[#00b894]">"https://api.helicity.network/v1/stress-scores"</span>, headers=headers)
+    response = client.get(<span className="text-[#a29bfe]">"https://api.helicity.network/v1/stress-scores"</span>, headers=headers)
     data = response.json()
     <span className="text-[#888]"># &#123;"data": [&#123;"symbol": "USDC", "score": 12, ...&#125;], ...&#125;</span>
               </pre>
             )}
             {activeLang === 'ts' && (
               <pre className="text-sm text-[#e2e8f0] font-mono leading-relaxed overflow-x-auto">
-<span className="text-[#e84393]">const</span> response = <span className="text-[#e84393]">await</span> fetch(<span className="text-[#00b894]">'https://api.helicity.network/v1/stress-scores'</span>, &#123;
+<span className="text-[#e84393]">const</span> response = <span className="text-[#e84393]">await</span> fetch(<span className="text-[#a29bfe]">'https://api.helicity.network/v1/stress-scores'</span>, &#123;
   headers: &#123;
-    <span className="text-[#00b894]">'Authorization'</span>: <span className="text-[#00b894]">'Bearer sk-kata-live-...'</span>
+    <span className="text-[#a29bfe]">'Authorization'</span>: <span className="text-[#a29bfe]">'Bearer sk-kata-live-...'</span>
   &#125;
 &#125;);
 
@@ -193,7 +193,7 @@ headers = &#123;
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
+                <span className="bg-[#a29bfe]/10 text-[#a29bfe] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/stress-scores</code>
               </div>
             </div>
@@ -221,7 +221,7 @@ headers = &#123;
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
-                <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
+                <span className="bg-[#a29bfe]/10 text-[#a29bfe] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/stress-scores/&#123;symbol&#125;</code>
               </div>
             </div>
@@ -234,7 +234,7 @@ headers = &#123;
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
-                <span className="bg-[#e17055]/10 text-[#e17055] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">POST</span>
+                <span className="bg-[#e84393]/10 text-[#e84393] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">POST</span>
                 <code className="text-white font-mono text-sm font-medium">/api/stress-scores/project</code>
               </div>
             </div>
@@ -247,7 +247,7 @@ headers = &#123;
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
-                <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
+                <span className="bg-[#a29bfe]/10 text-[#a29bfe] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/weather/active</code>
               </div>
             </div>
@@ -260,7 +260,7 @@ headers = &#123;
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
-                <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
+                <span className="bg-[#a29bfe]/10 text-[#a29bfe] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/graph</code>
               </div>
             </div>
@@ -373,12 +373,12 @@ headers = &#123;
 
 <span className="text-[#888]"># Connect to Helicity via SSE</span>
 client = FastMCPClient(
-    url=<span className="text-[#00b894]">"https://api.helicity.network/mcp/sse"</span>,
-    headers=&#123;<span className="text-[#00b894]">"Authorization"</span>: <span className="text-[#00b894]">"Bearer sk-kata-live-..."</span>&#125;
+    url=<span className="text-[#a29bfe]">"https://api.helicity.network/mcp/sse"</span>,
+    headers=&#123;<span className="text-[#a29bfe]">"Authorization"</span>: <span className="text-[#a29bfe]">"Bearer sk-kata-live-..."</span>&#125;
 )
 
 <span className="text-[#888]"># Use tools in your agent loop</span>
-scores = client.call_tool(<span className="text-[#00b894]">"get_stress_scores"</span>)
+scores = client.call_tool(<span className="text-[#a29bfe]">"get_stress_scores"</span>)
 print(scores)
             </pre>
           </div>

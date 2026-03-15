@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
 /* ────────────────────────── logos ────────────────────────── */
@@ -96,13 +96,48 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>
 }
 
+function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'none' : 'translateY(28px)',
+        transition: `opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
 /* ────────────────────────── component ────────────────────────── */
 export function LandingPage() {
   return (
     <div className="text-[#e2e8f0] bg-[#0c0a14]" style={{ overflowX: 'clip' }}>
 
       {/* Sticky Nav */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-6 bg-[#0c0a14]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-5 bg-[#0c0a14]/80 backdrop-blur-xl">
         <div className="flex items-center gap-2.5">
           <svg width="20" height="28" viewBox="0 0 30 44" fill="none" className="overflow-visible">
             <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.3)" strokeWidth="3.5" strokeLinecap="round" />
@@ -111,369 +146,389 @@ export function LandingPage() {
           </svg>
           <span className="text-xl font-bold text-white tracking-[-0.04em]">helicity</span>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-[#aaa]">
+        <div className="hidden md:flex items-center gap-8 text-sm text-[#777]">
           <a href="#problem" className="hover:text-white transition-colors">Problem</a>
-          <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
+          <a href="#how-it-works" className="hover:text-white transition-colors">Engine</a>
           <a href="#delivery" className="hover:text-white transition-colors">Delivery</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
         </div>
         <Link
           to="/developers"
-          className="px-5 py-2 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-[#6c5ce7]/20"
+          className="px-5 py-2 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white text-sm font-medium rounded-lg transition-colors"
         >
           Get API Access
         </Link>
       </nav>
 
-      {/* ═══════════════════ 1. HERO ═══════════════════ */}
+      {/* ═══════════════════ HERO ═══════════════════ */}
       <section className="relative min-h-[92vh] flex flex-col">
-        {/* Grid overlay for Palantir feel */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: 'linear-gradient(rgba(108,92,231,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(108,92,231,0.3) 1px, transparent 1px)',
-          backgroundSize: '60px 60px'
-        }} />
-        {/* Radial accent glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#6c5ce7]/8 rounded-full blur-[120px] pointer-events-none" />
-
-        {/* Hero content */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pb-20">
-          <h1 className="text-5xl md:text-7xl font-bold text-white max-w-4xl leading-[1.1] tracking-tight mb-6">
-            The System of Record for{' '}
-            <span className="bg-gradient-to-r from-[#6c5ce7] to-[#a29bfe] bg-clip-text text-transparent">
-              Stablecoin Reserve Risk
-            </span>
-          </h1>
-          <p className="text-lg md:text-xl text-[#888] max-w-2xl mb-10 leading-relaxed">
-            Realtime liquidity stress scores for every major stablecoin. API first infrastructure for DAO treasuries, DeFi protocols, and AI trading agents.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link
-              to="/developers"
-              className="px-8 py-3.5 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/25 text-sm"
-            >
-              Get API Access
-              <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
-            </Link>
-            <Link
-              to="/dashboard"
-              className="px-8 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-xl transition-all text-sm backdrop-blur-sm"
-            >
-              View Live Dashboard
-            </Link>
-          </div>
-
-          {/* Stats bar */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
-            {[
-              { value: 300, suffix: 'B+', label: 'Reserves Monitored' },
-              { value: 6, suffix: '', label: 'Stablecoins Tracked' },
-              { value: 2, suffix: 's', label: 'Rescore Latency' },
-              { value: 19, suffix: '', label: 'Risk Graph Nodes' },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white">
-                  {s.label === 'Reserves Monitored' && '$'}<AnimatedCounter target={s.value} suffix={s.suffix} />
-                </div>
-                <div className="text-xs text-[#888] mt-1 uppercase tracking-wider">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#0c0a14] to-transparent" />
-      </section>
-
-      {/* ═══════════════════ 2. THE PROBLEM ═══════════════════ */}
-      <section id="problem" className="relative py-28 px-6 md:px-16">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.2em] text-[#e17055] font-medium">The Problem</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-6">
-              $300B+ in Unstressed Reserves
-            </h2>
-            <p className="text-lg text-[#888] max-w-2xl mx-auto leading-relaxed">
-              Stablecoin risk is a <strong className="text-white">duration mismatch problem</strong>, the same failure mode that brought down SVB. Weather and geopolitical events are tail risk multipliers on already fragile balance sheets.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 items-start">
-            {/* Duration Mismatch */}
-            <div className="flex flex-col px-8 py-2">
-              <div className="w-10 h-10 rounded-lg bg-[#6c5ce7]/10 flex items-center justify-center mb-5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3">Duration Mismatch</h3>
-              <p className="text-sm text-[#888] leading-relaxed">Reserves locked in long maturity bonds while redemption demand can spike in hours. This is the SVB failure mode: the catalyst, not a credit event.</p>
-            </div>
-
-            {/* 30-Day PDF Lag */}
-            <div className="flex flex-col px-8 py-2 border-x border-white/[0.06]">
-              <div className="w-10 h-10 rounded-lg bg-[#a29bfe]/10 flex items-center justify-center mb-5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a29bfe" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3">30-Day PDF Lag</h3>
-              <p className="text-sm text-[#888] leading-relaxed">Before the GENIUS Act, reserve disclosures were quarterly PDFs. Even now, most data sits in compliance filings that no one ingests systematically.</p>
-            </div>
-
-            {/* No System of Record */}
-            <div className="flex flex-col px-8 py-2">
-              <div className="w-10 h-10 rounded-lg bg-[#5b4cdb]/10 flex items-center justify-center mb-5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b4cdb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><line x1="1.05" y1="12" x2="7" y2="12" /><line x1="17.01" y1="12" x2="22.96" y2="12" /><line x1="12" y1="1.05" x2="12" y2="7" /><line x1="12" y1="17.01" x2="12" y2="22.96" /></svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3">No System of Record</h3>
-              <p className="text-sm text-[#888] leading-relaxed">Onchain platforms track wallet flows. Nobody structures the offchain reserve composition, WAM durations, and custodian concentrations into a programmable risk score.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ 3. HOW IT WORKS ═══════════════════ */}
-      <section id="how-it-works" className="relative py-28 px-6 md:px-16 bg-[#0e0c16]">
+        {/* Grid overlay */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'radial-gradient(rgba(108,92,231,0.4) 1px, transparent 1px)',
-          backgroundSize: '24px 24px'
+          backgroundImage: 'linear-gradient(rgba(108,92,231,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(108,92,231,0.4) 1px, transparent 1px)',
+          backgroundSize: '80px 80px'
         }} />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.2em] text-[#6c5ce7] font-medium">How It Works</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-6">
-              Four Data Sources. One Risk Score.
-            </h2>
-            <p className="text-lg text-[#888] max-w-2xl mx-auto">
-              We ingest regulatory filings, onchain flows, bank health data, and weather intelligence, then run a 6 step scoring engine.
-            </p>
-          </div>
+        {/* Radial glows */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#6c5ce7]/6 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute top-[60%] left-[20%] w-[400px] h-[400px] bg-[#a29bfe]/4 rounded-full blur-[120px] pointer-events-none" />
 
-          {/* Pipeline */}
-          <div className="flex flex-col md:flex-row items-stretch gap-4">
-            {/* Sources */}
-            <div className="flex-1 space-y-3">
-              <div className="text-xs uppercase tracking-widest text-[#888] mb-4 font-medium">Data Sources</div>
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pb-24">
+          <Reveal>
+            <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#6c5ce7] to-transparent mx-auto mb-10" />
+            <h1 className="text-5xl md:text-7xl lg:text-[5.2rem] font-bold text-white max-w-5xl leading-[1.05] tracking-[-0.02em]">
+              The System of Record for{' '}
+              <span className="bg-gradient-to-r from-[#6c5ce7] to-[#a29bfe] bg-clip-text text-transparent">
+                Stablecoin Reserve Risk
+              </span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="text-lg md:text-xl text-[#666] max-w-2xl mt-8 leading-relaxed">
+              Realtime liquidity stress scores for every major stablecoin.
+              API-first infrastructure for DAO treasuries, DeFi protocols, and AI trading agents.
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="flex flex-wrap gap-4 justify-center mt-12">
+              <Link
+                to="/developers"
+                className="px-8 py-3.5 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/20 text-sm"
+              >
+                Get API Access
+                <svg className="inline-block ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+              </Link>
+              <Link
+                to="/dashboard"
+                className="px-8 py-3.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-white font-semibold rounded-xl transition-all text-sm"
+              >
+                View Live Dashboard
+              </Link>
+            </div>
+          </Reveal>
+
+          {/* Stats readouts */}
+          <Reveal delay={0.35}>
+            <div className="mt-24 flex flex-wrap justify-center gap-x-16 gap-y-6">
               {[
-                { label: 'GENIUS Act Filings', sub: 'XBRL + OCC API' },
-                { label: 'Onchain Flows', sub: 'Mint/burn via Etherscan' },
-                { label: 'FDIC Call Reports', sub: 'Bank health metrics' },
-                { label: 'NOAA / Open-Meteo', sub: 'Weather tail risk' },
-              ].map((s) => (
-                <div key={s.label} className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-5 py-3.5 flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#00b894]" />
-                  <div>
-                    <div className="text-sm font-medium text-white">{s.label}</div>
-                    <div className="text-xs text-[#888]">{s.sub}</div>
+                { value: 300, suffix: 'B+', prefix: '$', label: 'Reserves Monitored' },
+                { value: 6, suffix: '', prefix: '', label: 'Stablecoins Tracked' },
+                { value: 2, suffix: 's', prefix: '<', label: 'Rescore Latency' },
+                { value: 19, suffix: '', prefix: '', label: 'Risk Graph Nodes' },
+              ].map((s, i) => (
+                <div key={s.label} className="text-center relative">
+                  {i > 0 && <div className="hidden md:block absolute -left-8 top-1/2 -translate-y-1/2 w-px h-8 bg-white/[0.06]" />}
+                  <div className="text-3xl md:text-4xl font-bold text-white tabular-nums">
+                    {s.prefix}<AnimatedCounter target={s.value} suffix={s.suffix} />
                   </div>
+                  <div className="text-[11px] text-[#555] mt-1.5 uppercase tracking-[0.15em]">{s.label}</div>
                 </div>
               ))}
             </div>
+          </Reveal>
+        </div>
 
-            {/* Arrow */}
-            <div className="hidden md:flex items-center justify-center px-4">
-              <svg width="48" height="24" viewBox="0 0 48 24" fill="none"><path d="M0 12h44m0 0l-8-8m8 8l-8 8" stroke="#6c5ce7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </div>
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#0c0a14] to-transparent" />
+      </section>
 
-            {/* Engine */}
-            <div className="flex-1 bg-gradient-to-br from-[#6c5ce7]/10 to-[#a29bfe]/5 border border-[#6c5ce7]/20 rounded-2xl p-6">
-              <div className="text-xs uppercase tracking-widest text-[#a29bfe] mb-4 font-medium">6 Step Engine</div>
-              <ol className="space-y-2.5 text-sm">
-                {['WAM Duration Analysis', 'Concentration Factor', 'Weather Multiplier', 'LLM Jury Consensus', 'Knowledge Graph Walk', 'Score Aggregation'].map((step, i) => (
-                  <li key={step} className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-[#6c5ce7]/20 text-[#a29bfe] text-xs font-bold flex items-center justify-center shrink-0">{i + 1}</span>
-                    <span className="text-[#ccc]">{step}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
+      {/* ═══════════════════ THE PROBLEM — asymmetric editorial ═══════════════════ */}
+      <section id="problem" className="relative py-32 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-[1.3fr_1fr] gap-16 md:gap-24 items-start">
+            {/* Left: Large statement */}
+            <Reveal>
+              <span className="text-xs uppercase tracking-[0.2em] text-[#e84393] font-medium">The Problem</span>
+              <h2 className="text-4xl md:text-[3.4rem] font-bold text-white mt-5 leading-[1.1] tracking-[-0.01em]">
+                $300B+ in reserves.{' '}
+                <span className="text-[#555]">No one stress-tests them.</span>
+              </h2>
+              <p className="text-base text-[#666] mt-8 leading-relaxed max-w-lg">
+                Stablecoin risk is a <strong className="text-[#aaa] font-medium">duration mismatch problem</strong> — the same failure mode that brought down SVB. Weather and geopolitical events are tail-risk multipliers on already fragile balance sheets.
+              </p>
+            </Reveal>
 
-            {/* Arrow */}
-            <div className="hidden md:flex items-center justify-center px-4">
-              <svg width="48" height="24" viewBox="0 0 48 24" fill="none"><path d="M0 12h44m0 0l-8-8m8 8l-8 8" stroke="#6c5ce7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </div>
-
-            {/* Output */}
-            <div className="flex-1 flex flex-col justify-center">
-              <div className="text-xs uppercase tracking-widest text-[#888] mb-4 font-medium">Output</div>
-              <div className="bg-[#0c0a14] border border-white/[0.08] rounded-2xl p-6 space-y-4">
-                <div>
-                  <div className="text-xs text-[#888]">Stress Score</div>
-                  <div className="text-3xl font-bold text-white">12 <span className="text-sm font-normal text-[#00b894]">/ 100</span></div>
-                </div>
-                <div>
-                  <div className="text-xs text-[#888]">Redemption Latency</div>
-                  <div className="text-lg font-semibold text-white">4 hours</div>
-                </div>
-                <div>
-                  <div className="text-xs text-[#888]">Coverage Ratio</div>
-                  <div className="text-lg font-semibold text-white">1.05</div>
-                </div>
-              </div>
+            {/* Right: Stacked features with left border accent */}
+            <div className="space-y-0 pt-2">
+              {[
+                {
+                  color: '#6c5ce7',
+                  title: 'Duration Mismatch',
+                  desc: 'Reserves locked in long-maturity bonds while redemption demand can spike in hours. This is the SVB failure mode — the catalyst, not a credit event.',
+                },
+                {
+                  color: '#a29bfe',
+                  title: '30-Day PDF Lag',
+                  desc: 'Before the GENIUS Act, reserve disclosures were quarterly PDFs. Most data still sits in compliance filings no one ingests systematically.',
+                },
+                {
+                  color: '#5b4cdb',
+                  title: 'No System of Record',
+                  desc: 'Onchain platforms track wallet flows. Nobody structures offchain reserve composition, WAM durations, and custodian concentrations into a programmable risk score.',
+                },
+              ].map((item, i) => (
+                <Reveal key={item.title} delay={0.1 + i * 0.1}>
+                  <div className="border-l-2 pl-7 py-6" style={{ borderColor: `${item.color}40` }}>
+                    <h3 className="text-[15px] font-semibold text-white mb-2">{item.title}</h3>
+                    <p className="text-sm text-[#666] leading-relaxed">{item.desc}</p>
+                  </div>
+                </Reveal>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ 4. THREE DELIVERY MODES ═══════════════════ */}
-      <section id="delivery" className="relative py-28 px-6 md:px-16">
+      {/* ═══════════════════ SVB CALLOUT — full-width dramatic ═══════════════════ */}
+      <section className="relative py-4 px-6 md:px-16">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase tracking-[0.2em] text-[#00b894] font-medium">Delivery</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-6">
-              Three Ways to Consume Risk Data
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 items-start">
-            {/* REST API */}
-            <div className="flex flex-col px-8 py-2 group">
-              <div className="w-10 h-10 rounded-lg bg-[#6c5ce7]/10 flex items-center justify-center mb-5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-1">REST API</h3>
-              <span className="text-xs text-[#6c5ce7]/70 uppercase tracking-wider mb-4 font-medium">For Systems</span>
-              <p className="text-sm text-[#888] leading-relaxed flex-1">JSON stress scores on demand. &lt;2s rescore latency. Webhook alerts on threshold breaches. IPFS verified score snapshots.</p>
-              <Link to="/developers" className="mt-6 text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
-                View Docs
-                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+          <Reveal>
+            <div className="border-t border-b border-white/[0.05] py-20 md:py-24 text-center">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#e84393]/50 mb-8 font-medium">SVB Collapse — March 2023</p>
+              <p className="text-xl md:text-[1.75rem] text-[#bbb] font-light leading-relaxed max-w-3xl mx-auto">
+                Helicity's scoring engine would have flagged USDC at{' '}
+                <span className="font-semibold text-[#e84393]">Critical stress</span>{' '}
+                48 hours before the $0.87 depeg.
+              </p>
+              <p className="text-sm text-[#444] mt-8 max-w-xl mx-auto">
+                SVB held $91B in treasuries at 2,040-day WAM. Duration mismatch was the structural fragility — rate hikes were the catalyst.
+              </p>
+              <Link
+                to="/backtests/svb"
+                className="inline-flex items-center gap-2 text-sm text-[#a29bfe]/60 hover:text-[#a29bfe] transition-colors mt-8"
+              >
+                View SVB Backtest
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
             </div>
+          </Reveal>
+        </div>
+      </section>
 
-            {/* MCP Server */}
-            <div className="flex flex-col px-8 py-2 border-x border-white/[0.06] group">
-              <div className="w-10 h-10 rounded-lg bg-[#a29bfe]/10 flex items-center justify-center mb-5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a29bfe" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>
+      {/* ═══════════════════ HOW IT WORKS — asymmetric reversed ═══════════════════ */}
+      <section id="how-it-works" className="relative py-32 px-6 md:px-16">
+        {/* Subtle dot pattern */}
+        <div className="absolute inset-0 opacity-[0.025]" style={{
+          backgroundImage: 'radial-gradient(rgba(108,92,231,0.5) 1px, transparent 1px)',
+          backgroundSize: '32px 32px'
+        }} />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="grid md:grid-cols-[1fr_1.5fr] gap-16 md:gap-24 items-start">
+            {/* Left: Heading + data source pills */}
+            <Reveal>
+              <span className="text-xs uppercase tracking-[0.2em] text-[#6c5ce7] font-medium">How It Works</span>
+              <h2 className="text-4xl md:text-[3.4rem] font-bold text-white mt-5 leading-[1.1] tracking-[-0.01em]">
+                Four signals.{' '}
+                <span className="text-[#555]">One score.</span>
+              </h2>
+              <p className="text-base text-[#666] mt-8 leading-relaxed">
+                Regulatory filings, onchain flows, bank health data, and weather intelligence — fused through a 6-step scoring engine.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-10">
+                {['GENIUS Act XBRL', 'Etherscan V2', 'FDIC BankFind', 'NOAA NWS'].map((s) => (
+                  <span key={s} className="px-3.5 py-1.5 text-xs text-[#888] border border-white/[0.07] rounded-full">{s}</span>
+                ))}
               </div>
-              <h3 className="text-xl font-semibold text-white mb-1">MCP Server</h3>
-              <span className="text-xs text-[#a29bfe]/70 uppercase tracking-wider mb-4 font-medium">For AI Agents</span>
-              <p className="text-sm text-[#888] leading-relaxed flex-1">Tool calls for trading bots and agent frameworks. Query risk scores before executing stablecoin positions via stdio or SSE transport.</p>
-              <Link to="/developers#mcp-server" className="mt-6 text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+            </Reveal>
+
+            {/* Right: Pipeline + Output */}
+            <div>
+              <Reveal delay={0.1}>
+                <div className="text-[11px] uppercase tracking-[0.2em] text-[#a29bfe]/50 mb-6 font-medium">Scoring Pipeline</div>
+                <div className="space-y-0">
+                  {['WAM Duration Analysis', 'Reserve Transparency Check', 'Concentration Factor (HHI)', 'Weather Tail-Risk Multiplier', 'LLM Jury Consensus', 'Score Aggregation'].map((step, i) => (
+                    <div key={step} className="flex items-center gap-5 py-3.5 border-b border-white/[0.04]">
+                      <span className="text-[11px] text-[#6c5ce7]/40 font-mono w-5 shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="text-sm text-[#aaa]">{step}</span>
+                      <span className="text-[11px] text-[#444] ml-auto font-mono">{[30, 20, 15, 15, 15, 5][i]}%</span>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.2}>
+                <div className="grid grid-cols-3 gap-8 mt-10 pt-10 border-t border-white/[0.04]">
+                  <div>
+                    <div className="text-[11px] text-[#555] uppercase tracking-[0.15em] mb-2">Stress Score</div>
+                    <div className="text-3xl font-bold text-white">12<span className="text-sm font-normal text-[#a29bfe] ml-1">/ 100</span></div>
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-[#555] uppercase tracking-[0.15em] mb-2">Latency</div>
+                    <div className="text-3xl font-bold text-white">4<span className="text-sm font-normal text-[#666] ml-1">hours</span></div>
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-[#555] uppercase tracking-[0.15em] mb-2">Coverage</div>
+                    <div className="text-3xl font-bold text-white">1.05</div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ DELIVERY — featured + secondary ═══════════════════ */}
+      <section id="delivery" className="relative py-32 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#a29bfe] font-medium">Delivery</span>
+            <h2 className="text-4xl md:text-[3.4rem] font-bold text-white mt-5 mb-20 leading-[1.1] tracking-[-0.01em]">
+              Three ways to consume{' '}
+              <span className="text-[#555]">reserve risk data.</span>
+            </h2>
+          </Reveal>
+
+          {/* Featured: REST API with code preview */}
+          <Reveal delay={0.1}>
+            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center pb-16 mb-16 border-b border-white/[0.04]">
+              <div>
+                <span className="text-[11px] uppercase tracking-[0.2em] text-[#6c5ce7]/50 font-medium">For Systems</span>
+                <h3 className="text-2xl font-semibold text-white mt-3 mb-4">REST API</h3>
+                <p className="text-sm text-[#666] leading-relaxed mb-6">
+                  JSON stress scores on demand. Sub-2-second rescore latency.
+                  Webhook alerts on threshold breaches. IPFS-verified score snapshots with content-addressable CIDs.
+                </p>
+                <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-2">
+                  View Documentation
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                </Link>
+              </div>
+              <div className="font-mono text-[13px] leading-[1.8] bg-white/[0.02] border border-white/[0.06] rounded-lg p-6 text-[#666]">
+                <div><span className="text-[#a29bfe]">GET</span> <span className="text-[#ccc]">/api/stress-scores/usdc</span></div>
+                <div className="mt-3 text-[#444]">{'{'}</div>
+                <div className="pl-4"><span className="text-[#a29bfe]">"stress_score"</span>: <span className="text-white">12</span>,</div>
+                <div className="pl-4"><span className="text-[#a29bfe]">"redemption_latency"</span>: <span className="text-white">"4h"</span>,</div>
+                <div className="pl-4"><span className="text-[#a29bfe]">"coverage_ratio"</span>: <span className="text-white">1.05</span>,</div>
+                <div className="pl-4"><span className="text-[#a29bfe]">"consensus"</span>: <span className="text-[#a29bfe]">"confirmed"</span></div>
+                <div className="text-[#444]">{'}'}</div>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Secondary: MCP + Dashboard */}
+          <div className="grid md:grid-cols-2 gap-16">
+            <Reveal delay={0.2}>
+              <span className="text-[11px] uppercase tracking-[0.2em] text-[#a29bfe]/50 font-medium">For AI Agents</span>
+              <h3 className="text-xl font-semibold text-white mt-3 mb-3">MCP Server</h3>
+              <p className="text-sm text-[#666] leading-relaxed mb-5">
+                Tool calls for trading bots and agent frameworks. Query reserve risk before executing stablecoin positions via stdio or SSE transport.
+              </p>
+              <Link to="/developers#mcp-server" className="text-sm font-medium text-[#a29bfe]/60 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-2">
                 MCP Setup
-                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
-            </div>
-
-            {/* Monitoring Dashboard */}
-            <div className="flex flex-col px-8 py-2 group">
-              <div className="w-10 h-10 rounded-lg bg-[#5b4cdb]/10 flex items-center justify-center mb-5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b4cdb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-1">Monitoring Dashboard</h3>
-              <span className="text-xs text-[#5b4cdb]/70 uppercase tracking-wider mb-4 font-medium">For Humans</span>
-              <p className="text-sm text-[#888] leading-relaxed flex-1">Live risk modeling sandbox with geographic overlays, knowledge graph visualization, and scenario projection tools.</p>
-              <Link to="/dashboard" className="mt-6 text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+            </Reveal>
+            <Reveal delay={0.3}>
+              <span className="text-[11px] uppercase tracking-[0.2em] text-[#5b4cdb]/50 font-medium">For Humans</span>
+              <h3 className="text-xl font-semibold text-white mt-3 mb-3">Monitoring Dashboard</h3>
+              <p className="text-sm text-[#666] leading-relaxed mb-5">
+                Live risk modeling with geographic overlays, knowledge graph visualization, and scenario projection tools.
+              </p>
+              <Link to="/dashboard" className="text-sm font-medium text-[#a29bfe]/60 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-2">
                 Open Dashboard
-                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ 5. PRICING TIERS ═══════════════════ */}
-      <section id="pricing" className="relative py-28 px-6 md:px-16 bg-[#0e0c16]">
+      {/* ═══════════════════ PRICING — featured center tier ═══════════════════ */}
+      <section id="pricing" className="relative py-32 px-6 md:px-16">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="mb-20">
             <span className="text-xs uppercase tracking-[0.2em] text-[#a29bfe] font-medium">Pricing</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
-              API First Infrastructure
+            <h2 className="text-4xl md:text-[3.4rem] font-bold text-white mt-5 leading-[1.1] tracking-[-0.01em]">
+              API-first infrastructure.
             </h2>
-            <p className="text-lg text-[#888]">Not a consulting fee.</p>
-          </div>
+            <p className="text-base text-[#555] mt-3">Not a consulting fee.</p>
+          </Reveal>
 
-          <div className="grid md:grid-cols-3 items-start">
+          <div className="grid md:grid-cols-3 gap-0">
             {/* Starter */}
-            <div className="flex flex-col px-8 py-2 group">
-              <span className="text-5xl font-bold text-[#a29bfe]/20 mb-4">01</span>
-              <h3 className="text-xl font-semibold text-white mb-1">Starter API</h3>
-              <p className="text-xs text-[#888] uppercase tracking-wider mb-6">For builders & bots</p>
-              <ul className="space-y-3 text-sm text-[#aaa] flex-1 mb-8">
+            <Reveal delay={0.1} className="py-10 px-8">
+              <div className="text-[#a29bfe]/15 text-6xl font-bold leading-none mb-8">01</div>
+              <h3 className="text-lg font-semibold text-white mb-1">Starter</h3>
+              <p className="text-xs text-[#555] uppercase tracking-[0.15em] mb-8">For builders & bots</p>
+              <ul className="space-y-3.5 text-sm text-[#666]">
                 {['REST API access', 'MCP for AI agents', '6 stablecoins', '<2s rescore latency', 'Webhook alerts'].map((f) => (
-                  <li key={f} className="flex items-center gap-2.5">
-                    <span className="w-1 h-1 rounded-full bg-[#a29bfe]/40 shrink-0" />
-                    {f}
-                  </li>
+                  <li key={f}>{f}</li>
                 ))}
               </ul>
-              <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+              <Link to="/developers" className="inline-flex items-center gap-2 mt-10 text-sm text-[#a29bfe]/50 hover:text-[#a29bfe] transition-colors">
                 Get Started
-                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
-            </div>
+            </Reveal>
 
-            {/* Enterprise — center column with dividers */}
-            <div className="flex flex-col px-8 py-2 border-x border-white/[0.06] group">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-5xl font-bold text-[#6c5ce7]/30">02</span>
-                <span className="bg-[#6c5ce7] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full">Popular</span>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-1">Enterprise</h3>
-              <p className="text-xs text-[#6c5ce7]/50 uppercase tracking-wider mb-6">For protocols & desks</p>
-              <ul className="space-y-3 text-sm text-[#aaa] flex-1 mb-8">
-                {['Realtime streaming', 'IPFS verified scores', 'Multi model consensus', 'Enterprise SLA', 'Warehouse delivery'].map((f) => (
-                  <li key={f} className="flex items-center gap-2.5">
-                    <span className="w-1 h-1 rounded-full bg-[#6c5ce7] shrink-0" />
-                    {f}
-                  </li>
+            {/* Enterprise — featured */}
+            <Reveal delay={0.15} className="py-10 px-8 border-x border-white/[0.05] relative">
+              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#6c5ce7]/50 to-transparent" />
+              <div className="text-[#6c5ce7]/25 text-6xl font-bold leading-none mb-8">02</div>
+              <h3 className="text-lg font-semibold text-white mb-1">Enterprise</h3>
+              <p className="text-xs text-[#6c5ce7]/40 uppercase tracking-[0.15em] mb-8">For protocols & desks</p>
+              <ul className="space-y-3.5 text-sm text-[#aaa]">
+                {['Realtime streaming', 'IPFS verified scores', 'Multi-model consensus', 'Enterprise SLA', 'Warehouse delivery'].map((f) => (
+                  <li key={f}>{f}</li>
                 ))}
               </ul>
-              <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+              <Link to="/developers" className="inline-flex items-center gap-2 mt-10 text-sm text-[#a29bfe] hover:text-white transition-colors">
                 Contact Sales
-                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
-            </div>
+            </Reveal>
 
             {/* Institutional */}
-            <div className="flex flex-col px-8 py-2 group">
-              <span className="text-5xl font-bold text-[#5b4cdb]/20 mb-4">03</span>
-              <h3 className="text-xl font-semibold text-white mb-1">Institutional</h3>
-              <p className="text-xs text-[#888] uppercase tracking-wider mb-6">For compliance & risk</p>
-              <ul className="space-y-3 text-sm text-[#aaa] flex-1 mb-8">
-                {['FDIC Call Report mining', 'Oracle feed integration', 'GENIUS Act compliance', 'Dedicated scoring pipeline', 'Custom SLA'].map((f) => (
-                  <li key={f} className="flex items-center gap-2.5">
-                    <span className="w-1 h-1 rounded-full bg-[#5b4cdb]/40 shrink-0" />
-                    {f}
-                  </li>
+            <Reveal delay={0.2} className="py-10 px-8">
+              <div className="text-[#5b4cdb]/12 text-6xl font-bold leading-none mb-8">03</div>
+              <h3 className="text-lg font-semibold text-white mb-1">Institutional</h3>
+              <p className="text-xs text-[#555] uppercase tracking-[0.15em] mb-8">For compliance & risk</p>
+              <ul className="space-y-3.5 text-sm text-[#666]">
+                {['FDIC Call Report mining', 'Oracle feed integration', 'GENIUS Act compliance', 'Dedicated pipeline', 'Custom SLA'].map((f) => (
+                  <li key={f}>{f}</li>
                 ))}
               </ul>
-              <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+              <Link to="/developers" className="inline-flex items-center gap-2 mt-10 text-sm text-[#a29bfe]/50 hover:text-[#a29bfe] transition-colors">
                 Contact Sales
-                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ 6. TRUSTED BY ═══════════════════ */}
-      <section className="relative py-20 px-6 md:px-16 border-t border-white/[0.04]">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.2em] text-[#888] font-medium mb-10 text-center">Built for the protocols that matter</p>
-          <LogoConveyor items={logos} speed={25} />
-        </div>
+      {/* ═══════════════════ TRUSTED BY ═══════════════════ */}
+      <section className="relative py-20 px-6 md:px-16">
+        <div className="w-full max-w-5xl mx-auto h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mb-16" />
+        <p className="text-[11px] uppercase tracking-[0.25em] text-[#444] font-medium mb-10 text-center">Built for the protocols that matter</p>
+        <LogoConveyor items={logos} speed={25} />
       </section>
 
-      {/* ═══════════════════ 7. CTA ═══════════════════ */}
-      <section className="relative py-28 px-6 md:px-16">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#6c5ce7]/5 to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Start integrating today
+      {/* ═══════════════════ CTA ═══════════════════ */}
+      <section className="relative py-32 px-6 md:px-16">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#6c5ce7]/[0.03] to-transparent pointer-events-none" />
+        <div className="absolute bottom-[40%] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#6c5ce7]/5 rounded-full blur-[120px] pointer-events-none" />
+        <Reveal className="max-w-3xl mx-auto text-center relative z-10">
+          <h2 className="text-4xl md:text-[3.4rem] font-bold text-white leading-[1.1] tracking-[-0.01em]">
+            Start integrating today.
           </h2>
-          <p className="text-lg text-[#888] mb-10 max-w-xl mx-auto">
-            Get API access in minutes. Scores for every major stablecoin, delivered however your systems need them.
+          <p className="text-base text-[#555] mt-6 mb-12 max-w-xl mx-auto leading-relaxed">
+            Get API access in minutes. Scores for every major stablecoin,
+            delivered however your systems need them.
           </p>
           <Link
             to="/developers"
-            className="inline-block px-10 py-4 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/25 text-base"
+            className="inline-block px-10 py-4 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/20 text-base"
           >
             Get API Access
-            <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+            <svg className="inline-block ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
           </Link>
-        </div>
+        </Reveal>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.04] py-8 px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#555]">
-        <span>© 2026 Helicity. Cornell AI Hackathon.</span>
+      <footer className="border-t border-white/[0.04] py-8 px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#444]">
+        <span>2026 Helicity. Cornell AI Hackathon.</span>
         <div className="flex gap-6">
           <Link to="/dashboard" className="hover:text-[#888] transition-colors">Dashboard</Link>
           <Link to="/developers" className="hover:text-[#888] transition-colors">Developers</Link>

@@ -14,7 +14,7 @@ export function NarrativeCard({ narrative }: NarrativeCardProps) {
   if (typeof narrative === 'string') {
     return (
       <div id="narrative-card">
-        <p className="text-sm text-[#999] leading-relaxed">{narrative}</p>
+        <p className="text-sm text-[#aaa] leading-relaxed">{narrative}</p>
       </div>
     )
   }
@@ -29,14 +29,14 @@ export function NarrativeCard({ narrative }: NarrativeCardProps) {
           Causal Analysis
         </span>
         <span className={`text-[10px] font-semibold uppercase tracking-wider ${
-          n.consensus ? 'text-[#00b894]' : 'text-[#e17055]'
+          n.consensus ? 'text-[#a29bfe]' : 'text-[#e84393]'
         }`}>
           {n.consensus ? 'Consensus' : 'Divergence'} · {n.overlap_pct}%
         </span>
       </div>
 
       {/* Main narrative prose */}
-      <p className="text-sm text-[#999] leading-relaxed">{n.narrative}</p>
+      <p className="text-sm text-[#aaa] leading-relaxed">{n.narrative}</p>
 
       {/* Divergence: left-border model quotes */}
       {!n.consensus && n.claude_narrative && n.gemini_narrative && (

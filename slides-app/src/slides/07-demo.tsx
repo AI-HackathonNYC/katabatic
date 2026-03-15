@@ -23,7 +23,7 @@ export function SlideDemo(_props: { subStep?: number }) {
           muted
           playsInline
           className="w-[90%] h-[90%] object-contain rounded-xl z-10"
-          src="/helicity.mov"
+          src="./helicity.mov"
         />
       </motion.div>
     </SlideLayout>

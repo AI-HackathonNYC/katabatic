@@ -49,15 +49,15 @@ export function RiskModeling() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
+          <h2 className="text-xs font-semibold text-[#555] uppercase tracking-wider">
             System-Detected Risk Scenarios
           </h2>
-          <p className="text-xs text-[#888] mt-1">
-            AI-generated projections from live NOAA, FDIC, and macro data feeds
+          <p className="text-xs text-[#444] mt-1">
+            Live NOAA · FDIC · macro data feeds
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-[#888]">
-          <span className="inline-block w-2 h-2 rounded-full bg-[#00b894] animate-pulse" />
+        <div className="flex items-center gap-2 text-xs text-[#444]">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00b894] animate-pulse" />
           <span>Live</span>
         </div>
       </div>
@@ -74,78 +74,77 @@ export function RiskModeling() {
         )}
 
         {scenarios && scenarios.length > 0 && (
-          <div className="space-y-3">
-            {scenarios.map(scenario => {
+          <div>
+            {scenarios.map((scenario, idx) => {
               const isExpanded = expandedId === scenario.id
               const proj = scenario.projection
 
               return (
-                <div
-                  key={scenario.id}
-                  className={`border rounded-lg transition-colors cursor-pointer ${
-                    isExpanded ? 'border-[#6c5ce7]/30 bg-[#6c5ce7]/5' : 'border-white/[0.06] hover:border-white/[0.12]'
-                  }`}
-                  onClick={() => setExpandedId(isExpanded ? null : scenario.id)}
-                >
-                  {/* Scenario card header */}
-                  <div className="px-4 py-3 flex items-center gap-3">
-                    <span className="text-[#aaa]"><ScenarioIcon type={scenario.type} /></span>
+                <div key={scenario.id}>
+                  {/* Scenario row — separator only */}
+                  <div
+                    className={`py-3 flex items-center gap-3 cursor-pointer group ${
+                      idx > 0 ? 'border-t border-white/[0.05]' : ''
+                    }`}
+                    onClick={() => setExpandedId(isExpanded ? null : scenario.id)}
+                  >
+                    <span className="text-[#555] group-hover:text-[#888] transition-colors shrink-0">
+                      <ScenarioIcon type={scenario.type} />
+                    </span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-white truncate">{scenario.title}</span>
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-sm font-medium text-[#ddd] truncate">{scenario.title}</span>
                         <span
-                          className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                          style={{ color: severityColor(scenario.severity), backgroundColor: severityColor(scenario.severity) + '15' }}
+                          className="text-[10px] font-semibold uppercase tracking-wider"
+                          style={{ color: severityColor(scenario.severity) }}
                         >
                           {severityLabel(scenario.severity)}
                         </span>
-                        <span className="text-[10px] font-medium text-[#888] uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/[0.04]">
+                        <span className="text-[10px] text-[#444] uppercase tracking-wider">
                           {scenario.source}
                         </span>
                       </div>
-                      <p className="text-xs text-[#888] mt-0.5 line-clamp-1">{scenario.description}</p>
+                      <p className="text-xs text-[#555] mt-0.5 line-clamp-1">{scenario.description}</p>
                     </div>
                     {proj && (
                       <div className="text-right shrink-0">
-                        <div className={`text-lg font-bold ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#00b894]'}`}>
+                        <div className={`text-base font-bold tabular-nums ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#00b894]'}`}>
                           {proj.delta > 0 ? '+' : ''}{proj.delta}
                         </div>
-                        <div className="text-[10px] text-[#888] uppercase tracking-wider">Impact</div>
                       </div>
                     )}
-                    <svg className={`w-4 h-4 text-[#888] transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className={`w-3.5 h-3.5 text-[#444] transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
 
-                  {/* Expanded detail */}
+                  {/* Expanded detail — indented, no box */}
                   {isExpanded && proj && (
-                    <div className="px-4 pb-4 border-t border-white/[0.06] pt-4">
-                      <p className="text-xs text-[#aaa] mb-4">{scenario.description}</p>
+                    <div className="pl-8 pb-4">
+                      <p className="text-xs text-[#666] mb-4">{scenario.description}</p>
 
-                      {/* Score comparison */}
-                      <div className="grid grid-cols-3 gap-4 mb-4">
-                        <div className="rounded-lg p-3 border border-white/[0.08]">
-                          <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Current</p>
-                          <p className="text-2xl font-bold" style={{ color: scoreColor(proj.baseline.stress_score) }}>
+                      {/* Score comparison — inline stats, no boxes */}
+                      <div className="flex items-end gap-8 mb-5">
+                        <div>
+                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-1">Current</p>
+                          <p className="text-2xl font-bold tabular-nums" style={{ color: scoreColor(proj.baseline.stress_score) }}>
                             {proj.baseline.stress_score}
                           </p>
-                          <p className="text-[10px] text-[#aaa] mt-0.5">{proj.baseline.stress_level}</p>
+                          <p className="text-[10px] text-[#555] mt-0.5">{proj.baseline.stress_level}</p>
                         </div>
-                        <div className="rounded-lg p-3 border border-white/[0.08]">
-                          <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Projected</p>
-                          <p className="text-2xl font-bold" style={{ color: scoreColor(proj.projected.stress_score) }}>
+                        <div className="text-[#333] text-lg pb-4">→</div>
+                        <div>
+                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-1">Projected</p>
+                          <p className="text-2xl font-bold tabular-nums" style={{ color: scoreColor(proj.projected.stress_score) }}>
                             {proj.projected.stress_score}
                           </p>
-                          <p className="text-[10px] text-[#aaa] mt-0.5">{proj.projected.stress_level}</p>
+                          <p className="text-[10px] text-[#555] mt-0.5">{proj.projected.stress_level}</p>
                         </div>
-                        <div className="rounded-lg p-3 border border-white/[0.08]">
-                          <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Impact</p>
-                          <p className={`text-2xl font-bold ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#2ecc71]'}`}>
-                            {proj.delta > 0 ? '+' : ''}{proj.delta}
-                          </p>
-                          <p className="text-[10px] text-[#aaa] mt-0.5">
-                            Latency: {proj.baseline.redemption_latency_hours} to {proj.projected.redemption_latency_hours}
+                        <div className="text-[#333] pb-4">|</div>
+                        <div>
+                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-1">Latency</p>
+                          <p className="text-sm text-[#888]">
+                            {proj.baseline.redemption_latency_hours} → {proj.projected.redemption_latency_hours}
                           </p>
                         </div>
                       </div>
@@ -153,10 +152,8 @@ export function RiskModeling() {
                       {/* Dimension chart */}
                       {proj.dimensions && proj.dimensions.length > 0 && (
                         <div>
-                          <h3 className="text-[10px] font-semibold text-white uppercase tracking-wider mb-2">
-                            Per Dimension Impact
-                          </h3>
-                          <ResponsiveContainer width="100%" height={180}>
+                          <p className="text-[10px] text-[#444] uppercase tracking-wider mb-2">Per Dimension</p>
+                          <ResponsiveContainer width="100%" height={170}>
                             <BarChart
                               data={proj.dimensions.map(d => ({
                                 name: d.name.replace(/\s*\(.*\)/, ''),
@@ -167,21 +164,21 @@ export function RiskModeling() {
                               layout="vertical"
                               margin={{ left: 120 }}
                             >
-                              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#888' }} />
-                              <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#aaa' }} width={110} />
+                              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                              <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#555' }} />
+                              <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#666' }} width={110} />
                               <Tooltip
-                                contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', fontSize: 11, backgroundColor: '#1a1825', color: '#e2e8f0' }}
+                                contentStyle={{ borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', fontSize: 11, backgroundColor: '#13111f', color: '#ddd' }}
                                 wrapperStyle={{ backgroundColor: 'transparent', boxShadow: 'none', border: 'none' }}
-                                labelStyle={{ color: '#e2e8f0' }}
-                                itemStyle={{ color: '#aaa' }}
+                                labelStyle={{ color: '#ddd' }}
+                                itemStyle={{ color: '#888' }}
                                 formatter={(value: number, name: string) => [
                                   value.toFixed(1),
                                   name === 'baseline' ? 'Current' : 'Projected',
                                 ]}
                               />
-                              <Bar dataKey="baseline" fill="#a29bfe" fillOpacity={0.8} radius={[0, 3, 3, 0]} barSize={8} />
-                              <Bar dataKey="projected" radius={[0, 3, 3, 0]} barSize={8}>
+                              <Bar dataKey="baseline" fill="#a29bfe" fillOpacity={0.5} radius={[0, 3, 3, 0]} barSize={7} />
+                              <Bar dataKey="projected" radius={[0, 3, 3, 0]} barSize={7}>
                                 {proj.dimensions.map((_d, i) => (
                                   <Cell key={i} fill={proj.dimensions[i].delta > 5 ? '#e84393' : proj.dimensions[i].delta > 0 ? '#e17055' : '#00b894'} />
                                 ))}
@@ -193,10 +190,10 @@ export function RiskModeling() {
 
                       {/* Affected stablecoins */}
                       {scenario.affected_stablecoins.length > 0 && (
-                        <div className="mt-3 flex items-center gap-2">
-                          <span className="text-[10px] text-[#888] uppercase tracking-wider">Affected:</span>
+                        <div className="mt-3 flex items-center gap-2 flex-wrap">
+                          <span className="text-[10px] text-[#444] uppercase tracking-wider">Affects</span>
                           {scenario.affected_stablecoins.map(s => (
-                            <span key={s} className="text-xs font-medium text-[#a29bfe] bg-[#6c5ce7]/10 px-2 py-0.5 rounded">
+                            <span key={s} className="text-xs font-medium text-[#a29bfe]">
                               {s}
                             </span>
                           ))}

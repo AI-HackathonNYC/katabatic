@@ -22,20 +22,21 @@ export function StressScoreDetail() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse h-48 bg-white/[0.04] rounded-xl" />
-        <div className="animate-pulse h-64 bg-white/[0.04] rounded-xl" />
+      <div className="space-y-10">
+        <div className="animate-pulse h-4 w-16 bg-white/[0.04] rounded" />
+        <div className="animate-pulse h-32 bg-white/[0.03] rounded" />
+        <div className="animate-pulse h-64 bg-white/[0.03] rounded" />
       </div>
     )
   }
 
   if (error || !score) {
     return (
-      <div className="text-center">
-        <p className="text-[#e84393] font-medium mb-2">Failed to load {symbol}</p>
-        <p className="text-sm text-[#888]">{error}</p>
-        <Link to="/" className="text-sm text-[#6c5ce7] hover:underline mt-4 inline-block">
-          Back to Dashboard
+      <div className="py-12">
+        <p className="text-[#e84393] font-medium mb-1">Failed to load {symbol}</p>
+        <p className="text-sm text-[#666] mb-4">{error}</p>
+        <Link to="/" className="text-xs text-[#555] hover:text-[#888] transition-colors">
+          ← Dashboard
         </Link>
       </div>
     )
@@ -49,105 +50,84 @@ export function StressScoreDetail() {
   }))
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {/* Back link */}
-      <Link to="/" className="text-sm text-[#6c5ce7] hover:underline">
-        Back to Dashboard
+      <Link to="/" className="text-xs text-[#555] hover:text-[#888] transition-colors">
+        ← Dashboard
       </Link>
 
-      {/* Hero score card */}
+      {/* Hero: symbol + metrics, no wrapper box */}
       <div>
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex items-start justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-white">{score.stablecoin}</h2>
-            <p className="text-sm text-[#888] mt-1">Liquidity Stress Score</p>
+            <h2 className="text-3xl font-bold tracking-tight text-white">{score.stablecoin}</h2>
+            <p className="text-[10px] text-[#444] mt-1 uppercase tracking-wider">Liquidity Stress Score</p>
           </div>
           <DataSourceBadge source={score.resolution_source} />
         </div>
-        <div className="grid grid-cols-3 gap-8">
+        <div className="flex items-end gap-10">
           <div>
-            <div className="text-5xl font-bold" style={{ color: scoreColor(score.stress_score) }}>
+            <div className="text-[4.5rem] font-bold leading-none tabular-nums" style={{ color: scoreColor(score.stress_score) }}>
               {score.stress_score}
             </div>
-            <p className="text-xs text-[#888] mt-2 uppercase tracking-wider">{score.stress_level}</p>
+            <p className="text-xs text-[#555] mt-2 uppercase tracking-wider">{score.stress_level}</p>
           </div>
-          <div>
-            <div className="text-3xl font-bold text-white">{score.redemption_latency_hours}</div>
-            <p className="text-xs text-[#888] mt-2 uppercase tracking-wider">Redemption Latency</p>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-white">{score.liquidity_coverage_ratio}</div>
-            <p className="text-xs text-[#888] mt-2 uppercase tracking-wider">Liquidity Coverage</p>
+          <div className="pb-2 border-l border-white/[0.06] pl-10 flex gap-10">
+            <div>
+              <div className="text-2xl font-semibold text-[#ccc]">{score.redemption_latency_hours}</div>
+              <p className="text-[10px] text-[#444] mt-1.5 uppercase tracking-wider">Latency</p>
+            </div>
+            <div>
+              <div className="text-2xl font-semibold text-[#ccc]">{score.liquidity_coverage_ratio}</div>
+              <p className="text-[10px] text-[#444] mt-1.5 uppercase tracking-wider">Coverage</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* 6 Dimension Breakdown */}
-      <div>
-        <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-          6 Dimension Breakdown
-        </h3>
-        <ResponsiveContainer width="100%" height={280}>
+      <div className="pt-6 border-t border-white/[0.05]">
+        <p className="text-[10px] font-semibold text-[#444] uppercase tracking-wider mb-5">
+          6-Dimension Breakdown
+        </p>
+        <ResponsiveContainer width="100%" height={260}>
           <BarChart data={dimChartData} layout="vertical" margin={{ left: 140 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-            <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 12, fill: '#888' }} />
-            <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fill: '#888' }} width={130} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+            <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#555' }} />
+            <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#666' }} width={130} />
             <Tooltip
               formatter={(value: number, name: string) => [
                 `${value.toFixed(1)}`,
                 name === 'weighted' ? 'Weighted Score' : 'Raw Score'
               ]}
-              contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', backgroundColor: '#1a1825', color: '#e2e8f0' }}
+              contentStyle={{ borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#13111f', color: '#ddd', fontSize: 12 }}
               wrapperStyle={{ backgroundColor: 'transparent', boxShadow: 'none', border: 'none' }}
-              labelStyle={{ color: '#e2e8f0' }}
-              itemStyle={{ color: '#aaa' }}
+              labelStyle={{ color: '#ddd' }}
+              itemStyle={{ color: '#888' }}
             />
-            <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={18}>
+            <Bar dataKey="score" radius={[0, 3, 3, 0]} barSize={14}>
               {dimChartData.map((entry, i) => (
-                <Cell key={i} fill={scoreColor(entry.score)} fillOpacity={0.8} />
+                <Cell key={i} fill={scoreColor(entry.score)} fillOpacity={0.7} />
               ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div className="mt-4 space-y-2">
+        <div className="mt-5 space-y-2.5">
           {score.dimensions.map((d, i) => (
-            <div key={i} className="flex items-center justify-between text-xs text-[#888] px-2">
-              <span>{d.name} ({(d.weight * 100).toFixed(0)}% weight)</span>
-              <span className="text-[#aaa]">{d.detail}</span>
+            <div key={i} className="flex items-baseline justify-between text-xs text-[#555]">
+              <span>{d.name} <span className="text-[#3a3a3a]">· {(d.weight * 100).toFixed(0)}%</span></span>
+              <span className="text-[#666] text-right max-w-xs">{d.detail}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Consensus Panel */}
-      {score.jury && (
-        <div>
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-            Model Consensus
-          </h3>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-6 text-sm">
-              <span>Claude: <strong>{score.jury.claude_score.toFixed(0)}</strong></span>
-              <span>Gemini: <strong>{score.jury.gemini_score.toFixed(0)}</strong></span>
-              <span>Delta: <strong>{score.jury.delta.toFixed(0)}</strong></span>
-            </div>
-            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${score.jury.consensus
-                ? 'bg-[#00b894]/10 text-[#00b894]'
-                : 'bg-[#e17055]/10 text-[#e17055]'
-              }`}>
-              {score.jury.consensus ? 'CONSENSUS' : 'DIVERGENCE'}
-            </span>
-          </div>
-          {score.jury.warning && (
-            <p className="text-xs text-[#e17055] mt-2">{score.jury.warning}</p>
-          )}
-        </div>
-      )}
-
       {/* Narrative */}
-      <NarrativeCard narrative={score.narrative} />
+      <div className="pt-6 border-t border-white/[0.05]">
+        <NarrativeCard narrative={score.narrative} />
+      </div>
 
-      {/* Trust & Verification */}
+      {/* Verification metadata — single compact line */}
       <TrustBadge ipfsCid={score.ipfs_cid} jury={score.jury} stablecoin={score.stablecoin} />
     </div>
   )
